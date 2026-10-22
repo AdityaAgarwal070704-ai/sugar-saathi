@@ -117,7 +117,7 @@ import { fromPersisted, mergeReadings, toPersisted, EMPTY_STATE } from "../lib/s
 test("store: round trip keeps meals, readings and goals", () => {
   const m = meal("m1", "2026-10-20T08:00:00Z");
   const merged = mergeReadings([], [{ measured_at: "2026-10-20T07:50:00Z", value: 112, source: "manual" }]);
-  const state = { meals: [m], readings: merged.readings, profile: { ...EMPTY_STATE.profile, meal_carb_target: 50 } };
+  const state = { ...EMPTY_STATE, meals: [m], readings: merged.readings, profile: { ...EMPTY_STATE.profile, meal_carb_target: 50 } };
   const back = fromPersisted(JSON.parse(JSON.stringify(toPersisted(state))));
   assert.ok(back);
   assert.equal(back!.meals.length, 1);
@@ -343,4 +343,87 @@ test("meal type by hour and enrichment from the table", () => {
   const unknown = enrichMeal({ ...old, items: [{ foodId: "gone", count: 1, typed: "x" }] }, foods);
   assert.equal(unknown.carbs, 1);
   assert.equal(unknown.fat, 0);
+});
+
+import { walkEffect, walkedAfter } from "../lib/walks";
+import { dayWrapUp } from "../lib/wrapup";
+import { weeklyCheckin } from "../lib/checkin";
+import { reportText } from "../lib/share";
+import { buildIcs, remindersToEvents } from "../lib/calendar";
+import { DEFAULT_REMINDERS } from "../lib/store-core";
+import { dayKey } from "../lib/day";
+
+test("walks: a walk within an hour after eating counts; effect needs 3 of each", () => {
+  const eaten = "2026-10-20T08:00:00Z";
+  assert.equal(walkedAfter(eaten, [{ started_at: "2026-10-20T08:20:00Z" }]), true);
+  assert.equal(walkedAfter(eaten, [{ started_at: "2026-10-20T09:30:00Z" }]), false);
+  assert.equal(walkedAfter(eaten, [{ started_at: "2026-10-20T07:50:00Z" }]), false);
+
+  const day = (d: number, rise: number | null) => ({ eaten_at: `2026-10-${10 + d}T08:00:00Z`, rise });
+  const meals = [day(0, 30), day(1, 40), day(2, 35), day(3, 80), day(4, 90), day(5, 85), day(6, null)];
+  const walks = [0, 1, 2].map((d) => ({ started_at: `2026-10-${10 + d}T08:15:00Z` }));
+  const e = walkEffect(meals, walks);
+  assert.ok(e);
+  assert.equal(e!.withWalk.avgRise, 35);
+  assert.equal(e!.without.avgRise, 85);
+  assert.equal(walkEffect(meals, walks.slice(0, 2)), null);
+});
+
+test("wrap-up and check-in: specific, kind, and no dosing language", () => {
+  const profile = { meal_carb_target: 60, glucose_low: 70, glucose_high: 180 };
+  const ms = [
+    enrichMeal(meal("a", "2026-10-20T08:00:00Z", [{ foodId: "poha", count: 1, typed: "poha" }]), foods),
+    enrichMeal(meal("b", "2026-10-20T13:00:00Z", [{ foodId: "white_rice", count: 2.5, typed: "rice" }, { foodId: "dal", count: 1, typed: "dal" }]), foods),
+  ];
+  const w = dayWrapUp(ms, foods, profile, [{ value: 100 }, { value: 200 }, { value: 120 }]);
+  assert.match(w.lines[0], /2 meals logged/);
+  assert.match(w.lines[1], /2 of 3 readings/);
+  assert.ok(w.idea);
+  assert.ok([...w.lines, w.good ?? "", w.idea ?? ""].every((t) => !hasDosingAdvice(t)));
+
+  const stats = weekStats(pairMeals(ms, []), [], profile, foods);
+  const c = weeklyCheckin(stats, profile);
+  assert.ok(c.highlights.length >= 2 && c.tryThis.length > 10);
+  assert.ok(!hasDosingAdvice(c.tryThis + c.highlights.join(" ")));
+  assert.ok(!hasDosingAdvice(reportText({ name: "A", stats, observations: ["x"], profile, from: new Date(2026, 9, 14), to: new Date(2026, 9, 21) })));
+  assert.match(reportText({ name: null, stats, observations: [], profile, from: new Date(2026, 9, 14), to: new Date(2026, 9, 21) }), /Sugar Saathi weekly report/);
+});
+
+test("calendar: valid daily reminders with alarms, escaped text, CRLF", () => {
+  const today = new Date(2026, 9, 22, 9, 0, 0);
+  const events = remindersToEvents(DEFAULT_REMINDERS, today);
+  assert.equal(events.length, 9); // 3 meals x (log + walk + 2-hour check)
+  assert.equal(remindersToEvents({ ...DEFAULT_REMINDERS, checks: false, walks: false }, today).length, 3);
+  assert.equal(remindersToEvents({ ...DEFAULT_REMINDERS, snack: "17:00" }, today).length, 12);
+  const ics = buildIcs(DEFAULT_REMINDERS, today, new Date(Date.UTC(2026, 9, 22, 4, 0, 0)));
+  assert.ok(ics.startsWith("BEGIN:VCALENDAR\r\n") && ics.endsWith("END:VCALENDAR\r\n"));
+  assert.equal((ics.match(/BEGIN:VEVENT/g) ?? []).length, 9);
+  assert.equal((ics.match(/END:VEVENT/g) ?? []).length, 9);
+  assert.ok(ics.includes("DTSTART:20261022T083000"));
+  assert.ok(ics.includes("DTSTART:20261022T103000")); // breakfast 08:30 + 2 hours
+  assert.ok(ics.includes("RRULE:FREQ=DAILY") && ics.includes("TRIGGER:PT0M"));
+  assert.ok(!/[^\r]\n/.test(ics), "every line break must be CRLF");
+  assert.equal(dayKey(new Date(2026, 0, 5)), "2026-01-05");
+});
+
+test("store: routine, walks, timer and reminders survive a round trip; junk is dropped", () => {
+  const state = { ...EMPTY_STATE, routine: [{ id: "x", label: "Stretch", icon: "🧘" }], ticks: { "2026-10-20": ["x"] }, walks: [{ id: "w", started_at: "2026-10-20T08:00:00Z", minutes: 10 }], timer: { started_at: "2026-10-20T08:00:00Z", minutes: 10 }, reminders: { ...DEFAULT_REMINDERS, snack: "17:00" }, checkinAt: "2026-10-20T08:00:00Z", wrapupDismissed: "2026-10-20" };
+  const back = fromPersisted(JSON.parse(JSON.stringify(toPersisted(state))))!;
+  assert.deepEqual(back.routine, state.routine);
+  assert.deepEqual(back.ticks, state.ticks);
+  assert.equal(back.walks.length, 1);
+  assert.equal(back.timer?.minutes, 10);
+  assert.equal(back.reminders.snack, "17:00");
+  assert.equal(back.wrapupDismissed, "2026-10-20");
+  // older data without these fields still loads with defaults
+  const old = fromPersisted({ v: 1, meals: [], readings: [], profile: {} })!;
+  assert.equal(old.routine.length, 3);
+  assert.equal(old.reminders.lunch, "13:30");
+  // hostile values
+  const bad = fromPersisted({ v: 1, meals: [], readings: [], profile: {}, routine: [{ id: 1 }, { id: "ok", label: "  Walk  ", icon: "x" }], ticks: { nope: ["a"], "2026-10-20": [1, "a"] }, walks: [{ id: "w", started_at: "bad", minutes: 5 }, { id: "z", started_at: "2026-10-20T08:00:00Z", minutes: 9999 }], timer: { started_at: "2026-10-20T08:00:00Z", minutes: 500 }, reminders: { breakfast: "25:99", lunch: "13:00", dinner: "20:00" } })!;
+  assert.deepEqual(bad.routine, [{ id: "ok", label: "Walk", icon: "x" }]);
+  assert.deepEqual(bad.ticks, { "2026-10-20": ["a"] });
+  assert.equal(bad.walks.length, 0);
+  assert.equal(bad.timer, null);
+  assert.equal(bad.reminders.breakfast, "08:30");
 });

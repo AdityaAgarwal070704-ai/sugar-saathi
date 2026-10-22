@@ -1,8 +1,9 @@
 "use client";
 
 import { useSyncExternalStore } from "react";
+import { dayKey } from "./day";
 import { EMPTY_STATE, fromPersisted, mergeReadings, toPersisted, type State } from "./store-core";
-import type { MealRow, Profile } from "./types";
+import type { MealRow, Profile, Reminders, RoutineItem } from "./types";
 
 // All user data lives in this browser (localStorage). No accounts, no server database.
 const KEY = "sugar-saathi:v1";
@@ -91,6 +92,40 @@ export const store = {
   },
   setProfile(profile: Profile): boolean {
     return commit({ ...getSnapshot(), profile });
+  },
+  toggleTick(day: string, itemId: string): boolean {
+    const s = getSnapshot();
+    const cur = s.ticks[day] ?? [];
+    const next = cur.includes(itemId) ? cur.filter((i) => i !== itemId) : [...cur, itemId];
+    return commit({ ...s, ticks: { ...s.ticks, [day]: next } });
+  },
+  setRoutine(routine: RoutineItem[]): boolean {
+    return commit({ ...getSnapshot(), routine: routine.slice(0, 12) });
+  },
+  setReminders(reminders: Reminders): boolean {
+    return commit({ ...getSnapshot(), reminders });
+  },
+  startTimer(minutes = 10): boolean {
+    return commit({ ...getSnapshot(), timer: { started_at: new Date().toISOString(), minutes } });
+  },
+  cancelTimer(): boolean {
+    return commit({ ...getSnapshot(), timer: null });
+  },
+  // Logs the finished walk, clears the timer and ticks the "walk" routine item for today.
+  finishTimer(): boolean {
+    const s = getSnapshot();
+    if (!s.timer) return true;
+    const walk = { id: crypto.randomUUID(), started_at: s.timer.started_at, minutes: s.timer.minutes };
+    const today = dayKey(new Date());
+    const cur = s.ticks[today] ?? [];
+    const ticks = s.routine.some((r) => r.id === "walk") && !cur.includes("walk") ? { ...s.ticks, [today]: [...cur, "walk"] } : s.ticks;
+    return commit({ ...s, walks: [...s.walks, walk].slice(-1000), timer: null, ticks });
+  },
+  markCheckin(): boolean {
+    return commit({ ...getSnapshot(), checkinAt: new Date().toISOString() });
+  },
+  dismissWrapup(day: string): boolean {
+    return commit({ ...getSnapshot(), wrapupDismissed: day });
   },
   exportJson(): string {
     return JSON.stringify(toPersisted(getSnapshot()));

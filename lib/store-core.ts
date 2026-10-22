@@ -1,15 +1,33 @@
-import type { MealRow, MealType, Profile, ReadingRow, SavedItem } from "./types";
+import type { MealRow, MealType, Profile, Reminders, ReadingRow, RoutineItem, SavedItem, Walk, WalkTimer } from "./types";
 
 // Pure functions for the browser-storage layer (no browser APIs), so they can be tested.
 
-export type State = { meals: MealRow[]; readings: ReadingRow[]; profile: Profile };
+export type Extras = {
+  routine: RoutineItem[];
+  ticks: Record<string, string[]>; // "YYYY-MM-DD" -> ids of routine items done that day
+  walks: Walk[];
+  timer: WalkTimer | null;
+  reminders: Reminders;
+  checkinAt: string | null; // when the weekly check-in was last done
+  wrapupDismissed: string | null; // "YYYY-MM-DD" of the day whose wrap-up was dismissed
+};
+
+export type State = { meals: MealRow[]; readings: ReadingRow[]; profile: Profile } & Extras;
+
+export const DEFAULT_REMINDERS: Reminders = { breakfast: "08:30", lunch: "13:30", snack: null, dinner: "20:00", checks: true, walks: true };
+export const DEFAULT_ROUTINE: RoutineItem[] = [
+  { id: "walk", label: "10-minute walk after a meal", icon: "🚶" },
+  { id: "water", label: "Drink enough water", icon: "💧" },
+  { id: "fasting", label: "Check fasting sugar", icon: "🩸" },
+];
+export const DEFAULT_EXTRAS: Extras = { routine: DEFAULT_ROUTINE, ticks: {}, walks: [], timer: null, reminders: DEFAULT_REMINDERS, checkinAt: null, wrapupDismissed: null };
 
 export const DEFAULT_PROFILE: Profile = { display_name: null, meal_carb_target: 60, glucose_low: 70, glucose_high: 180, diet: "veg" };
-export const EMPTY_STATE: State = { meals: [], readings: [], profile: DEFAULT_PROFILE };
+export const EMPTY_STATE: State = { meals: [], readings: [], profile: DEFAULT_PROFILE, ...DEFAULT_EXTRAS };
 
 // Readings are stored compactly as [epoch ms, mg/dL, source] so a year of CGM data fits in browser storage.
 export type PersistedReading = [number, number, 0 | 1];
-export type Persisted = { v: 1; meals: MealRow[]; readings: PersistedReading[]; profile: Profile };
+export type Persisted = { v: 1; meals: MealRow[]; readings: PersistedReading[]; profile: Profile } & Partial<Extras>;
 
 const MEAL_TYPES: MealType[] = ["breakfast", "lunch", "dinner", "snack"];
 
@@ -27,6 +45,13 @@ export function toPersisted(state: State): Persisted {
     meals: state.meals,
     readings: state.readings.map((r) => [new Date(r.measured_at).getTime(), r.value, r.source === "csv" ? 1 : 0] as PersistedReading),
     profile: state.profile,
+    routine: state.routine,
+    ticks: state.ticks,
+    walks: state.walks,
+    timer: state.timer,
+    reminders: state.reminders,
+    checkinAt: state.checkinAt,
+    wrapupDismissed: state.wrapupDismissed,
   };
 }
 
@@ -46,6 +71,36 @@ function validProfile(p: unknown): Profile {
     glucose_high: high > low ? high : DEFAULT_PROFILE.glucose_high,
     diet: x.diet === "nonveg" || x.diet === "egg" ? x.diet : "veg",
   };
+}
+
+const isIso = (v: unknown): v is string => typeof v === "string" && !Number.isNaN(new Date(v).getTime());
+const isDay = (v: unknown): v is string => typeof v === "string" && /^\d{4}-\d{2}-\d{2}$/.test(v);
+const isTime = (v: unknown): v is string => typeof v === "string" && /^([01]\d|2[0-3]):[0-5]\d$/.test(v);
+
+function validExtras(d: Partial<Extras>): Extras {
+  const routine: RoutineItem[] = Array.isArray(d.routine)
+    ? d.routine
+        .filter((r): r is RoutineItem => !!r && typeof r.id === "string" && typeof r.label === "string" && r.label.trim() !== "" && typeof r.icon === "string")
+        .slice(0, 12)
+        .map((r) => ({ id: r.id.slice(0, 40), label: r.label.trim().slice(0, 40), icon: r.icon.slice(0, 8) }))
+    : DEFAULT_ROUTINE;
+
+  const ticks: Record<string, string[]> = {};
+  if (d.ticks && typeof d.ticks === "object") {
+    for (const [day, ids] of Object.entries(d.ticks).slice(-400)) {
+      if (isDay(day) && Array.isArray(ids)) ticks[day] = ids.filter((i): i is string => typeof i === "string").slice(0, 12);
+    }
+  }
+  const walks: Walk[] = Array.isArray(d.walks)
+    ? d.walks.filter((w): w is Walk => !!w && typeof w.id === "string" && isIso(w.started_at) && typeof w.minutes === "number" && w.minutes >= 1 && w.minutes <= 180).slice(-1000)
+    : [];
+  const t = d.timer;
+  const timer = t && isIso(t.started_at) && typeof t.minutes === "number" && t.minutes >= 1 && t.minutes <= 60 ? { started_at: t.started_at, minutes: Math.round(t.minutes) } : null;
+  const r = d.reminders;
+  const reminders: Reminders = r && isTime(r.breakfast) && isTime(r.lunch) && isTime(r.dinner)
+    ? { breakfast: r.breakfast, lunch: r.lunch, dinner: r.dinner, snack: isTime(r.snack) ? r.snack : null, checks: r.checks !== false, walks: r.walks !== false }
+    : DEFAULT_REMINDERS;
+  return { routine, ticks, walks, timer, reminders, checkinAt: isIso(d.checkinAt) ? d.checkinAt : null, wrapupDismissed: isDay(d.wrapupDismissed) ? d.wrapupDismissed : null };
 }
 
 // Reads stored or backed-up data defensively: anything malformed is dropped, never trusted.
@@ -70,7 +125,7 @@ export function fromPersisted(raw: unknown): State | null {
       readings.push(toReadingRow([r[0], Math.round(r[1]), r[2] === 1 ? 1 : 0]));
     }
   }
-  return { meals, readings, profile: validProfile(d.profile) };
+  return { meals, readings, profile: validProfile(d.profile), ...validExtras(d) };
 }
 
 // Adds readings, ignoring exact duplicates (same minute-precise time and value). Returns the new list and how many were added.

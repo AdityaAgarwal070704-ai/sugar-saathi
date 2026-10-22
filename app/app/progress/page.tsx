@@ -11,6 +11,7 @@ import { Pill } from "@/components/ui/Pill";
 import { FOODS } from "@/lib/foods-client";
 import { weeklyObservations } from "@/lib/insights";
 import { weekStats } from "@/lib/stats";
+import { walkEffect } from "@/lib/walks";
 import { dailySeries, gmi, averageGlucose } from "@/lib/trends";
 import { MEAL_EMOJI, MEAL_LABEL } from "@/lib/meal";
 import { nowMs } from "@/lib/time";
@@ -29,7 +30,7 @@ function Big({ label, value, sub }: { label: string; value: string; sub?: string
 
 export default function Progress() {
   const [days, setDays] = useState<7 | 30>(7);
-  const { ready, paired, readings, profile } = useRecent(days);
+  const { ready, paired, readings, profile, walks } = useRecent(days);
   if (!ready) return <p className="text-muted">Loading…</p>;
 
   const stats = weekStats(paired, readings, profile, FOODS);
@@ -39,6 +40,8 @@ export default function Progress() {
   const loggedDays = series.filter((d) => d.meals > 0);
   const avg = (k: "protein" | "fibre" | "fat" | "kcal") => (loggedDays.length ? Math.round((loggedDays.reduce((a, d) => a + d[k], 0) / loggedDays.length) * 10) / 10 : 0);
   const g = gmi(readings);
+  const walkFx = walkEffect(paired, walks);
+  const walkCount = walks.filter((w) => new Date(w.started_at).getTime() >= nowMs() - days * 86400_000).length;
   const avgGlu = averageGlucose(readings);
 
   const gentle = [...stats.dishRises].sort((a, b) => a.avgRise - b.avgRise).slice(0, 3);
@@ -111,6 +114,18 @@ export default function Progress() {
               </div>
             )}
             <p className="mt-3 text-xs text-muted">Average rise in mg/dL for meals that included the dish. Portions, other dishes, activity and timing all matter, so treat these as possible links to discuss.</p>
+          </Card>
+
+          <Card>
+            <h2 className="font-display text-xl font-semibold">🚶 Walks</h2>
+            <p className="mt-1 text-sm text-muted">{walkCount} walk{walkCount === 1 ? "" : "s"} logged in the last {days} days.</p>
+            {walkFx ? (
+              <p className="mt-3 rounded-2xl bg-moss-soft px-4 py-3 text-sm">
+                After meals with a walk within the hour ({walkFx.withWalk.n} meals), your average rise was <strong>{walkFx.withWalk.avgRise > 0 ? "+" : ""}{walkFx.withWalk.avgRise} mg/dL</strong>. Without a walk ({walkFx.without.n} meals) it was <strong>{walkFx.without.avgRise > 0 ? "+" : ""}{walkFx.without.avgRise} mg/dL</strong>. A possible link to discuss with your educator: other things differ between those meals too.
+              </p>
+            ) : (
+              <p className="mt-2 text-sm text-muted">Once you have 3 meals with a walk and 3 without, all with before and 2-hour readings, you will see how they compare for you.</p>
+            )}
           </Card>
 
           {Object.keys(stats.byMealType).length > 0 && (

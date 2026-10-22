@@ -13,6 +13,10 @@ Live app: https://sugar-saathi.vercel.app. No sign-up. Your data stays in your o
 - **Nutrition from an Indian food table:** carbs, fibre, protein and glycemic load per meal.
 - **Per-meal feedback:** what's good, what could be better, and swaps (for example brown rice for white, with the carbs saved).
 - **Glucose:** quick entry or CSV import (LibreView-style, mg/dL or mmol/L). Every meal is automatically paired with its before and 2-hour readings.
+- **A daily rhythm:** a Today screen with your carb budget ring, meal slots, a 2-hour sugar check, a 10-minute post-meal walk timer, a routine checklist you define, a gentle streak, an evening wrap-up and a weekly check-in.
+- **Phone reminders without a server:** download a calendar file with repeating meal, walk and 2-hour-check alerts, so your phone's own calendar rings.
+- **Share with family or your educator:** one tap shares your weekly summary on WhatsApp (or any app) as plain text.
+- **Calm safety cards:** a reading outside your own range shows a gentle note to follow your doctor's plan, never treatment instructions.
 - **Dashboard, history and weekly insights:** rule-based observations, plus an AI summary of possible links to discuss with your educator.
 - **Educator report:** a one-page weekly summary to print or save as PDF.
 - **Meal planner:** an AI-proposed day of Indian meals within your carb goal and diet, with every number calculated from the table.

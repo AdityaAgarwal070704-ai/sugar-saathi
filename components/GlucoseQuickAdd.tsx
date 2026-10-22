@@ -3,7 +3,8 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/Button";
 import { parseReading } from "@/lib/glucose";
-import { store } from "@/lib/store";
+import { rangeAlert, type RangeAlert } from "@/lib/safety";
+import { store, useStore } from "@/lib/store";
 import { nowMs } from "@/lib/time";
 
 const localInput = (ms: number) => {
@@ -18,9 +19,12 @@ export default function GlucoseQuickAdd({ compact = false, defaultTime, label = 
   const [time, setTime] = useState(defaultTime ?? localInput(nowMs()));
   const [error, setError] = useState<string | null>(null);
   const [saved, setSaved] = useState(false);
+  const [alert, setAlert] = useState<RangeAlert | null>(null);
+  const { profile } = useStore();
 
   const save = () => {
     setSaved(false);
+    setAlert(null);
     const parsed = parseReading(value);
     if (!parsed.ok) return setError(parsed.message);
     const when = new Date(compact && !defaultTime ? Date.now() : time);
@@ -32,6 +36,7 @@ export default function GlucoseQuickAdd({ compact = false, defaultTime, label = 
     setError(null);
     setValue("");
     setSaved(true);
+    setAlert(rangeAlert(parsed.value, profile));
     onSaved?.(parsed.value);
   };
 
@@ -43,7 +48,13 @@ export default function GlucoseQuickAdd({ compact = false, defaultTime, label = 
         <Button size="sm" variant="soft" onClick={save}>{label}</Button>
       </div>
       {error && <p role="alert" className="text-sm text-terracotta">{error}</p>}
-      {saved && <p className="text-sm text-leaf">Saved.</p>}
+      {saved && !alert && <p className="text-sm text-leaf">Saved.</p>}
+      {alert && (
+        <div role="alert" className="rounded-2xl bg-terracotta-soft px-4 py-3 text-sm">
+          <p className="font-semibold">Saved. {alert.title}</p>
+          <p className="mt-1">{alert.body}</p>
+        </div>
+      )}
     </div>
   );
 }

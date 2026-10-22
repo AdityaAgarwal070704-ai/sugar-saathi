@@ -1,6 +1,8 @@
 "use client";
 
 import PrintButton from "@/components/PrintButton";
+import ShareButton from "@/components/ShareButton";
+import { reportText } from "@/lib/share";
 import { FOODS } from "@/lib/foods-client";
 import { weeklyObservations } from "@/lib/insights";
 import { weekStats } from "@/lib/stats";
@@ -24,7 +26,10 @@ export default function ReportPage() {
             {profile.display_name ? `${profile.display_name} · ` : ""}{from.toLocaleDateString("en-IN", { dateStyle: "medium" })} to {new Date(nowMs()).toLocaleDateString("en-IN", { dateStyle: "medium" })}
           </p>
         </div>
-        <PrintButton />
+        <div className="flex flex-wrap gap-2">
+          <ShareButton text={reportText({ name: profile.display_name, stats, observations: obs, profile, from, to: new Date(nowMs()) })} />
+          <PrintButton />
+        </div>
       </div>
 
       <section className="grid grid-cols-2 gap-3 text-sm sm:grid-cols-4">

@@ -1,6 +1,11 @@
 "use client";
 
 import Link from "next/link";
+import CheckinCard from "@/components/habit/CheckinCard";
+import RoutineCard from "@/components/habit/RoutineCard";
+import WalkTimer from "@/components/habit/WalkTimer";
+import WeekDots from "@/components/habit/WeekDots";
+import WrapUpCard from "@/components/habit/WrapUpCard";
 import GlucoseQuickAdd from "@/components/GlucoseQuickAdd";
 import MealCard from "@/components/MealCard";
 import { ButtonLink } from "@/components/ui/Button";
@@ -10,7 +15,12 @@ import { GlucoseChart } from "@/components/ui/GlucoseChart";
 import { StreakChip } from "@/components/ui/StreakChip";
 import { FOODS } from "@/lib/foods-client";
 import { MEAL_EMOJI, MEAL_LABEL, MEAL_TYPES } from "@/lib/meal";
+import { weeklyCheckin } from "@/lib/checkin";
+import { dayKey } from "@/lib/day";
+import { weeklyObservations } from "@/lib/insights";
 import { rangeAlert } from "@/lib/safety";
+import { reportText } from "@/lib/share";
+import { dayWrapUp } from "@/lib/wrapup";
 import { saathiSays } from "@/lib/saathi";
 import { weekStats } from "@/lib/stats";
 import { streakOf } from "@/lib/streak";
@@ -24,7 +34,7 @@ const localInput = (ms: number) => {
 };
 
 export default function Today() {
-  const { ready, meals, readings, paired, profile } = useRecent(365);
+  const { ready, meals, readings, paired, profile, walks, timer, checkinAt, wrapupDismissed } = useRecent(365);
   if (!ready) return <p className="text-muted">Loading…</p>;
 
   const now = new Date(nowMs());
@@ -56,6 +66,23 @@ export default function Today() {
   const dayOfYear = Math.floor((nowMs() - new Date(now.getFullYear(), 0, 0).getTime()) / 86400_000);
   const says = saathiSays({ stats, todayMeals: todayMeals.length, profile, dayOfYear });
   const hasAnything = meals.length > 0 || readings.length > 0;
+
+  // Habit layer
+  const todayKey = dayKey(now);
+  const loggedDays = new Set(meals.map((m) => dayKey(new Date(m.eaten_at))));
+  const lastMeal = todayMeals[todayMeals.length - 1];
+  const sinceMeal = lastMeal ? nowMs() - new Date(lastMeal.eaten_at).getTime() : Infinity;
+  const walkedSince = lastMeal ? walks.some((w) => new Date(w.started_at).getTime() >= new Date(lastMeal.eaten_at).getTime()) : false;
+  const offerWalk = !timer && lastMeal !== undefined && sinceMeal < 90 * 60_000 && !walkedSince;
+
+  const daysSinceCheckin = checkinAt ? (nowMs() - new Date(checkinAt).getTime()) / 86400_000 : Infinity;
+  const checkinDue = stats.meals >= 4 && daysSinceCheckin >= 7;
+  const observations = weeklyObservations(stats, profile);
+  const checkin = weeklyCheckin(stats, profile);
+  const shareBody = reportText({ name: profile.display_name, stats, observations, profile, from: new Date(weekCut), to: now });
+
+  const wrapDue = hour >= 19 && todayMeals.length > 0 && wrapupDismissed !== todayKey;
+  const wrap = wrapDue ? dayWrapUp(todayMeals, FOODS, profile, todayReadings) : null;
 
   return (
     <>
@@ -105,7 +132,10 @@ export default function Today() {
         <Card tone="sand" className="rise-in">
           <h2 className="font-display text-xl font-semibold">Saathi says</h2>
           <p className="mt-2 text-lg leading-snug">{says}</p>
-          <p className="mt-3 text-xs text-muted">{streak.loggedLast7} of the last 7 days logged.</p>
+          <div className="mt-4 flex items-end justify-between gap-3">
+            <WeekDots logged={loggedDays} now={now} />
+            <p className="text-xs text-muted">{streak.loggedLast7} of 7 days logged</p>
+          </div>
         </Card>
       </div>
 
@@ -123,6 +153,11 @@ export default function Today() {
           ))}
         </section>
       )}
+
+      <WalkTimer offer={offerWalk} />
+
+      {checkinDue && <CheckinCard checkin={checkin} text={shareBody} />}
+      {wrap && <WrapUpCard wrap={wrap} day={todayKey} />}
 
       <section className="space-y-3">
         <h2 className="font-display text-xl font-semibold">Your meals today</h2>
@@ -146,6 +181,8 @@ export default function Today() {
           })}
         </div>
       </section>
+
+      <RoutineCard />
 
       {todayReadings.length > 0 && (
         <Card>

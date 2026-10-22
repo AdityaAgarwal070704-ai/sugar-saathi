@@ -59,3 +59,16 @@ export type Profile = {
   glucose_high: number; // mg/dL
   diet: "veg" | "nonveg" | "egg";
 };
+
+// ----- Habit layer (all stored in the browser)
+export type RoutineItem = { id: string; label: string; icon: string };
+export type Walk = { id: string; started_at: string; minutes: number };
+export type WalkTimer = { started_at: string; minutes: number };
+export type Reminders = {
+  breakfast: string; // "HH:MM"
+  lunch: string;
+  snack: string | null;
+  dinner: string;
+  checks: boolean; // a 2-hour sugar check after each meal
+  walks: boolean; // a walk reminder after each meal
+};
