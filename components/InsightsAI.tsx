@@ -1,10 +1,12 @@
 "use client";
 
 import { useState } from "react";
+import type { WeekStats } from "@/lib/stats";
+import type { Profile } from "@/lib/types";
 
 type Result = { summary: string; links: { title: string; detail: string }[]; suggestions: string[] };
 
-export default function InsightsAI() {
+export default function InsightsAI({ stats, goals }: { stats: WeekStats; goals: Pick<Profile, "meal_carb_target" | "glucose_low" | "glucose_high"> }) {
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [blocked, setBlocked] = useState(false);
@@ -15,7 +17,7 @@ export default function InsightsAI() {
     setError(null);
     setBlocked(false);
     try {
-      const res = await fetch("/api/insights", { method: "POST" });
+      const res = await fetch("/api/insights", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ stats, goals }) });
       const data = await res.json().catch(() => null);
       if (!res.ok) return setError(data?.error ?? "Couldn't reach the AI, try again.");
       if (data.blocked) return setBlocked(true);

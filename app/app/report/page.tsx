@@ -1,18 +1,17 @@
-import { nowMs } from "@/lib/time";
-import PrintButton from "@/components/PrintButton";
-import { loadMeals, loadReadings } from "@/lib/data";
-import { loadFoods } from "@/lib/foods";
-import { weeklyObservations } from "@/lib/insights";
-import { pairMeals } from "@/lib/pairing";
-import { weekStats } from "@/lib/stats";
-import { requireUser } from "@/lib/session";
+"use client";
 
-export default async function ReportPage() {
-  const { supabase, user, profile } = await requireUser();
-  if (!profile) return <p className="text-red-700">Your profile couldn&apos;t be loaded. Run supabase/schema.sql, then sign in again.</p>;
-  const [foods, meals, readings] = await Promise.all([loadFoods(), loadMeals(supabase, 7), loadReadings(supabase, 7)]);
-  const paired = pairMeals(meals, readings).sort((a, b) => a.eaten_at.localeCompare(b.eaten_at));
-  const stats = weekStats(paired, readings, profile, foods ?? []);
+import PrintButton from "@/components/PrintButton";
+import { FOODS } from "@/lib/foods-client";
+import { weeklyObservations } from "@/lib/insights";
+import { weekStats } from "@/lib/stats";
+import { nowMs } from "@/lib/time";
+import { useRecent } from "@/lib/useRecent";
+
+export default function ReportPage() {
+  const { ready, paired: unsorted, readings, profile } = useRecent(7);
+  if (!ready) return <p className="text-zinc-500">Loading…</p>;
+  const paired = [...unsorted].sort((a, b) => a.eaten_at.localeCompare(b.eaten_at));
+  const stats = weekStats(paired, readings, profile, FOODS);
   const obs = weeklyObservations(stats, profile);
   const from = new Date(nowMs() - 7 * 86400_000);
 
@@ -22,7 +21,7 @@ export default async function ReportPage() {
         <div>
           <h1 className="text-2xl font-bold">Weekly food and glucose report</h1>
           <p className="text-sm text-zinc-600">
-            {profile.display_name ?? user.email} · {from.toLocaleDateString("en-IN", { dateStyle: "medium" })} to {new Date().toLocaleDateString("en-IN", { dateStyle: "medium" })}
+            {profile.display_name ? `${profile.display_name} · ` : ""}{from.toLocaleDateString("en-IN", { dateStyle: "medium" })} to {new Date(nowMs()).toLocaleDateString("en-IN", { dateStyle: "medium" })}
           </p>
         </div>
         <PrintButton />
@@ -42,21 +41,25 @@ export default async function ReportPage() {
 
       <section>
         <h2 className="font-semibold">Meals</h2>
-        <table className="mt-1 w-full text-left text-xs">
-          <thead className="text-zinc-500"><tr><th className="py-1">When</th><th>Meal</th><th>Carbs</th><th>Before</th><th>2 h</th><th>Rise</th></tr></thead>
-          <tbody>
-            {paired.map((m) => (
-              <tr key={m.id} className="border-t border-zinc-100 align-top">
-                <td className="py-1 pr-2 whitespace-nowrap">{new Date(m.eaten_at).toLocaleString("en-IN", { day: "numeric", month: "short", hour: "numeric", minute: "2-digit" })}</td>
-                <td className="pr-2">{m.text}</td>
-                <td className="pr-2">{m.carbs} g</td>
-                <td className="pr-2">{m.pre?.value ?? "–"}</td>
-                <td className="pr-2">{m.post?.value ?? "–"}</td>
-                <td>{m.rise !== null ? `${m.rise > 0 ? "+" : ""}${m.rise}` : "–"}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+        {paired.length === 0 ? (
+          <p className="mt-1 text-sm text-zinc-600">No meals logged in the last 7 days.</p>
+        ) : (
+          <table className="mt-1 w-full text-left text-xs">
+            <thead className="text-zinc-500"><tr><th className="py-1">When</th><th>Meal</th><th>Carbs</th><th>Before</th><th>2 h</th><th>Rise</th></tr></thead>
+            <tbody>
+              {paired.map((m) => (
+                <tr key={m.id} className="border-t border-zinc-100 align-top">
+                  <td className="py-1 pr-2 whitespace-nowrap">{new Date(m.eaten_at).toLocaleString("en-IN", { day: "numeric", month: "short", hour: "numeric", minute: "2-digit" })}</td>
+                  <td className="pr-2">{m.text}</td>
+                  <td className="pr-2">{m.carbs} g</td>
+                  <td className="pr-2">{m.pre?.value ?? "–"}</td>
+                  <td className="pr-2">{m.post?.value ?? "–"}</td>
+                  <td>{m.rise !== null ? `${m.rise > 0 ? "+" : ""}${m.rise}` : "–"}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        )}
       </section>
 
       <p className="text-xs text-zinc-500">

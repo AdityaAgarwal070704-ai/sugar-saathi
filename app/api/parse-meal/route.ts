@@ -1,8 +1,6 @@
-import { supabaseConfigured } from "@/lib/supabase/config";
 import { callModel } from "@/lib/ai";
 import { loadFoods } from "@/lib/foods";
-import { createClient } from "@/lib/supabase/server";
-import { AI_LOGS_PER_DAY } from "@/lib/session";
+import { tooMany } from "@/lib/ratelimit";
 import type { ParseResponse } from "@/lib/types";
 
 const MAX_TEXT = 300;
@@ -12,7 +10,8 @@ function fail(message: string, status: number) {
 }
 
 export async function POST(request: Request) {
-  if (!supabaseConfigured) return Response.json({ error: "The app isn't fully set up yet (database missing)." }, { status: 503 });
+  if (tooMany(request, "parse", 40)) return fail("Too many requests right now. Please wait a few minutes and try again.", 429);
+
   let text: unknown;
   try {
     text = (await request.json()).text;
@@ -21,21 +20,6 @@ export async function POST(request: Request) {
   }
   if (typeof text !== "string" || text.trim() === "") return fail("Type what you ate.", 400);
   if (text.length > MAX_TEXT) return fail("Please keep it to one meal (under 300 characters).", 400);
-
-  // Only signed-in users may spend AI calls.
-  const supabase = await createClient();
-  const { data: auth } = await supabase.auth.getUser();
-  if (!auth.user) return fail("Please sign in to log a meal.", 401);
-
-  const limit = AI_LOGS_PER_DAY;
-  const since = new Date(Date.now() - 24 * 3600 * 1000).toISOString();
-  const { count } = await supabase
-    .from("ai_usage")
-    .select("id", { count: "exact", head: true })
-    .eq("kind", "parse")
-    .gte("created_at", since);
-  const used = count ?? 0;
-  if (used >= limit) return fail(`You've reached today's limit of ${limit} AI meal logs. Try again tomorrow.`, 429);
 
   const foods = await loadFoods();
   if (!foods) return fail("Food table unavailable.", 500);
@@ -98,9 +82,6 @@ Rules:
     });
   }
 
-  // Count the call only after the AI answered, so failures don't use up the free allowance.
-  await supabase.from("ai_usage").insert({ user_id: auth.user.id, kind: "parse" });
-
-  const body: ParseResponse = { items, foods, usage: { used: used + 1, limit } };
+  const body: ParseResponse = { items };
   return Response.json(body);
 }

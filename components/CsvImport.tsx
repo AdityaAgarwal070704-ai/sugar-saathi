@@ -1,11 +1,10 @@
 "use client";
 
 import { useState } from "react";
-import { useRouter } from "next/navigation";
 import { parseGlucoseCsv } from "@/lib/csv";
+import { store } from "@/lib/store";
 
 export default function CsvImport() {
-  const router = useRouter();
   const [msg, setMsg] = useState<{ ok: boolean; text: string } | null>(null);
   const [busy, setBusy] = useState(false);
 
@@ -20,20 +19,12 @@ export default function CsvImport() {
       const result = parseGlucoseCsv(await file.text());
       if (result.error) return setMsg({ ok: false, text: result.error });
       if (result.readings.length === 0) return setMsg({ ok: false, text: "I couldn't read any valid glucose values from that file." });
-      let imported = 0;
-      for (let i = 0; i < result.readings.length; i += 2000) {
-        const chunk = result.readings.slice(i, i + 2000);
-        const res = await fetch("/api/glucose/import", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ readings: chunk }),
-        });
-        const data = await res.json().catch(() => null);
-        if (!res.ok) return setMsg({ ok: false, text: data?.error ?? "Import failed. Try again." });
-        imported += data.received ?? chunk.length;
-      }
-      setMsg({ ok: true, text: `Imported ${imported} readings (${result.unit})${result.skipped ? `, skipped ${result.skipped} unreadable rows` : ""}. Duplicates are ignored.` });
-      router.refresh();
+      const { added, saved } = store.addReadings(result.readings.map((r) => ({ ...r, source: "csv" as const })));
+      if (!saved) return setMsg({ ok: false, text: "Your browser couldn't save that many readings (storage is full). Export a backup from Settings and clear old data, or import a shorter date range." });
+      setMsg({
+        ok: true,
+        text: `Imported ${added} new readings (${result.unit})${result.readings.length - added > 0 ? `, ${result.readings.length - added} already saved` : ""}${result.skipped ? `, skipped ${result.skipped} unreadable rows` : ""}.`,
+      });
     } catch {
       setMsg({ ok: false, text: "Couldn't read that file." });
     } finally {
@@ -47,7 +38,7 @@ export default function CsvImport() {
         {busy ? "Importing…" : "Choose a CSV file"}
         <input type="file" accept=".csv,text/csv" className="hidden" disabled={busy} onChange={onFile} />
       </label>
-      <p className="text-xs text-zinc-500">Works with LibreView and similar exports (a time column and a glucose column, mg/dL or mmol/L). Dates are read day-first unless the file shows otherwise.</p>
+      <p className="text-xs text-zinc-500">Works with LibreView and similar exports (a time column and a glucose column, mg/dL or mmol/L). Dates are read day-first unless the file shows otherwise. The file is read on your device and never uploaded.</p>
       {msg && <p role="alert" className={`text-sm ${msg.ok ? "text-emerald-800" : "text-red-700"}`}>{msg.text}</p>}
     </div>
   );

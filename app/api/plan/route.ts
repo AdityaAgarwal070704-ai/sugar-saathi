@@ -1,27 +1,15 @@
-import { supabaseConfigured } from "@/lib/supabase/config";
 import { callModel } from "@/lib/ai";
 import { nutritionOf } from "@/lib/carbs";
-import { aiUsedToday } from "@/lib/data";
 import { loadFoods } from "@/lib/foods";
 import { allSafe } from "@/lib/guardrails";
 import { mealTips } from "@/lib/insights";
-import { createClient } from "@/lib/supabase/server";
-import type { Profile } from "@/lib/types";
+import { tooMany } from "@/lib/ratelimit";
 
-const DAILY_LIMIT = 10;
 const NON_VEG = new Set(["chicken_curry", "fish_curry"]);
 
 // The AI picks dishes and counts; code checks every dish and calculates every number.
 export async function POST(request: Request) {
-  if (!supabaseConfigured) return Response.json({ error: "The app isn't fully set up yet (database missing)." }, { status: 503 });
-  const supabase = await createClient();
-  const { data: auth } = await supabase.auth.getUser();
-  if (!auth.user) return Response.json({ error: "Please sign in." }, { status: 401 });
-  const { data: profile } = await supabase.from("profiles").select("*").eq("id", auth.user.id).single();
-  if (!profile) return Response.json({ error: "Your profile couldn't be loaded." }, { status: 500 });
-  if ((await aiUsedToday(supabase, "plan")) >= DAILY_LIMIT) {
-    return Response.json({ error: "You've reached today's planner limit. Try again tomorrow." }, { status: 429 });
-  }
+  if (tooMany(request, "plan", 15)) return Response.json({ error: "Too many requests right now. Please wait a few minutes." }, { status: 429 });
 
   let body: { carbTarget?: unknown; diet?: unknown; snacks?: unknown };
   try {
@@ -29,9 +17,8 @@ export async function POST(request: Request) {
   } catch {
     return Response.json({ error: "Bad request." }, { status: 400 });
   }
-  const p = profile as Profile;
-  const carbTarget = typeof body.carbTarget === "number" && body.carbTarget >= 20 && body.carbTarget <= 150 ? Math.round(body.carbTarget) : p.meal_carb_target;
-  const diet = body.diet === "veg" || body.diet === "egg" || body.diet === "nonveg" ? body.diet : p.diet;
+  const carbTarget = typeof body.carbTarget === "number" && body.carbTarget >= 20 && body.carbTarget <= 150 ? Math.round(body.carbTarget) : 60;
+  const diet = body.diet === "egg" || body.diet === "nonveg" ? body.diet : "veg";
   const snacks = body.snacks === true;
 
   const all = await loadFoods();
@@ -102,6 +89,5 @@ Only call the tool.`,
   }
   if (meals.length === 0) return Response.json({ error: "The planner didn't return a usable plan. Try again." }, { status: 502 });
 
-  await supabase.from("ai_usage").insert({ kind: "plan" });
   return Response.json({ meals, carbTarget, diet });
 }

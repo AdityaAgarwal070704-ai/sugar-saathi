@@ -1,25 +1,24 @@
+"use client";
+
 import InsightsAI from "@/components/InsightsAI";
 import Stat from "@/components/Stat";
-import { loadMeals, loadReadings } from "@/lib/data";
-import { loadFoods } from "@/lib/foods";
+import { FOODS } from "@/lib/foods-client";
 import { weeklyObservations } from "@/lib/insights";
-import { pairMeals } from "@/lib/pairing";
 import { weekStats } from "@/lib/stats";
-import { requireUser } from "@/lib/session";
+import { useRecent } from "@/lib/useRecent";
 
-export default async function InsightsPage() {
-  const { supabase, profile } = await requireUser();
-  const p = profile ?? { plan: "free" as const, display_name: null, meal_carb_target: 60, glucose_low: 70, glucose_high: 180, diet: "veg" as const, id: "" };
-  const [foods, meals, readings] = await Promise.all([loadFoods(), loadMeals(supabase, 7), loadReadings(supabase, 7)]);
-  const stats = weekStats(pairMeals(meals, readings), readings, p, foods ?? []);
-  const obs = weeklyObservations(stats, p);
+export default function InsightsPage() {
+  const { ready, paired, readings, profile } = useRecent(7);
+  if (!ready) return <p className="text-zinc-500">Loading…</p>;
+  const stats = weekStats(paired, readings, profile, FOODS);
+  const obs = weeklyObservations(stats, profile);
 
   return (
     <>
       <h1 className="text-2xl font-bold">Weekly insights</h1>
       <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
         <Stat label="Meals logged" value={String(stats.meals)} sub={`${stats.days} day${stats.days === 1 ? "" : "s"}`} />
-        <Stat label="Avg carbs per meal" value={stats.meals ? `${stats.avgMealCarbs} g` : "–"} sub={`goal ${p.meal_carb_target} g`} />
+        <Stat label="Avg carbs per meal" value={stats.meals ? `${stats.avgMealCarbs} g` : "–"} sub={`goal ${profile.meal_carb_target} g`} />
         <Stat label="Avg fibre / protein" value={stats.meals ? `${stats.avgFibre} / ${stats.avgProtein} g` : "–"} sub="per meal" />
         <Stat label="Avg rise" value={stats.avgRise !== null ? `${stats.avgRise > 0 ? "+" : ""}${stats.avgRise} mg/dL` : "–"} sub={`${stats.pairedMeals} paired meals`} />
       </div>
@@ -44,7 +43,7 @@ export default async function InsightsPage() {
         </section>
       )}
 
-      <InsightsAI />
+      <InsightsAI stats={stats} goals={profile} />
     </>
   );
 }

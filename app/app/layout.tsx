@@ -1,12 +1,7 @@
 import AppNav from "@/components/AppNav";
 import Disclaimer from "@/components/Disclaimer";
-import SetupNotice from "@/components/SetupNotice";
-import { supabaseConfigured } from "@/lib/supabase/config";
-import { requireUser } from "@/lib/session";
 
-export default async function AppLayout({ children }: { children: React.ReactNode }) {
-  if (!supabaseConfigured) return <SetupNotice />;
-  await requireUser();
+export default function AppLayout({ children }: { children: React.ReactNode }) {
   return (
     <div className="min-h-screen">
       <AppNav />

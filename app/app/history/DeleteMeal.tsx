@@ -1,25 +1,14 @@
 "use client";
 
-import { useState } from "react";
-import { useRouter } from "next/navigation";
-import { createClient } from "@/lib/supabase/browser";
+import { store } from "@/lib/store";
 
 export default function DeleteMeal({ id }: { id: string }) {
-  const router = useRouter();
-  const [busy, setBusy] = useState(false);
-  const [error, setError] = useState(false);
-  const del = async () => {
-    if (!window.confirm("Delete this meal?")) return;
-    setBusy(true);
-    const { error: err } = await createClient().from("meals").delete().eq("id", id);
-    setBusy(false);
-    if (err) return setError(true);
-    router.refresh();
+  const del = () => {
+    if (window.confirm("Delete this meal?")) store.deleteMeal(id);
   };
   return (
-    <span className="text-xs">
-      <button type="button" disabled={busy} onClick={del} className="text-zinc-500 underline">Delete</button>
-      {error && <span className="ml-2 text-red-700">Couldn&apos;t delete</span>}
-    </span>
+    <button type="button" onClick={del} className="text-xs text-zinc-500 underline">
+      Delete
+    </button>
   );
 }

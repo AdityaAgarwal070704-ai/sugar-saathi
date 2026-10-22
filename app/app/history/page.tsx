@@ -1,19 +1,23 @@
-import { nowMs } from "@/lib/time";
+"use client";
+
 import Link from "next/link";
 import GlucoseQuickAdd from "@/components/GlucoseQuickAdd";
 import TipsCard from "@/components/TipsCard";
-import { loadMeals, loadReadings } from "@/lib/data";
-import { loadFoods } from "@/lib/foods";
+import { FOODS } from "@/lib/foods-client";
 import { mealTips } from "@/lib/insights";
-import { pairMeals } from "@/lib/pairing";
-import { HISTORY_DAYS, requireUser } from "@/lib/session";
+import { nowMs } from "@/lib/time";
+import { useRecent } from "@/lib/useRecent";
 import DeleteMeal from "./DeleteMeal";
 
-export default async function History() {
-  const { supabase, profile } = await requireUser();
-  const [foods, meals, readings] = await Promise.all([loadFoods(), loadMeals(supabase, HISTORY_DAYS), loadReadings(supabase, HISTORY_DAYS)]);
-  const paired = pairMeals(meals, readings);
-  const target = profile?.meal_carb_target ?? 60;
+function localInput(ms: number) {
+  const d = new Date(ms);
+  d.setMinutes(d.getMinutes() - d.getTimezoneOffset());
+  return d.toISOString().slice(0, 16);
+}
+
+export default function History() {
+  const { ready, paired, profile } = useRecent(365);
+  if (!ready) return <p className="text-zinc-500">Loading…</p>;
 
   return (
     <>
@@ -22,7 +26,7 @@ export default async function History() {
       <ul className="space-y-3">
         {paired.map((m) => {
           const age = nowMs() - new Date(m.eaten_at).getTime();
-          const tips = foods ? mealTips(m.items, foods, { meal_carb_target: target }) : null;
+          const tips = mealTips(m.items, FOODS, profile);
           return (
             <li key={m.id} className="rounded-xl border border-zinc-200 bg-white p-4">
               <div className="flex flex-wrap items-start justify-between gap-2">
@@ -40,15 +44,13 @@ export default async function History() {
               {m.post === null && age >= 60 * 60_000 && (
                 <div className="mt-2 text-sm">
                   <p className="mb-1 text-zinc-600">Add the 2-hour reading for this meal:</p>
-                  <GlucoseQuickAdd defaultTime={(() => { const d = new Date(new Date(m.eaten_at).getTime() + 120 * 60_000); d.setMinutes(d.getMinutes() - d.getTimezoneOffset()); return d.toISOString().slice(0, 16); })()} />
+                  <GlucoseQuickAdd defaultTime={localInput(new Date(m.eaten_at).getTime() + 120 * 60_000)} />
                 </div>
               )}
-              {tips && (
-                <details className="mt-2">
-                  <summary className="cursor-pointer text-sm text-emerald-800">Tips for this meal</summary>
-                  <div className="mt-2"><TipsCard tips={tips} /></div>
-                </details>
-              )}
+              <details className="mt-2">
+                <summary className="cursor-pointer text-sm text-emerald-800">Tips for this meal</summary>
+                <div className="mt-2"><TipsCard tips={tips} /></div>
+              </details>
             </li>
           );
         })}

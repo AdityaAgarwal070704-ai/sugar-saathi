@@ -1,8 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname, useRouter } from "next/navigation";
-import { createClient } from "@/lib/supabase/browser";
+import { usePathname } from "next/navigation";
 
 const LINKS = [
   { href: "/app", label: "Dashboard" },
@@ -17,13 +16,6 @@ const LINKS = [
 
 export default function AppNav() {
   const path = usePathname();
-  const router = useRouter();
-
-  const signOut = async () => {
-    await createClient().auth.signOut();
-    router.push("/");
-    router.refresh();
-  };
 
   return (
     <header className="border-b border-zinc-200 bg-white print:hidden">
@@ -45,9 +37,6 @@ export default function AppNav() {
             );
           })}
         </nav>
-        <button type="button" onClick={signOut} className="text-sm text-zinc-600 underline">
-          Sign out
-        </button>
       </div>
     </header>
   );

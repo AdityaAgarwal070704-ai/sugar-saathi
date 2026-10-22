@@ -111,3 +111,44 @@ test("guardrail blocks dosing and medication talk, allows food advice", () => {
     assert.ok(!hasDosingAdvice(ok), ok);
   }
 });
+
+import { fromPersisted, mergeReadings, toPersisted, EMPTY_STATE } from "../lib/store-core";
+
+test("store: round trip keeps meals, readings and goals", () => {
+  const m = meal("m1", "2026-10-20T08:00:00Z");
+  const merged = mergeReadings([], [{ measured_at: "2026-10-20T07:50:00Z", value: 112, source: "manual" }]);
+  const state = { meals: [m], readings: merged.readings, profile: { ...EMPTY_STATE.profile, meal_carb_target: 50 } };
+  const back = fromPersisted(JSON.parse(JSON.stringify(toPersisted(state))));
+  assert.ok(back);
+  assert.equal(back!.meals.length, 1);
+  assert.equal(back!.readings[0].value, 112);
+  assert.equal(back!.profile.meal_carb_target, 50);
+});
+
+test("store: duplicates are ignored and bad values rejected", () => {
+  const a = mergeReadings([], [{ measured_at: "2026-10-20T07:50:00Z", value: 112, source: "csv" }]);
+  const b = mergeReadings(a.readings, [
+    { measured_at: "2026-10-20T07:50:00Z", value: 112, source: "csv" },
+    { measured_at: "2026-10-20T08:50:00Z", value: 20, source: "manual" },
+    { measured_at: "not a date", value: 100, source: "manual" },
+  ]);
+  assert.equal(b.added, 0);
+  assert.equal(b.readings.length, 1);
+});
+
+test("store: malformed or hostile backup data is dropped, not trusted", () => {
+  assert.equal(fromPersisted(null), null);
+  assert.equal(fromPersisted({ v: 2 }), null);
+  const s = fromPersisted({
+    v: 1,
+    meals: [{ id: 1 }, meal("ok", "2026-10-20T08:00:00Z"), { ...meal("bad", "nope") }],
+    readings: [[1, 2, 0], "x", [1_760_000_000_000, 130, 1]],
+    profile: { meal_carb_target: 9999, glucose_low: 90, glucose_high: 50, diet: "<script>" },
+  });
+  assert.ok(s);
+  assert.equal(s!.meals.length, 1);
+  assert.equal(s!.readings.length, 1);
+  assert.equal(s!.profile.meal_carb_target, 60);
+  assert.equal(s!.profile.glucose_high, 180);
+  assert.equal(s!.profile.diet, "veg");
+});

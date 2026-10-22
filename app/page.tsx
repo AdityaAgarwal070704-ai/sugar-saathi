@@ -9,7 +9,7 @@ const FEATURES = [
   ["Weekly patterns", "See which dishes and meals go with bigger rises, in plain language, as possible links to discuss with your educator."],
   ["One-page educator report", "Print or save a clean summary of your week before every appointment."],
   ["Day meal planner", "Get a day of Indian meals that fits your carb goal and diet, with every number calculated from the table."],
-  ["Your goals, your ranges", "Set your own per-meal carb goal and glucose range."],
+  ["Private by design", "No account needed. Your meals and readings are stored only in your own browser, with backup and restore."],
 ];
 
 export default function Landing() {
@@ -18,7 +18,7 @@ export default function Landing() {
       <header className="mx-auto flex max-w-5xl items-center justify-between px-4 py-4">
         <span className="text-lg font-bold text-emerald-800">Sugar Saathi</span>
         <nav className="flex items-center gap-4 text-sm">
-          <Link href="/login" className="rounded-lg bg-emerald-700 px-3 py-1.5 text-white">Sign in</Link>
+          <Link href="/app" className="rounded-lg bg-emerald-700 px-3 py-1.5 text-white">Open the app</Link>
         </nav>
       </header>
 
@@ -27,9 +27,9 @@ export default function Landing() {
         <p className="mx-auto mt-4 max-w-2xl text-lg text-zinc-600">
           Built for adults managing type 2 diabetes who cook at home. Describe a meal, get an honest carb estimate and practical feedback, and see it beside your glucose.
         </p>
+        <p className="mt-2 text-sm text-zinc-500">Free. No sign-up. Your data stays on your device.</p>
         <div className="mt-8 flex justify-center gap-3">
-          <Link href="/login?mode=signup" className="rounded-lg bg-emerald-700 px-5 py-3 font-medium text-white">Get started</Link>
-          <Link href="/login" className="rounded-lg border border-zinc-300 px-5 py-3">Sign in</Link>
+          <Link href="/app" className="rounded-lg bg-emerald-700 px-5 py-3 font-medium text-white">Open the app, it&apos;s free</Link>
         </div>
       </section>
 

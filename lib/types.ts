@@ -22,8 +22,6 @@ export type Item = {
 
 export type ParseResponse = {
   items: Omit<Item, "key">[];
-  foods: Food[];
-  usage?: { used: number; limit: number | null };
 };
 
 // A saved line of a meal (what we store in the database).
@@ -50,9 +48,8 @@ export type ReadingRow = {
   source: "manual" | "csv";
 };
 
+// Goals saved in the browser (no accounts).
 export type Profile = {
-  id: string;
-  plan: "free" | "pro";
   display_name: string | null;
   meal_carb_target: number; // grams per meal
   glucose_low: number; // mg/dL

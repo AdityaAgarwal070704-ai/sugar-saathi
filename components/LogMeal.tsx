@@ -1,14 +1,14 @@
 "use client";
 
 import { useState } from "react";
-import { useRouter } from "next/navigation";
 import ConfirmCard from "./ConfirmCard";
 import TipsCard from "./TipsCard";
-import { createClient } from "@/lib/supabase/browser";
+import { store } from "@/lib/store";
+import { FOODS } from "@/lib/foods-client";
 import { nutritionOf, totalCarbs } from "@/lib/carbs";
 import { mealTips, type MealTips } from "@/lib/insights";
 import { parseReading } from "@/lib/glucose";
-import type { Food, Item, MealType, ParseResponse, Profile } from "@/lib/types";
+import type { Item, MealType, ParseResponse, Profile } from "@/lib/types";
 
 const MAX_TEXT = 300;
 
@@ -27,16 +27,14 @@ function guessType(): MealType {
 }
 
 export default function LogMeal({ profile }: { profile: Pick<Profile, "meal_carb_target"> }) {
-  const router = useRouter();
   const [text, setText] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [draft, setDraft] = useState<{ text: string; items: Item[]; foods: Food[] } | null>(null);
+  const [draft, setDraft] = useState<{ text: string; items: Item[] } | null>(null);
   const [mealType, setMealType] = useState<MealType>(guessType());
   const [eatenAt, setEatenAt] = useState(nowLocal());
   const [pre, setPre] = useState("");
   const [saveError, setSaveError] = useState<string | null>(null);
-  const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState<{ tips: MealTips; carbs: number } | null>(null);
 
   const estimate = async () => {
@@ -60,7 +58,7 @@ export default function LogMeal({ profile }: { profile: Pick<Profile, "meal_carb
       const items = parsed.items
         .map((i) => ({ ...i, key: crypto.randomUUID() }))
         .sort((a, b) => Number(a.confidence >= 0.7 && a.foodId !== null) - Number(b.confidence >= 0.7 && b.foodId !== null));
-      setDraft({ text, items, foods: parsed.foods });
+      setDraft({ text, items });
     } catch {
       setError("Couldn't reach the AI, try again.");
     } finally {
@@ -68,7 +66,7 @@ export default function LogMeal({ profile }: { profile: Pick<Profile, "meal_carb
     }
   };
 
-  const confirm = async () => {
+  const confirm = () => {
     if (!draft) return;
     setSaveError(null);
     const when = new Date(eatenAt);
@@ -82,10 +80,8 @@ export default function LogMeal({ profile }: { profile: Pick<Profile, "meal_carb
     }
 
     const lines = draft.items.filter((i) => i.foodId !== null).map((i) => ({ foodId: i.foodId as string, count: i.count, typed: i.typed }));
-    const n = nutritionOf(lines, draft.foods);
-    setSaving(true);
-    const supabase = createClient();
-    const { error: err } = await supabase.from("meals").insert({
+    const n = nutritionOf(lines, FOODS);
+    const ok = store.addMeal({
       eaten_at: when.toISOString(),
       meal_type: mealType,
       text: draft.text,
@@ -95,20 +91,13 @@ export default function LogMeal({ profile }: { profile: Pick<Profile, "meal_carb
       protein: n.protein,
       gl: n.gl,
     });
-    if (err) {
-      setSaving(false);
-      return setSaveError("Couldn't save the meal. Try again.");
-    }
-    if (preValue !== null) {
-      await supabase.from("readings").insert({ value: preValue, measured_at: when.toISOString(), source: "manual" });
-    }
-    setSaving(false);
-    setSaved({ tips: mealTips(lines, draft.foods, profile), carbs: n.carbs });
+    if (!ok) return setSaveError("Your browser couldn't save this (storage is full or blocked). Export a backup from Settings and clear old data.");
+    if (preValue !== null) store.addReadings([{ measured_at: when.toISOString(), value: preValue, source: "manual" }]);
+    setSaved({ tips: mealTips(lines, FOODS, profile), carbs: n.carbs });
     setDraft(null);
     setText("");
     setPre("");
     setEatenAt(nowLocal());
-    router.refresh();
   };
 
   const input = "rounded border border-zinc-300 px-2 py-1";
@@ -132,12 +121,11 @@ export default function LogMeal({ profile }: { profile: Pick<Profile, "meal_carb
           <ConfirmCard
             text={draft.text}
             items={draft.items}
-            foods={draft.foods}
+            foods={FOODS}
             onChange={(items) => setDraft({ ...draft, items })}
             onConfirm={confirm}
             onCancel={() => setDraft(null)}
-            confirmLabel={saving ? "Saving…" : "Confirm and save"}
-            confirmDisabled={saving}
+            confirmLabel="Confirm and save"
           />
           <section className="rounded-xl border border-zinc-200 bg-white p-4 shadow-sm">
             <h2 className="font-semibold">Details to save with it</h2>
@@ -149,7 +137,7 @@ export default function LogMeal({ profile }: { profile: Pick<Profile, "meal_carb
               <label>Glucose just before (optional) <input inputMode="numeric" placeholder="mg/dL" className={`${input} w-24`} value={pre} onChange={(e) => setPre(e.target.value)} /></label>
             </div>
             {saveError && <p role="alert" className="mt-2 text-sm text-red-700">{saveError}</p>}
-            <p className="mt-2 text-xs text-zinc-500">Total about {totalCarbs(draft.items, draft.foods).grams} g carbs will be saved. Add your 2-hour reading later from History or Glucose.</p>
+            <p className="mt-2 text-xs text-zinc-500">Total about {totalCarbs(draft.items, FOODS).grams} g carbs will be saved. Add your 2-hour reading later from History or Glucose.</p>
           </section>
         </>
       )}

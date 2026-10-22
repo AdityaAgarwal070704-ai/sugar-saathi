@@ -1,12 +1,14 @@
-import LogMeal from "@/components/LogMeal";
-import { requireUser } from "@/lib/session";
+"use client";
 
-export default async function LogPage() {
-  const { profile } = await requireUser();
+import LogMeal from "@/components/LogMeal";
+import { useStore } from "@/lib/store";
+
+export default function LogPage() {
+  const { profile } = useStore();
   return (
     <>
       <h1 className="text-2xl font-bold">Log a meal</h1>
-      <LogMeal profile={{ meal_carb_target: profile?.meal_carb_target ?? 60 }} />
+      <LogMeal profile={profile} />
     </>
   );
 }

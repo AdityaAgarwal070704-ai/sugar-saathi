@@ -1,13 +1,13 @@
+"use client";
+
 import CsvImport from "@/components/CsvImport";
 import GlucoseQuickAdd from "@/components/GlucoseQuickAdd";
-import { loadReadings } from "@/lib/data";
-import { HISTORY_DAYS, requireUser } from "@/lib/session";
+import { useRecent } from "@/lib/useRecent";
 
-export default async function GlucosePage() {
-  const { supabase, profile } = await requireUser();
-  const readings = await loadReadings(supabase, HISTORY_DAYS);
-  const low = profile?.glucose_low ?? 70;
-  const high = profile?.glucose_high ?? 180;
+export default function GlucosePage() {
+  const { ready, readings, profile } = useRecent(365);
+  if (!ready) return <p className="text-zinc-500">Loading…</p>;
+  const { glucose_low: low, glucose_high: high } = profile;
 
   return (
     <>

@@ -1,8 +1,8 @@
 # Sugar Saathi
 
-A subscription web app for Indian adults managing type 2 diabetes. Describe a meal in everyday words, get an honest carb estimate and practical feedback, and see every meal beside your glucose.
+A free web app for Indian adults managing type 2 diabetes. Describe a meal in everyday words, get an honest carb estimate and practical feedback, and see every meal beside your glucose.
 
-Live app: https://sugar-saathi.vercel.app (sign-in works once Supabase is set up, see "Run it locally").
+Live app: https://sugar-saathi.vercel.app. No sign-up. Your data stays in your own browser.
 
 - Original MVP scope: [MVP_SCOPE.md](MVP_SCOPE.md)
 - Current product scope and decisions: [PRODUCT.md](PRODUCT.md)
@@ -17,15 +17,14 @@ Live app: https://sugar-saathi.vercel.app (sign-in works once Supabase is set up
 - **Educator report:** a one-page weekly summary to print or save as PDF.
 - **Meal planner:** an AI-proposed day of Indian meals within your carb goal and diet, with every number calculated from the table.
 - **Your goals:** set your own per-meal carb goal, glucose range and diet.
-
-Payments and subscription tiers are **not built yet**. Every signed-in user gets every feature, with fair-use limits on AI calls (30 meal logs a day, 10 AI summaries and 10 plans a day).
+- **Backup and restore:** export everything to a file and restore it later.
 
 ## Rules the app follows
 
 - **Numbers come from code, not AI.** Carbs, fibre, protein and glycemic load come only from `data/foods.json`. The AI only turns words into dishes, writes the weekly narrative from numbers that were already calculated, and proposes plans using table dishes that code then checks and calculates.
 - **Glucose is never invented.** Readings are only what the user enters or imports. The app does not predict glucose.
 - **Food guidance only.** No insulin, dose or medication advice. Every piece of AI text goes through a filter (`lib/guardrails.ts`) that blocks dosing and medication language, and the prompts forbid it. Patterns are worded as "possible links to discuss with your educator".
-- **Your data is yours.** Row-level security in the database means a signed-in user can only read and change their own rows. Users cannot change their own plan.
+- **Private by design.** There are no accounts and no database. Meals, readings and goals live in the browser's local storage on the user's own device. The only things sent to a server are the meal text (to be split into dishes) and, for the AI summary, statistics the browser calculated. CSV files are read on the device and never uploaded.
 
 ## Architecture: Input → AI → Logic → Action → Output
 
@@ -33,45 +32,41 @@ Payments and subscription tiers are **not built yet**. Every signed-in user gets
 |---|---|---|
 | **Input** | Meal text; glucose entered or imported from CSV; goals in Settings | Human |
 | **AI** | Splits meal text into table dishes with counts and confidence; writes the weekly narrative; proposes a day plan (Gemini through OpenRouter) | AI |
-| **Logic** | Validates AI output against the table; nutrition maths; meal-to-glucose pairing (before: 45 min before to 10 min after eating; after: 90 to 150 min, nearest 2 hours); weekly stats; rule-based tips and swaps; plan limits; safety filter | Plain code |
+| **Logic** | Validates AI output against the table; nutrition maths; meal-to-glucose pairing (before: 45 min before to 10 min after eating; after: 90 to 150 min, nearest 2 hours); weekly stats; rule-based tips and swaps; the safety filter | Plain code |
 | **Action** | User confirms or edits portions and dishes, saves the meal, adds readings | Human |
 | **Output** | Dashboard, per-meal tips, history, weekly insights, educator report, meal plan | Plain code (plus AI text where marked) |
 
-Stack: Next.js (App Router) on Vercel; Supabase (email login and Postgres); Gemini via OpenRouter.
+Stack: Next.js (App Router) on Vercel; browser local storage for data; Gemini via OpenRouter for the three AI features.
 
 Key files:
-- `lib/` has the engines: `carbs.ts`, `insights.ts`, `pairing.ts`, `stats.ts`, `csv.ts`, `guardrails.ts`, `ai.ts`
-- `app/app/` has the signed-in screens
-- `app/api/` has `parse-meal`, `insights`, `plan` and `glucose/import`
-- `supabase/schema.sql` is the database
+- `lib/` has the engines: `carbs.ts`, `insights.ts`, `pairing.ts`, `stats.ts`, `csv.ts`, `guardrails.ts`, `ai.ts`, and the browser storage layer (`store.ts`, `store-core.ts`)
+- `app/app/` has the screens
+- `app/api/` has three routes: `parse-meal`, `insights` and `plan`
+- `data/foods.json` is the food table
 - `tests/logic.test.ts` has the unit tests
 
 ## Run it locally
 
-You need Node.js (LTS) and two free accounts.
+You need Node.js (LTS) and an OpenRouter key.
 
 ```bash
 npm install
 cp .env.example .env.local
 ```
 
-Fill in `.env.local` (never commit it; git already ignores it):
+Open `.env.local` and replace the placeholder with your key from openrouter.ai (never commit this file; git already ignores it):
 
-1. **OpenRouter** (AI): create a key at openrouter.ai and set `OPENROUTER_API_KEY`.
-2. **Supabase** (login and data):
-   1. Create a project at supabase.com.
-   2. Open SQL Editor, paste all of `supabase/schema.sql`, and run it.
-   3. Project Settings → API: copy the Project URL into `NEXT_PUBLIC_SUPABASE_URL` and the anon (or publishable) key into `NEXT_PUBLIC_SUPABASE_ANON_KEY`.
-   4. For quick testing, Authentication → Sign In / Providers → Email, and turn off "Confirm email". Leave it on for real users.
-   5. Authentication → URL Configuration: set Site URL to your app URL and add `<your url>/auth/callback` as a redirect URL.
+```
+OPENROUTER_API_KEY=your-key-here
+```
 
-Then:
+Then start the app and open http://localhost:3000:
 
 ```bash
 npm run dev
 ```
 
-Open http://localhost:3000. Run the unit tests with:
+Run the unit tests with:
 
 ```bash
 npx tsx --test tests/logic.test.ts
@@ -79,7 +74,7 @@ npx tsx --test tests/logic.test.ts
 
 ## Deploy to Vercel
 
-Import the repo in Vercel (or run `npx vercel deploy --prod`). Add the three variables from `.env.example` under Project Settings → Environment Variables, then redeploy. Add the live URL's `/auth/callback` to Supabase's redirect URLs.
+Import the repo in Vercel (or run `npx vercel deploy --prod`), add `OPENROUTER_API_KEY` under Project Settings → Environment Variables, and redeploy.
 
 ## Failure cases and how the screen handles them
 
@@ -89,17 +84,18 @@ Import the repo in Vercel (or run `npx vercel deploy --prod`). Add the three var
 | Dish not in the table | Red "Not in my table, not counted"; the total is labelled partial; nothing is guessed |
 | AI picks the wrong dish | Each row shows what you typed beside what it matched, a dropdown to change it, and an amber "Check this" when unsure |
 | AI invents a dish id or returns broken data | Code rejects it; the user sees "Couldn't reach the AI, try again" |
-| Daily AI fair-use limit reached | A clear message to try again tomorrow |
 | AI text that sounds like dosing advice | Blocked by the safety filter; rule-based insights still show |
+| Too many AI requests in a short time | A clear "please wait" message (a simple per-IP limit) |
 | CSV that isn't a glucose export, or has bad rows | A clear message; unreadable rows are skipped and counted |
 | Impossible glucose values (outside 40 to 600 mg/dL) | Rejected inline |
-| Database or AI not configured | A setup notice or a clear error, never a crash |
+| Browser storage full or blocked | A message explaining how to export a backup and clear old data |
+| Corrupted or hostile backup file | Rejected, or bad rows are dropped; never trusted |
 
-## Status and known limits
+## Known limits
 
-- Logic is covered by unit tests (`tests/logic.test.ts`): nutrition maths, tips, pairing, weekly stats, CSV parsing and the safety filter.
-- The signed-in screens and Supabase row-level security need your Supabase project to run, and have not been exercised end to end yet. Expect to find and fix small issues on first run.
+- **Data lives in one browser on one device.** Clearing browser data or switching device loses it, so use Settings → Export backup. There is no sync.
 - The food table is a **starter set of 52 dishes with approximate values, not verified by a dietitian**. It must be reviewed before real use, and the app says so on screen.
 - Glycemic-load ratings and per-meal thresholds are simple starter rules, not clinically validated.
+- The abuse limit on the AI routes is best-effort (per server instance), not a hard guarantee.
 - This is not a medical device. It gives food guidance, not medical advice.
-- Not built: payments and subscription tiers, direct CGM or meter sync, photo and voice input, regional languages, medication tracking, an educator-side dashboard.
+- Not built: accounts and cross-device sync, payments, direct CGM or meter sync, photo and voice input, regional languages, medication tracking, an educator-side dashboard.
