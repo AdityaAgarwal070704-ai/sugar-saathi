@@ -1,6 +1,5 @@
 import InsightsAI from "@/components/InsightsAI";
 import Stat from "@/components/Stat";
-import { LockedCard } from "@/components/Upgrade";
 import { loadMeals, loadReadings } from "@/lib/data";
 import { loadFoods } from "@/lib/foods";
 import { weeklyObservations } from "@/lib/insights";
@@ -45,11 +44,7 @@ export default async function InsightsPage() {
         </section>
       )}
 
-      {p.plan === "pro" ? (
-        <InsightsAI />
-      ) : (
-        <LockedCard title="AI weekly summary">A plain-language write-up of your week: possible links between meals and glucose, confounders to note, and food ideas for next week.</LockedCard>
-      )}
+      <InsightsAI />
     </>
   );
 }

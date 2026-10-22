@@ -3,21 +3,15 @@ import Link from "next/link";
 import Stat from "@/components/Stat";
 import { weeklyObservations } from "@/lib/insights";
 import { loadFoods } from "@/lib/foods";
-import { aiUsedToday, loadMeals, loadReadings } from "@/lib/data";
+import { loadMeals, loadReadings } from "@/lib/data";
 import { pairMeals } from "@/lib/pairing";
 import { weekStats } from "@/lib/stats";
-import { FREE_AI_LOGS_PER_DAY, requireUser } from "@/lib/session";
-import { UpgradeButton } from "@/components/Upgrade";
+import { requireUser } from "@/lib/session";
 
 export default async function Dashboard() {
   const { supabase, profile } = await requireUser();
   const p = profile ?? { plan: "free" as const, display_name: null, meal_carb_target: 60, glucose_low: 70, glucose_high: 180, diet: "veg" as const, id: "" };
-  const [foods, meals, readings, used] = await Promise.all([
-    loadFoods(),
-    loadMeals(supabase, 7),
-    loadReadings(supabase, 7),
-    aiUsedToday(supabase, "parse"),
-  ]);
+  const [foods, meals, readings] = await Promise.all([loadFoods(), loadMeals(supabase, 7), loadReadings(supabase, 7)]);
   const paired = pairMeals(meals, readings);
   const stats = weekStats(paired, readings, p, foods ?? []);
   const obs = weeklyObservations(stats, p);
@@ -65,13 +59,6 @@ export default async function Dashboard() {
         </ul>
       </section>
 
-      {p.plan === "free" && (
-        <section className="rounded-xl border border-emerald-200 bg-emerald-50 p-4">
-          <h2 className="font-semibold">You&apos;re on Free</h2>
-          <p className="text-sm text-zinc-700">{Math.min(used, FREE_AI_LOGS_PER_DAY)} of {FREE_AI_LOGS_PER_DAY} AI meal logs used today. Pro adds unlimited logging, CSV import, AI weekly insights, the educator report and the meal planner.</p>
-          <div className="mt-3"><UpgradeButton /></div>
-        </section>
-      )}
     </>
   );
 }

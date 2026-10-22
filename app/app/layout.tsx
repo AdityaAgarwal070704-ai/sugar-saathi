@@ -6,10 +6,10 @@ import { requireUser } from "@/lib/session";
 
 export default async function AppLayout({ children }: { children: React.ReactNode }) {
   if (!supabaseConfigured) return <SetupNotice />;
-  const { profile } = await requireUser();
+  await requireUser();
   return (
     <div className="min-h-screen">
-      <AppNav plan={profile?.plan ?? "free"} />
+      <AppNav />
       <div className="mx-auto max-w-5xl space-y-5 px-4 py-6">{children}</div>
       <footer className="mx-auto max-w-5xl px-4 pb-10 print:hidden">
         <Disclaimer />

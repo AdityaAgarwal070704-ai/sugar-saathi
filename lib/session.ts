@@ -11,7 +11,7 @@ export async function requireUser() {
   return { supabase, user: data.user, profile: profile as Profile | null };
 }
 
-export const FREE_AI_LOGS_PER_DAY = 3;
-export const FREE_HISTORY_DAYS = 7;
-export const PRO_HISTORY_DAYS = 365;
-export const PRO_PRICE_LABEL = process.env.NEXT_PUBLIC_PRO_PRICE_LABEL ?? "₹299 / month";
+// Payments aren't built yet, so every signed-in user gets every feature.
+// A fair-use cap keeps AI costs bounded.
+export const AI_LOGS_PER_DAY = 30;
+export const HISTORY_DAYS = 365;

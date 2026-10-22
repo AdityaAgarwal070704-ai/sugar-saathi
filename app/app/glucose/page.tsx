@@ -1,13 +1,11 @@
 import CsvImport from "@/components/CsvImport";
 import GlucoseQuickAdd from "@/components/GlucoseQuickAdd";
-import { LockedCard } from "@/components/Upgrade";
 import { loadReadings } from "@/lib/data";
-import { FREE_HISTORY_DAYS, PRO_HISTORY_DAYS, requireUser } from "@/lib/session";
+import { HISTORY_DAYS, requireUser } from "@/lib/session";
 
 export default async function GlucosePage() {
   const { supabase, profile } = await requireUser();
-  const isPro = profile?.plan === "pro";
-  const readings = await loadReadings(supabase, isPro ? PRO_HISTORY_DAYS : FREE_HISTORY_DAYS);
+  const readings = await loadReadings(supabase, HISTORY_DAYS);
   const low = profile?.glucose_low ?? 70;
   const high = profile?.glucose_high ?? 180;
 
@@ -20,14 +18,10 @@ export default async function GlucosePage() {
         <GlucoseQuickAdd />
       </section>
 
-      {isPro ? (
-        <section className="rounded-xl border border-zinc-200 bg-white p-4">
-          <h2 className="font-semibold">Import from your CGM or meter</h2>
-          <div className="mt-2"><CsvImport /></div>
-        </section>
-      ) : (
-        <LockedCard title="Import from your CGM or meter">Upload a CSV export (for example from LibreView) and every meal is matched to its before and 2-hour values automatically.</LockedCard>
-      )}
+      <section className="rounded-xl border border-zinc-200 bg-white p-4">
+        <h2 className="font-semibold">Import from your CGM or meter</h2>
+        <div className="mt-2"><CsvImport /></div>
+      </section>
 
       <section className="rounded-xl border border-zinc-200 bg-white p-4">
         <h2 className="font-semibold">Recent readings ({readings.length})</h2>

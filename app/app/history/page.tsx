@@ -6,21 +6,18 @@ import { loadMeals, loadReadings } from "@/lib/data";
 import { loadFoods } from "@/lib/foods";
 import { mealTips } from "@/lib/insights";
 import { pairMeals } from "@/lib/pairing";
-import { FREE_HISTORY_DAYS, PRO_HISTORY_DAYS, requireUser } from "@/lib/session";
+import { HISTORY_DAYS, requireUser } from "@/lib/session";
 import DeleteMeal from "./DeleteMeal";
 
 export default async function History() {
   const { supabase, profile } = await requireUser();
-  const isPro = profile?.plan === "pro";
-  const days = isPro ? PRO_HISTORY_DAYS : FREE_HISTORY_DAYS;
-  const [foods, meals, readings] = await Promise.all([loadFoods(), loadMeals(supabase, days), loadReadings(supabase, days)]);
+  const [foods, meals, readings] = await Promise.all([loadFoods(), loadMeals(supabase, HISTORY_DAYS), loadReadings(supabase, HISTORY_DAYS)]);
   const paired = pairMeals(meals, readings);
   const target = profile?.meal_carb_target ?? 60;
 
   return (
     <>
       <h1 className="text-2xl font-bold">History</h1>
-      {!isPro && <p className="text-sm text-zinc-600">Showing the last {FREE_HISTORY_DAYS} days. <Link href="/app/settings" className="underline">Upgrade</Link> to see everything.</p>}
       {paired.length === 0 && <p className="text-zinc-600">No meals yet. <Link href="/app/log" className="underline">Log your first meal</Link>.</p>}
       <ul className="space-y-3">
         {paired.map((m) => {

@@ -15,7 +15,7 @@ const LINKS = [
   { href: "/app/settings", label: "Settings" },
 ];
 
-export default function AppNav({ plan }: { plan: "free" | "pro" }) {
+export default function AppNav() {
   const path = usePathname();
   const router = useRouter();
 
@@ -45,9 +45,6 @@ export default function AppNav({ plan }: { plan: "free" | "pro" }) {
             );
           })}
         </nav>
-        <span className={`rounded px-2 py-0.5 text-xs font-medium ${plan === "pro" ? "bg-emerald-700 text-white" : "bg-zinc-200 text-zinc-700"}`}>
-          {plan === "pro" ? "Pro" : "Free"}
-        </span>
         <button type="button" onClick={signOut} className="text-sm text-zinc-600 underline">
           Sign out
         </button>

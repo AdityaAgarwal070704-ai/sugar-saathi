@@ -30,7 +30,7 @@ export default function InsightsAI() {
   return (
     <section className="rounded-xl border border-zinc-200 bg-white p-4">
       <div className="flex flex-wrap items-center justify-between gap-2">
-        <h2 className="font-semibold">AI weekly summary <span className="ml-1 rounded bg-emerald-700 px-2 py-0.5 text-xs text-white">Pro</span></h2>
+        <h2 className="font-semibold">AI weekly summary</h2>
         <button type="button" disabled={busy} onClick={run} className="rounded-lg bg-emerald-700 px-4 py-2 text-sm text-white disabled:opacity-50">
           {busy ? "Writing…" : result ? "Refresh" : "Generate summary"}
         </button>

@@ -1,6 +1,6 @@
 # Sugar Saathi
 
-[MVP_SCOPE.md](MVP_SCOPE.md) is the original MVP scope. On 2026-10-22 the user expanded it to a full subscription product (see "v2 scope" in [PRODUCT.md](PRODUCT.md)). Follow PRODUCT.md for what to build.
+[MVP_SCOPE.md](MVP_SCOPE.md) is the original MVP scope. On 2026-10-22 the user expanded it to a full platform (see [PRODUCT.md](PRODUCT.md)); payments are deferred. Follow PRODUCT.md for what to build.
 
 Hard rules that still apply everywhere (UI text, prompts, code):
 - Carbs, fibre, protein and glycemic load come only from `data/foods.json`, never from the AI.

@@ -2,7 +2,7 @@ import { supabaseConfigured } from "@/lib/supabase/config";
 import { callModel } from "@/lib/ai";
 import { loadFoods } from "@/lib/foods";
 import { createClient } from "@/lib/supabase/server";
-import { FREE_AI_LOGS_PER_DAY } from "@/lib/session";
+import { AI_LOGS_PER_DAY } from "@/lib/session";
 import type { ParseResponse } from "@/lib/types";
 
 const MAX_TEXT = 300;
@@ -27,23 +27,15 @@ export async function POST(request: Request) {
   const { data: auth } = await supabase.auth.getUser();
   if (!auth.user) return fail("Please sign in to log a meal.", 401);
 
-  const { data: profile } = await supabase.from("profiles").select("plan").eq("id", auth.user.id).single();
-  const isPro = profile?.plan === "pro";
-  const limit = isPro ? null : FREE_AI_LOGS_PER_DAY;
-
-  let used = 0;
-  if (limit !== null) {
-    const since = new Date(Date.now() - 24 * 3600 * 1000).toISOString();
-    const { count } = await supabase
-      .from("ai_usage")
-      .select("id", { count: "exact", head: true })
-      .eq("kind", "parse")
-      .gte("created_at", since);
-    used = count ?? 0;
-    if (used >= limit) {
-      return fail(`You've used your ${limit} free AI meal logs for today. Upgrade to Pro for unlimited logging.`, 429);
-    }
-  }
+  const limit = AI_LOGS_PER_DAY;
+  const since = new Date(Date.now() - 24 * 3600 * 1000).toISOString();
+  const { count } = await supabase
+    .from("ai_usage")
+    .select("id", { count: "exact", head: true })
+    .eq("kind", "parse")
+    .gte("created_at", since);
+  const used = count ?? 0;
+  if (used >= limit) return fail(`You've reached today's limit of ${limit} AI meal logs. Try again tomorrow.`, 429);
 
   const foods = await loadFoods();
   if (!foods) return fail("Food table unavailable.", 500);

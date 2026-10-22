@@ -1,15 +1,12 @@
 import { supabaseConfigured } from "@/lib/supabase/config";
 import { createClient } from "@/lib/supabase/server";
 
-// Bulk glucose import. Pro only, and each reading is validated again here (never trust the browser).
+// Bulk glucose import. Each reading is validated again here (never trust the browser).
 export async function POST(request: Request) {
   if (!supabaseConfigured) return Response.json({ error: "The app isn't fully set up yet (database missing)." }, { status: 503 });
   const supabase = await createClient();
   const { data: auth } = await supabase.auth.getUser();
   if (!auth.user) return Response.json({ error: "Please sign in." }, { status: 401 });
-
-  const { data: profile } = await supabase.from("profiles").select("plan").eq("id", auth.user.id).single();
-  if (profile?.plan !== "pro") return Response.json({ error: "CSV import is a Pro feature." }, { status: 403 });
 
   let body: { readings?: unknown };
   try {

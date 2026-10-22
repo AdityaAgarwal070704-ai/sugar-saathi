@@ -1,5 +1,4 @@
 import Planner from "@/components/Planner";
-import { LockedCard } from "@/components/Upgrade";
 import { requireUser } from "@/lib/session";
 
 export default async function PlannerPage() {
@@ -7,10 +6,10 @@ export default async function PlannerPage() {
   return (
     <>
       <h1 className="text-2xl font-bold">Meal planner</h1>
-      {profile?.plan === "pro" ? (
+      {profile ? (
         <Planner defaultTarget={profile.meal_carb_target} defaultDiet={profile.diet} />
       ) : (
-        <LockedCard title="AI day meal planner">Get a full day of Indian meals that fits your carb goal and diet, with fibre and protein worked out for every plate.</LockedCard>
+        <p className="text-red-700">Your profile couldn&apos;t be loaded. Run supabase/schema.sql, then sign in again.</p>
       )}
     </>
   );

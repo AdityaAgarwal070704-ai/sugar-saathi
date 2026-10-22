@@ -4,7 +4,6 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import ConfirmCard from "./ConfirmCard";
 import TipsCard from "./TipsCard";
-import { UpgradeButton } from "./Upgrade";
 import { createClient } from "@/lib/supabase/browser";
 import { nutritionOf, totalCarbs } from "@/lib/carbs";
 import { mealTips, type MealTips } from "@/lib/insights";
@@ -27,12 +26,11 @@ function guessType(): MealType {
   return "dinner";
 }
 
-export default function LogMeal({ profile, usedToday }: { profile: Pick<Profile, "plan" | "meal_carb_target">; usedToday: number }) {
+export default function LogMeal({ profile }: { profile: Pick<Profile, "meal_carb_target"> }) {
   const router = useRouter();
   const [text, setText] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [limitHit, setLimitHit] = useState(false);
   const [draft, setDraft] = useState<{ text: string; items: Item[]; foods: Food[] } | null>(null);
   const [mealType, setMealType] = useState<MealType>(guessType());
   const [eatenAt, setEatenAt] = useState(nowLocal());
@@ -40,17 +38,12 @@ export default function LogMeal({ profile, usedToday }: { profile: Pick<Profile,
   const [saveError, setSaveError] = useState<string | null>(null);
   const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState<{ tips: MealTips; carbs: number } | null>(null);
-  const [used, setUsed] = useState(usedToday);
-
-  const FREE_LIMIT = 3;
-  const isPro = profile.plan === "pro";
 
   const estimate = async () => {
     if (text.trim() === "") return setError("Type what you ate.");
     if (text.length > MAX_TEXT) return setError("Please keep it to one meal (under 300 characters).");
     setLoading(true);
     setError(null);
-    setLimitHit(false);
     setDraft(null);
     setSaved(null);
     try {
@@ -60,10 +53,8 @@ export default function LogMeal({ profile, usedToday }: { profile: Pick<Profile,
         body: JSON.stringify({ text }),
       });
       const data = await res.json().catch(() => null);
-      if (res.status === 429) setLimitHit(true);
       if (!res.ok || !data) return setError(data?.error ?? "Couldn't reach the AI, try again.");
       const parsed = data as ParseResponse;
-      if (parsed.usage) setUsed(parsed.usage.used);
       if (parsed.items.length === 0) return setError("I couldn't find any food in that. Try e.g. 2 rotis, 1 katori dal.");
       // Items the AI is unsure about go first so they get noticed.
       const items = parsed.items
@@ -131,11 +122,9 @@ export default function LogMeal({ profile, usedToday }: { profile: Pick<Profile,
           <button type="button" disabled={loading || text.trim() === ""} className="rounded-lg bg-emerald-700 px-4 py-2 text-white disabled:opacity-40" onClick={estimate}>
             {loading ? "Working…" : "Estimate carbs"}
           </button>
-          {!isPro && <span className="text-sm text-zinc-500">{Math.min(used, FREE_LIMIT)} of {FREE_LIMIT} free AI logs used today</span>}
           {text.trim() === "" && !loading && <span className="text-sm text-zinc-500">Type what you ate.</span>}
         </div>
         {error && <p role="alert" className="mt-2 text-sm text-red-700">{error}</p>}
-        {limitHit && <div className="mt-2"><UpgradeButton label="Upgrade for unlimited logs" /></div>}
       </section>
 
       {draft && (

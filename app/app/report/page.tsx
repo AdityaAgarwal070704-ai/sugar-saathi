@@ -1,6 +1,5 @@
 import { nowMs } from "@/lib/time";
 import PrintButton from "@/components/PrintButton";
-import { LockedCard } from "@/components/Upgrade";
 import { loadMeals, loadReadings } from "@/lib/data";
 import { loadFoods } from "@/lib/foods";
 import { weeklyObservations } from "@/lib/insights";
@@ -10,14 +9,7 @@ import { requireUser } from "@/lib/session";
 
 export default async function ReportPage() {
   const { supabase, user, profile } = await requireUser();
-  if (profile?.plan !== "pro") {
-    return (
-      <>
-        <h1 className="text-2xl font-bold">Educator report</h1>
-        <LockedCard title="One-page educator report">A clean summary of your week (meals, carbs, glucose rises and possible links to discuss) to print or save as a PDF before your appointment.</LockedCard>
-      </>
-    );
-  }
+  if (!profile) return <p className="text-red-700">Your profile couldn&apos;t be loaded. Run supabase/schema.sql, then sign in again.</p>;
   const [foods, meals, readings] = await Promise.all([loadFoods(), loadMeals(supabase, 7), loadReadings(supabase, 7)]);
   const paired = pairMeals(meals, readings).sort((a, b) => a.eaten_at.localeCompare(b.eaten_at));
   const stats = weekStats(paired, readings, profile, foods ?? []);

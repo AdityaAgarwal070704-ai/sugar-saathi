@@ -5,23 +5,14 @@ Decided with the user on 2026-10-22. This expands [MVP_SCOPE.md](MVP_SCOPE.md) i
 ## Decisions
 - **Glucose data:** real readings only, from quick manual entry or CSV import (LibreView-style exports). The app never invents readings. Every meal also gets a glycemic-load estimate from the food table, labelled as an estimate.
 - **Accounts and storage:** Supabase email login and Postgres, with row-level security so users only see their own data.
-- **Subscription:** Free vs Pro. Stripe Checkout in test mode until the user supplies live keys.
+- **Subscription:** deferred. Payments are not built; every signed-in user gets every feature, with fair-use AI caps. The `profiles.plan` column is kept in the database for when Free vs Pro and Stripe are added.
 - **Advice rules:** food guidance only, worded as suggestions to discuss with an educator or doctor. No medication or dose advice.
 
-## Plans
-| | Free | Pro |
-|---|---|---|
-| AI meal logging | 3 per day | Unlimited |
-| History | Last 7 days | Everything |
-| Per-meal tips (rule-based) | Yes | Yes |
-| Dashboard and glucose pairing | Yes | Yes |
-| CSV glucose import | No | Yes |
-| Weekly insights with AI narrative | Rule-based only | Plus AI narrative |
-| Educator report (print or PDF) | No | Yes |
-| AI day meal planner | No | Yes |
+## Plans (planned, not built)
+The earlier plan was Free (3 AI logs a day, 7-day history, no CSV import, AI summary, report or planner) versus Pro (everything), billed through Stripe Checkout. That is deferred. See git history (commit "Sugar Saathi v2") for the removed Stripe code.
 
 ## Screens
-Landing, pricing, login, dashboard, log a meal, history, glucose (add and import), weekly insights, educator report, meal planner, settings and billing.
+Landing, login, dashboard, log a meal, history, glucose (add and import), weekly insights, educator report, meal planner, settings.
 
 ## What is AI and what is code
 - **AI (Gemini via OpenRouter):** split meal text into table dishes; write the weekly narrative from code-computed stats; propose a day plan using only table dishes.

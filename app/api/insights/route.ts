@@ -11,14 +11,14 @@ import type { Profile } from "@/lib/types";
 
 const DAILY_LIMIT = 10;
 
-// Pro only. Numbers are computed by code from the user's own data; the AI only words them.
+// Numbers are computed by code from the user's own data; the AI only words them.
 export async function POST() {
   if (!supabaseConfigured) return Response.json({ error: "The app isn't fully set up yet (database missing)." }, { status: 503 });
   const supabase = await createClient();
   const { data: auth } = await supabase.auth.getUser();
   if (!auth.user) return Response.json({ error: "Please sign in." }, { status: 401 });
   const { data: profile } = await supabase.from("profiles").select("*").eq("id", auth.user.id).single();
-  if (profile?.plan !== "pro") return Response.json({ error: "AI weekly insights are a Pro feature." }, { status: 403 });
+  if (!profile) return Response.json({ error: "Your profile couldn't be loaded." }, { status: 500 });
 
   if ((await aiUsedToday(supabase, "insights")) >= DAILY_LIMIT) {
     return Response.json({ error: "You've reached today's limit for AI insights. Try again tomorrow." }, { status: 429 });
