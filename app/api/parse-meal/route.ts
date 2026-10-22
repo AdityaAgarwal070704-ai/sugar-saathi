@@ -1,59 +1,54 @@
-import { readFile } from "node:fs/promises";
-import path from "node:path";
-import type { Food, ParseResponse } from "@/lib/types";
+import { supabaseConfigured } from "@/lib/supabase/config";
+import { callModel } from "@/lib/ai";
+import { loadFoods } from "@/lib/foods";
+import { createClient } from "@/lib/supabase/server";
+import { FREE_AI_LOGS_PER_DAY } from "@/lib/session";
+import type { ParseResponse } from "@/lib/types";
 
 const MAX_TEXT = 300;
-const MODEL = "google/gemini-3.5-flash-lite";
 
 function fail(message: string, status: number) {
   return Response.json({ error: message }, { status });
 }
 
-// Load the food table. Any problem here means we refuse to answer rather than guess.
-async function loadFoods(): Promise<Food[] | null> {
-  try {
-    const raw = await readFile(path.join(process.cwd(), "data", "foods.json"), "utf8");
-    const foods = JSON.parse(raw).foods;
-    if (!Array.isArray(foods) || foods.length === 0) return null;
-    for (const f of foods) {
-      if (
-        typeof f.id !== "string" ||
-        typeof f.name !== "string" ||
-        typeof f.unit !== "string" ||
-        typeof f.carbs !== "number"
-      ) {
-        return null;
-      }
-    }
-    return foods as Food[];
-  } catch {
-    return null;
-  }
-}
-
 export async function POST(request: Request) {
+  if (!supabaseConfigured) return Response.json({ error: "The app isn't fully set up yet (database missing)." }, { status: 503 });
   let text: unknown;
   try {
     text = (await request.json()).text;
   } catch {
     return fail("Type what you ate.", 400);
   }
-  if (typeof text !== "string" || text.trim() === "") {
-    return fail("Type what you ate.", 400);
-  }
-  if (text.length > MAX_TEXT) {
-    return fail("Please keep it to one meal (under 300 characters).", 400);
+  if (typeof text !== "string" || text.trim() === "") return fail("Type what you ate.", 400);
+  if (text.length > MAX_TEXT) return fail("Please keep it to one meal (under 300 characters).", 400);
+
+  // Only signed-in users may spend AI calls.
+  const supabase = await createClient();
+  const { data: auth } = await supabase.auth.getUser();
+  if (!auth.user) return fail("Please sign in to log a meal.", 401);
+
+  const { data: profile } = await supabase.from("profiles").select("plan").eq("id", auth.user.id).single();
+  const isPro = profile?.plan === "pro";
+  const limit = isPro ? null : FREE_AI_LOGS_PER_DAY;
+
+  let used = 0;
+  if (limit !== null) {
+    const since = new Date(Date.now() - 24 * 3600 * 1000).toISOString();
+    const { count } = await supabase
+      .from("ai_usage")
+      .select("id", { count: "exact", head: true })
+      .eq("kind", "parse")
+      .gte("created_at", since);
+    used = count ?? 0;
+    if (used >= limit) {
+      return fail(`You've used your ${limit} free AI meal logs for today. Upgrade to Pro for unlimited logging.`, 429);
+    }
   }
 
   const foods = await loadFoods();
   if (!foods) return fail("Food table unavailable.", 500);
 
-  if (!process.env.OPENROUTER_API_KEY) {
-    return fail("Couldn't reach the AI, try again.", 502);
-  }
-
   const menu = foods.map((f) => `${f.id} = ${f.name} (counted in ${f.unit}s)`).join("\n");
-
   const system = `You help split a described Indian home-cooked meal into items.
 Map each item to ONE dish id from this list, or null if nothing fits. Never invent ids.
 
@@ -66,77 +61,41 @@ Rules:
 - If the text contains no food, return an empty items list.
 - Never output carbohydrate, calorie or nutrition numbers, and never give health, medical or medication advice. Only call the tool.`;
 
-  let toolInput: unknown;
-  try {
-    const res = await fetch("https://openrouter.ai/api/v1/chat/completions", {
-      method: "POST",
-      signal: AbortSignal.timeout(15000),
-      headers: {
-        Authorization: `Bearer ${process.env.OPENROUTER_API_KEY}`,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        model: MODEL,
-        max_tokens: 1500,
-        messages: [
-          { role: "system", content: system },
-          { role: "user", content: text },
-        ],
-        tools: [
-          {
-            type: "function",
-            function: {
-              name: "report_items",
-              description: "Report the items found in the meal description.",
-              parameters: {
-                type: "object",
-                properties: {
-                  items: {
-                    type: "array",
-                    items: {
-                      type: "object",
-                      properties: {
-                        typed: { type: "string" },
-                        foodId: { type: ["string", "null"] },
-                        count: { type: "number" },
-                        confidence: { type: "number" },
-                      },
-                      required: ["typed", "foodId", "count", "confidence"],
-                    },
-                  },
-                },
-                required: ["items"],
-              },
+  const result = await callModel({
+    system,
+    user: text,
+    toolName: "report_items",
+    toolDescription: "Report the items found in the meal description.",
+    schema: {
+      type: "object",
+      properties: {
+        items: {
+          type: "array",
+          items: {
+            type: "object",
+            properties: {
+              typed: { type: "string" },
+              foodId: { type: ["string", "null"] },
+              count: { type: "number" },
+              confidence: { type: "number" },
             },
+            required: ["typed", "foodId", "count", "confidence"],
           },
-        ],
-        tool_choice: { type: "function", function: { name: "report_items" } },
-        // Only Google's own infrastructure may serve the request.
-        provider: { only: ["google-vertex", "google-ai-studio"], allow_fallbacks: false },
-      }),
-    });
-    if (!res.ok) return fail("Couldn't reach the AI, try again.", 502);
-    const data = await res.json();
-    const args = data?.choices?.[0]?.message?.tool_calls?.[0]?.function?.arguments;
-    toolInput = typeof args === "string" ? JSON.parse(args) : undefined;
-  } catch {
-    return fail("Couldn't reach the AI, try again.", 502);
-  }
+        },
+      },
+      required: ["items"],
+    },
+    maxTokens: 1500,
+  });
 
   // Never trust the AI's answer: check every field before using it.
-  const rawItems = (toolInput as { items?: unknown } | undefined)?.items;
+  const rawItems = (result as { items?: unknown } | null)?.items;
   if (!Array.isArray(rawItems)) return fail("Couldn't reach the AI, try again.", 502);
 
   const known = new Set(foods.map((f) => f.id));
   const items: ParseResponse["items"] = [];
   for (const it of rawItems) {
-    if (
-      !it ||
-      typeof it.typed !== "string" ||
-      typeof it.count !== "number" ||
-      !Number.isFinite(it.count) ||
-      typeof it.confidence !== "number"
-    ) {
+    if (!it || typeof it.typed !== "string" || typeof it.count !== "number" || !Number.isFinite(it.count) || typeof it.confidence !== "number") {
       return fail("Couldn't reach the AI, try again.", 502);
     }
     items.push({
@@ -147,6 +106,9 @@ Rules:
     });
   }
 
-  const body: ParseResponse = { items, foods };
+  // Count the call only after the AI answered, so failures don't use up the free allowance.
+  await supabase.from("ai_usage").insert({ user_id: auth.user.id, kind: "parse" });
+
+  const body: ParseResponse = { items, foods, usage: { used: used + 1, limit } };
   return Response.json(body);
 }

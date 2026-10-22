@@ -13,7 +13,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Sugar Saathi",
+  title: "Sugar Saathi: Indian food and glucose tracker for type 2 diabetes",
   description: "Turn a meal described in everyday words into a carb estimate beside your glucose.",
 };
 

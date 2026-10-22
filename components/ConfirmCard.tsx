@@ -10,9 +10,11 @@ type Props = {
   onChange: (items: Item[]) => void;
   onConfirm: () => void;
   onCancel: () => void;
+  confirmLabel?: string;
+  confirmDisabled?: boolean;
 };
 
-export default function ConfirmCard({ text, items, foods, onChange, onConfirm, onCancel }: Props) {
+export default function ConfirmCard({ text, items, foods, onChange, onConfirm, onCancel, confirmLabel = "Confirm meal", confirmDisabled = false }: Props) {
   const total = totalCarbs(items, foods);
 
   const update = (key: string, patch: Partial<Item>) =>
@@ -143,11 +145,11 @@ export default function ConfirmCard({ text, items, foods, onChange, onConfirm, o
         <div className="mt-3 flex gap-2">
           <button
             type="button"
-            disabled={total.counted === 0}
+            disabled={total.counted === 0 || confirmDisabled}
             className="rounded-lg bg-emerald-700 px-4 py-2 text-white disabled:opacity-40"
             onClick={onConfirm}
           >
-            Confirm meal
+            {confirmLabel}
           </button>
           <button type="button" className="rounded-lg border border-zinc-300 px-4 py-2" onClick={onCancel}>
             Start over
