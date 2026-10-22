@@ -4,11 +4,10 @@ import MealCard from "@/components/MealCard";
 import ProgressTabs from "@/components/ProgressTabs";
 import { ButtonLink } from "@/components/ui/Button";
 import { EmptyState } from "@/components/ui/EmptyState";
-import { FOODS } from "@/lib/foods-client";
 import { useRecent } from "@/lib/useRecent";
 
 export default function History() {
-  const { ready, paired } = useRecent(3650);
+  const { ready, paired, foods: FOODS } = useRecent(3650);
   if (!ready) return <p className="text-muted">Loading…</p>;
 
   const groups = new Map<string, typeof paired>();

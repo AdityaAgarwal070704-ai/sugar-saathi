@@ -13,7 +13,7 @@ import { Pill } from "@/components/ui/Pill";
 import { Stepper } from "@/components/ui/Stepper";
 import { nutritionOf } from "@/lib/carbs";
 import { enrichMeal } from "@/lib/enrich";
-import { FOODS } from "@/lib/foods-client";
+import { useFoods } from "@/lib/useFoods";
 import { parseReading } from "@/lib/glucose";
 import { guessMealType, isMealType, MEAL_EMOJI, MEAL_LABEL, MEAL_TYPES } from "@/lib/meal";
 import { pairMeals } from "@/lib/pairing";
@@ -43,17 +43,20 @@ export default function LogFlow() {
 function LogFlowInner() {
   const router = useRouter();
   const params = useSearchParams();
-  const { meals, readings, profile } = useStore();
+  const { meals, readings, profile, customFoods } = useStore();
+  const FOODS = useFoods();
 
   const editId = params.get("edit");
   const fromId = params.get("from");
   const base = meals.find((m) => m.id === (editId ?? fromId)) ?? null;
   const slot = params.get("slot");
+  const dishParam = params.get("dish");
+  const startDish = !base && dishParam ? FOODS.find((f) => f.id === dishParam) : undefined;
 
-  const [step, setStep] = useState<Step>(base ? "review" : "describe");
-  const [source, setSource] = useState<Source>(base ? (editId ? "edit" : "usual") : "text");
-  const [text, setText] = useState(base?.text ?? "");
-  const [items, setItems] = useState<Item[]>(() => (base ? base.items.map((i) => ({ key: crypto.randomUUID(), typed: i.typed, foodId: i.foodId, count: i.count, confidence: 1 })) : []));
+  const [step, setStep] = useState<Step>(base || startDish ? "review" : "describe");
+  const [source, setSource] = useState<Source>(base ? (editId ? "edit" : "usual") : startDish ? "usual" : "text");
+  const [text, setText] = useState(base?.text ?? startDish?.name ?? "");
+  const [items, setItems] = useState<Item[]>(() => (base ? base.items.map((i) => ({ key: crypto.randomUUID(), typed: i.typed, foodId: i.foodId, count: i.count, confidence: 1 })) : startDish ? [{ key: crypto.randomUUID(), typed: startDish.name, foodId: startDish.id, count: 1, confidence: 1 }] : []));
   const [mealType, setMealType] = useState<MealType>(base && editId ? base.meal_type : isMealType(slot) ? slot : guessMealType(new Date().getHours()));
   // If the user never picks a meal type themselves, we choose it from the time they ate.
   const [typeChosen, setTypeChosen] = useState(Boolean((base && editId) || isMealType(slot)));
@@ -89,7 +92,7 @@ function LogFlowInner() {
     setLoading("text");
     setError(null);
     try {
-      const res = await fetch("/api/parse-meal", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ text }) });
+      const res = await fetch("/api/parse-meal", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ text, custom: customFoods.map((f) => ({ id: f.id, name: f.name })) }) });
       const data = await res.json().catch(() => null);
       if (!res.ok || !data) return setError(data?.error ?? "Couldn't reach the AI, try again.");
       const parsed = data as ParseResponse;
@@ -110,7 +113,7 @@ function LogFlowInner() {
     setError(null);
     try {
       const image = await photoToJpegDataUrl(file);
-      const res = await fetch("/api/parse-photo", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ image }) });
+      const res = await fetch("/api/parse-photo", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ image, custom: customFoods.map((f) => ({ id: f.id, name: f.name })) }) });
       const data = await res.json().catch(() => null);
       if (!res.ok || !data) return setError(data?.error ?? "Couldn't read that photo, try again.");
       const parsed = data as ParseResponse;

@@ -4,8 +4,14 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import type { Category, Food } from "@/lib/types";
 import { CloseIcon, SearchIcon } from "./icons";
 
-const CATS: { key: Category | "all"; label: string }[] = [
+type Filter = Category | "all" | "tag:mine" | "tag:restaurant" | "tag:vrat" | "tag:festival";
+
+const CATS: { key: Filter; label: string }[] = [
   { key: "all", label: "All" },
+  { key: "tag:mine", label: "My dishes" },
+  { key: "tag:restaurant", label: "Eating out" },
+  { key: "tag:vrat", label: "Vrat" },
+  { key: "tag:festival", label: "Festival" },
   { key: "grain", label: "Roti & rice" },
   { key: "dal", label: "Dal" },
   { key: "veg", label: "Sabzi" },
@@ -31,7 +37,7 @@ type Props = {
 export function DishPicker({ foods, value, onChange, placeholder = "Pick a dish", triggerClassName = "" }: Props) {
   const [open, setOpen] = useState(false);
   const [q, setQ] = useState("");
-  const [cat, setCat] = useState<Category | "all">("all");
+  const [cat, setCat] = useState<Filter>("all");
   const inputRef = useRef<HTMLInputElement>(null);
   const current = foods.find((f) => f.id === value);
 
@@ -51,7 +57,7 @@ export function DishPicker({ foods, value, onChange, placeholder = "Pick a dish"
   const results = useMemo(() => {
     const needle = q.trim().toLowerCase();
     return foods
-      .filter((f) => (cat === "all" || f.category === cat) && (needle === "" || f.name.toLowerCase().includes(needle) || f.id.replace(/_/g, " ").includes(needle)))
+      .filter((f) => (cat === "all" || (cat.startsWith("tag:") ? f.tags.includes(cat.slice(4)) : f.category === cat)) && (needle === "" || f.name.toLowerCase().includes(needle) || f.id.replace(/_/g, " ").includes(needle)))
       .slice(0, 80);
   }, [foods, q, cat]);
 
@@ -78,7 +84,7 @@ export function DishPicker({ foods, value, onChange, placeholder = "Pick a dish"
               <button type="button" onClick={() => setOpen(false)} aria-label="Close" className="rounded-full p-2 hover:bg-sand"><CloseIcon className="h-5 w-5" /></button>
             </div>
             <div className="flex gap-2 overflow-x-auto border-b border-line px-3 py-2">
-              {CATS.map((c) => (
+              {CATS.filter((c) => c.key !== "tag:mine" || foods.some((f) => f.tags.includes("mine"))).map((c) => (
                 <button key={c.key} type="button" onClick={() => setCat(c.key)} aria-pressed={cat === c.key} className={`whitespace-nowrap rounded-full px-3 py-1.5 text-sm ${cat === c.key ? "bg-moss text-white" : "bg-sand text-ink hover:bg-line"}`}>{c.label}</button>
               ))}
             </div>

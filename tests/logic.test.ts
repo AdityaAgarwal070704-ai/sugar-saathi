@@ -427,3 +427,91 @@ test("store: routine, walks, timer and reminders survive a round trip; junk is d
   assert.equal(bad.timer, null);
   assert.equal(bad.reminders.breakfast, "08:30");
 });
+
+import { lineGrams, recipeNutrition, recipeToFood, unitsFor, type Ingredient } from "../lib/recipe";
+
+const ingredients: Ingredient[] = JSON.parse(readFileSync("data/ingredients.json", "utf8")).ingredients;
+
+test("ingredients table: unique ids, sane numbers, unit sizes", () => {
+  const ids = new Set<string>();
+  for (const i of ingredients) {
+    assert.ok(!ids.has(i.id), `duplicate ${i.id}`);
+    ids.add(i.id);
+    for (const k of ["carbs", "fibre", "protein", "fat", "gi"] as const) assert.ok(Number.isFinite(i[k]) && i[k] >= 0, `${i.id}.${k}`);
+    assert.ok(i.carbs + i.protein + i.fat <= 210 && i.gi <= 100, i.id);
+    for (const g of Object.values(i.units)) assert.ok(g! > 0 && g! <= 500, `${i.id} unit grams`);
+  }
+  assert.ok(ingredients.length >= 60);
+});
+
+test("recipe maths: totals divided by servings", () => {
+  // 200 g toor dal + 2 tsp oil + 1 onion, for 4 servings
+  const r = recipeNutrition(
+    [{ ingredientId: "toor_dal_raw", amount: 200, unit: "g" }, { ingredientId: "oil", amount: 2, unit: "tsp" }, { ingredientId: "onion", amount: 1, unit: "piece" }],
+    4,
+    ingredients,
+  );
+  assert.ok(r.ok);
+  if (r.ok) {
+    // carbs: 126 + 0 + 11 = 137 -> 34.3 per serving
+    assert.equal(r.perServing.carbs, 34.3);
+    assert.equal(r.perServing.protein, 11.3); // (44 + 0 + 1.2) / 4 = 11.3
+    assert.equal(r.perServing.fat, 3.1); // (3.4 + 9 + 0.1) / 4 = 3.125
+    assert.equal(r.perServing.kcal, Math.round(4 * 34.25 + 4 * 11.3 + 9 * 3.1));
+    assert.ok(r.perServing.gi > 20 && r.perServing.gi < 40);
+    assert.equal(r.totalGrams, 200 + 9 + 100);
+  }
+  const food = recipeToFood({ foodId: "my_x", name: "My dal", category: "dal", icon: "🍲" }, { carbs: 34.3, fibre: 5, protein: 11, fat: 2.4, gi: 30 });
+  assert.equal(food.unit, "serving");
+  assert.deepEqual(food.tags, ["mine"]);
+});
+
+test("recipe maths: bad input is rejected with a clear message", () => {
+  const ok = [{ ingredientId: "oil", amount: 1, unit: "tsp" as const }];
+  assert.equal(recipeNutrition(ok, 0, ingredients).ok, false);
+  assert.equal(recipeNutrition(ok, 2.5, ingredients).ok, false);
+  assert.equal(recipeNutrition(ok, 51, ingredients).ok, false);
+  assert.equal(recipeNutrition([], 2, ingredients).ok, false);
+  assert.equal(recipeNutrition([{ ingredientId: "nope", amount: 5, unit: "g" }], 2, ingredients).ok, false);
+  assert.equal(recipeNutrition([{ ingredientId: "oil", amount: -3, unit: "g" }], 2, ingredients).ok, false);
+  assert.equal(recipeNutrition([{ ingredientId: "oil", amount: 99999, unit: "g" }], 2, ingredients).ok, false);
+  // a unit the ingredient does not have (eggs have no tsp size)
+  assert.equal(recipeNutrition([{ ingredientId: "egg_raw", amount: 2, unit: "tsp" }], 2, ingredients).ok, false);
+  const egg = ingredients.find((i) => i.id === "egg_raw")!;
+  assert.deepEqual(unitsFor(egg), ["g", "piece"]);
+  assert.equal(lineGrams({ ingredientId: "egg_raw", amount: 2, unit: "piece" }, egg), 100);
+});
+
+import { IFTAR_IDS, SEHRI_IDS, piecesWithin } from "../lib/occasions";
+
+test("occasions: curated ids exist, vrat and festival tags are populated, budget maths is whole pieces", () => {
+  const ids = new Set(foods.map((f) => f.id));
+  for (const id of [...SEHRI_IDS, ...IFTAR_IDS]) assert.ok(ids.has(id), `${id} missing from the food table`);
+  assert.ok(foods.filter((f) => f.tags.includes("vrat")).length >= 6);
+  assert.ok(foods.filter((f) => f.tags.includes("festival")).length >= 10);
+  assert.ok(foods.filter((f) => f.tags.includes("restaurant")).length >= 15);
+  assert.equal(piecesWithin(30, 100), 3);
+  assert.equal(piecesWithin(30, 29), 0);
+  assert.equal(piecesWithin(0, 30), 0);
+  assert.equal(piecesWithin(10, -5), 0);
+  // vegetarian filter data: every meat or fish dish is tagged
+  for (const id of ["chicken_curry", "butter_chicken", "mutton_curry", "fish_curry", "keema", "prawn_curry", "chicken_biryani"]) assert.ok(foods.find((f) => f.id === id)!.tags.includes("nonveg"), id);
+  for (const id of ["egg", "omelette", "egg_curry"]) assert.ok(foods.find((f) => f.id === id)!.tags.includes("egg"), id);
+});
+
+test("store: custom dishes and recipes round trip; foreign ids and bad numbers are dropped", () => {
+  const food: Food = { id: "my_abc12345", name: "Mummy's rajma", unit: "serving", carbs: 30, fibre: 8, protein: 10, fat: 6, gi: 30, category: "dal", icon: "🍲", tags: ["mine"] };
+  const recipe = { id: "r-1", name: "Mummy's rajma", servings: 4, lines: [{ ingredientId: "rajma_raw", amount: 1, unit: "cup" as const }], foodId: "my_abc12345", category: "dal" as const, icon: "🍲" };
+  const state = { ...EMPTY_STATE, customFoods: [food], recipes: [recipe] };
+  const back = fromPersisted(JSON.parse(JSON.stringify(toPersisted(state))))!;
+  assert.equal(back.customFoods.length, 1);
+  assert.deepEqual(back.recipes, [recipe]);
+  const bad = fromPersisted({
+    v: 1, meals: [], readings: [], profile: {},
+    customFoods: [{ ...food, id: "roti" }, { ...food, id: "my_zzzz1111", carbs: -5 }, { ...food, id: "my_okok1111", category: "bogus" }, { ...food, id: "my_good2222", name: "  Fine  " }],
+    recipes: [{ ...recipe, foodId: "my_missing99" }, { ...recipe, id: "r-2", foodId: "my_good2222", servings: 0 }, { ...recipe, id: "r-3", foodId: "my_good2222" }],
+  })!;
+  assert.deepEqual(bad.customFoods.map((f) => f.id), ["my_good2222"]);
+  assert.equal(bad.customFoods[0].name, "Fine");
+  assert.deepEqual(bad.recipes.map((r) => r.id), ["r-3"]);
+});

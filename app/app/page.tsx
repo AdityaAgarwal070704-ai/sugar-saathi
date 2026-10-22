@@ -13,7 +13,6 @@ import { Card } from "@/components/ui/Card";
 import { DayRing } from "@/components/ui/DayRing";
 import { GlucoseChart } from "@/components/ui/GlucoseChart";
 import { StreakChip } from "@/components/ui/StreakChip";
-import { FOODS } from "@/lib/foods-client";
 import { MEAL_EMOJI, MEAL_LABEL, MEAL_TYPES } from "@/lib/meal";
 import { weeklyCheckin } from "@/lib/checkin";
 import { dayKey } from "@/lib/day";
@@ -34,7 +33,7 @@ const localInput = (ms: number) => {
 };
 
 export default function Today() {
-  const { ready, meals, readings, paired, profile, walks, timer, checkinAt, wrapupDismissed } = useRecent(365);
+  const { ready, meals, readings, paired, profile, walks, timer, checkinAt, wrapupDismissed, foods: FOODS } = useRecent(365);
   if (!ready) return <p className="text-muted">Loading…</p>;
 
   const now = new Date(nowMs());

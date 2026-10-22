@@ -17,6 +17,8 @@ Live app: https://sugar-saathi.vercel.app. No sign-up. Your data stays in your o
 - **Phone reminders without a server:** download a calendar file with repeating meal, walk and 2-hour-check alerts, so your phone's own calendar rings.
 - **Share with family or your educator:** one tap shares your weekly summary on WhatsApp (or any app) as plain text.
 - **Calm safety cards:** a reading outside your own range shows a gentle note to follow your doctor's plan, never treatment instructions.
+- **Recipe builder for home-cooked dishes:** list your raw ingredients (or just describe them in your own words), say how many it serves, and get nutrition for one serving. Save it as "my dish" and log it in one tap or by name.
+- **Eating out, fasting and festivals:** restaurant dishes compared, a side-by-side dish comparison, vrat, Ramzan and festival ideas, and a sweet budget that shows how many pieces fit.
 - **Dashboard, history and weekly insights:** rule-based observations, plus an AI summary of possible links to discuss with your educator.
 - **Educator report:** a one-page weekly summary to print or save as PDF.
 - **Meal planner:** an AI-proposed day of Indian meals within your carb goal and diet, with every number calculated from the table.
@@ -40,13 +42,13 @@ Live app: https://sugar-saathi.vercel.app. No sign-up. Your data stays in your o
 | **Action** | User confirms or edits portions and dishes, saves the meal, adds readings | Human |
 | **Output** | Dashboard, per-meal tips, history, weekly insights, educator report, meal plan | Plain code (plus AI text where marked) |
 
-Stack: Next.js (App Router) on Vercel; browser local storage for data; Gemini via OpenRouter for the four AI features (meal text, meal photo, weekly summary, day plan). Installable on your phone as an app (PWA).
+Stack: Next.js (App Router) on Vercel; browser local storage for data; Gemini via OpenRouter for the five AI features (meal text, meal photo, recipe text, weekly summary, day plan). Installable on your phone as an app (PWA).
 
 Key files:
 - `lib/` has the engines: `carbs.ts`, `insights.ts`, `pairing.ts`, `stats.ts`, `csv.ts`, `guardrails.ts`, `ai.ts`, and the browser storage layer (`store.ts`, `store-core.ts`)
 - `app/app/` has the screens
-- `app/api/` has four routes: `parse-meal`, `parse-photo`, `insights` and `plan`
-- `data/foods.json` is the food table
+- `app/api/` has five routes: `parse-meal`, `parse-photo`, `parse-recipe`, `insights` and `plan`
+- `data/foods.json` is the food table and `data/ingredients.json` the raw-ingredient table for the recipe builder
 - `tests/logic.test.ts` has the unit tests
 
 ## Run it locally

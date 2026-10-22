@@ -8,7 +8,6 @@ import { BarChart } from "@/components/ui/BarChart";
 import { Card } from "@/components/ui/Card";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { Pill } from "@/components/ui/Pill";
-import { FOODS } from "@/lib/foods-client";
 import { weeklyObservations } from "@/lib/insights";
 import { weekStats } from "@/lib/stats";
 import { walkEffect } from "@/lib/walks";
@@ -30,7 +29,7 @@ function Big({ label, value, sub }: { label: string; value: string; sub?: string
 
 export default function Progress() {
   const [days, setDays] = useState<7 | 30>(7);
-  const { ready, paired, readings, profile, walks } = useRecent(days);
+  const { ready, paired, readings, profile, walks, foods: FOODS } = useRecent(days);
   if (!ready) return <p className="text-muted">Loading…</p>;
 
   const stats = weekStats(paired, readings, profile, FOODS);

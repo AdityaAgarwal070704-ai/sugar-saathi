@@ -1,0 +1,923 @@
+{
+ "_note": "STARTER TABLE, UNVERIFIED. Approximate values per 100 g of the RAW ingredient (carbs, fibre, protein, fat in grams; gi = glycemic index), drafted from typical Indian food composition data (IFCT, ICMR-NIN). Must be reviewed by a dietitian before real use.",
+ "ingredients": [
+  {
+   "id": "atta",
+   "name": "Wheat flour (atta)",
+   "carbs": 71,
+   "fibre": 11,
+   "protein": 11,
+   "fat": 1.5,
+   "gi": 62,
+   "icon": "🌾",
+   "units": {
+    "cup": 120,
+    "tbsp": 8
+   }
+  },
+  {
+   "id": "maida",
+   "name": "Maida (refined flour)",
+   "carbs": 74,
+   "fibre": 3,
+   "protein": 10,
+   "fat": 1,
+   "gi": 70,
+   "icon": "🌾",
+   "units": {
+    "cup": 125,
+    "tbsp": 8
+   }
+  },
+  {
+   "id": "besan",
+   "name": "Besan (gram flour)",
+   "carbs": 58,
+   "fibre": 11,
+   "protein": 22,
+   "fat": 6,
+   "gi": 35,
+   "icon": "🌾",
+   "units": {
+    "cup": 100,
+    "tbsp": 6
+   }
+  },
+  {
+   "id": "suji",
+   "name": "Suji / rava",
+   "carbs": 73,
+   "fibre": 3,
+   "protein": 10,
+   "fat": 1,
+   "gi": 66,
+   "icon": "🌾",
+   "units": {
+    "cup": 160,
+    "tbsp": 10
+   }
+  },
+  {
+   "id": "ragi_flour",
+   "name": "Ragi flour",
+   "carbs": 72,
+   "fibre": 11,
+   "protein": 7,
+   "fat": 1.5,
+   "gi": 55,
+   "icon": "🌾",
+   "units": {
+    "cup": 120,
+    "tbsp": 8
+   }
+  },
+  {
+   "id": "bajra_flour",
+   "name": "Bajra flour",
+   "carbs": 67,
+   "fibre": 11,
+   "protein": 11,
+   "fat": 5,
+   "gi": 55,
+   "icon": "🌾",
+   "units": {
+    "cup": 120,
+    "tbsp": 8
+   }
+  },
+  {
+   "id": "jowar_flour",
+   "name": "Jowar flour",
+   "carbs": 73,
+   "fibre": 10,
+   "protein": 10,
+   "fat": 2,
+   "gi": 62,
+   "icon": "🌾",
+   "units": {
+    "cup": 120,
+    "tbsp": 8
+   }
+  },
+  {
+   "id": "oats",
+   "name": "Rolled oats",
+   "carbs": 66,
+   "fibre": 10,
+   "protein": 13,
+   "fat": 7,
+   "gi": 55,
+   "icon": "🌾",
+   "units": {
+    "cup": 90,
+    "tbsp": 6
+   }
+  },
+  {
+   "id": "rice_raw",
+   "name": "White rice (raw)",
+   "carbs": 78,
+   "fibre": 1,
+   "protein": 7,
+   "fat": 0.5,
+   "gi": 73,
+   "icon": "🍚",
+   "units": {
+    "cup": 190,
+    "tbsp": 12
+   }
+  },
+  {
+   "id": "brown_rice_raw",
+   "name": "Brown rice (raw)",
+   "carbs": 77,
+   "fibre": 3.5,
+   "protein": 8,
+   "fat": 2.5,
+   "gi": 50,
+   "icon": "🍚",
+   "units": {
+    "cup": 190,
+    "tbsp": 12
+   }
+  },
+  {
+   "id": "poha_raw",
+   "name": "Poha (flattened rice, raw)",
+   "carbs": 77,
+   "fibre": 2,
+   "protein": 7,
+   "fat": 1,
+   "gi": 60,
+   "icon": "🍚",
+   "units": {
+    "cup": 70,
+    "tbsp": 5
+   }
+  },
+  {
+   "id": "sabudana_raw",
+   "name": "Sabudana (raw)",
+   "carbs": 88,
+   "fibre": 0.5,
+   "protein": 0.2,
+   "fat": 0.2,
+   "gi": 70,
+   "icon": "⚪",
+   "units": {
+    "cup": 150,
+    "tbsp": 10
+   }
+  },
+  {
+   "id": "vermicelli_raw",
+   "name": "Vermicelli (raw)",
+   "carbs": 75,
+   "fibre": 3,
+   "protein": 9,
+   "fat": 1,
+   "gi": 65,
+   "icon": "🍜",
+   "units": {
+    "cup": 100
+   }
+  },
+  {
+   "id": "toor_dal_raw",
+   "name": "Toor dal (raw)",
+   "carbs": 63,
+   "fibre": 15,
+   "protein": 22,
+   "fat": 1.7,
+   "gi": 30,
+   "icon": "🫘",
+   "units": {
+    "cup": 200,
+    "tbsp": 13
+   }
+  },
+  {
+   "id": "moong_dal_raw",
+   "name": "Moong dal (raw)",
+   "carbs": 60,
+   "fibre": 16,
+   "protein": 24,
+   "fat": 1.3,
+   "gi": 28,
+   "icon": "🫘",
+   "units": {
+    "cup": 200,
+    "tbsp": 13
+   }
+  },
+  {
+   "id": "masoor_dal_raw",
+   "name": "Masoor dal (raw)",
+   "carbs": 59,
+   "fibre": 11,
+   "protein": 25,
+   "fat": 1,
+   "gi": 30,
+   "icon": "🫘",
+   "units": {
+    "cup": 200,
+    "tbsp": 13
+   }
+  },
+  {
+   "id": "chana_dal_raw",
+   "name": "Chana dal (raw)",
+   "carbs": 60,
+   "fibre": 12,
+   "protein": 21,
+   "fat": 5,
+   "gi": 28,
+   "icon": "🫘",
+   "units": {
+    "cup": 200,
+    "tbsp": 13
+   }
+  },
+  {
+   "id": "urad_dal_raw",
+   "name": "Urad dal (raw)",
+   "carbs": 59,
+   "fibre": 18,
+   "protein": 24,
+   "fat": 1.5,
+   "gi": 30,
+   "icon": "🫘",
+   "units": {
+    "cup": 200,
+    "tbsp": 13
+   }
+  },
+  {
+   "id": "rajma_raw",
+   "name": "Rajma (raw)",
+   "carbs": 60,
+   "fibre": 16,
+   "protein": 22,
+   "fat": 1.5,
+   "gi": 29,
+   "icon": "🫘",
+   "units": {
+    "cup": 190,
+    "tbsp": 12
+   }
+  },
+  {
+   "id": "chole_raw",
+   "name": "Kabuli chana (raw)",
+   "carbs": 61,
+   "fibre": 12,
+   "protein": 19,
+   "fat": 6,
+   "gi": 33,
+   "icon": "🫘",
+   "units": {
+    "cup": 190,
+    "tbsp": 12
+   }
+  },
+  {
+   "id": "kala_chana_raw",
+   "name": "Kala chana (raw)",
+   "carbs": 61,
+   "fibre": 17,
+   "protein": 20,
+   "fat": 5,
+   "gi": 28,
+   "icon": "🫘",
+   "units": {
+    "cup": 190,
+    "tbsp": 12
+   }
+  },
+  {
+   "id": "soya_chunks_raw",
+   "name": "Soya chunks (dry)",
+   "carbs": 33,
+   "fibre": 13,
+   "protein": 52,
+   "fat": 0.5,
+   "gi": 15,
+   "icon": "🫘",
+   "units": {
+    "cup": 60
+   }
+  },
+  {
+   "id": "potato",
+   "name": "Potato",
+   "carbs": 17,
+   "fibre": 2,
+   "protein": 2,
+   "fat": 0.1,
+   "gi": 78,
+   "icon": "🥔",
+   "units": {
+    "piece": 100
+   }
+  },
+  {
+   "id": "sweet_potato",
+   "name": "Sweet potato",
+   "carbs": 20,
+   "fibre": 3,
+   "protein": 1.6,
+   "fat": 0.1,
+   "gi": 50,
+   "icon": "🍠",
+   "units": {
+    "piece": 130
+   }
+  },
+  {
+   "id": "onion",
+   "name": "Onion",
+   "carbs": 11,
+   "fibre": 2,
+   "protein": 1.2,
+   "fat": 0.1,
+   "gi": 10,
+   "icon": "🧅",
+   "units": {
+    "piece": 100,
+    "cup": 160
+   }
+  },
+  {
+   "id": "tomato",
+   "name": "Tomato",
+   "carbs": 4,
+   "fibre": 1,
+   "protein": 0.9,
+   "fat": 0.2,
+   "gi": 15,
+   "icon": "🍅",
+   "units": {
+    "piece": 80,
+    "cup": 180
+   }
+  },
+  {
+   "id": "spinach",
+   "name": "Spinach (palak)",
+   "carbs": 3,
+   "fibre": 2,
+   "protein": 2.9,
+   "fat": 0.4,
+   "gi": 15,
+   "icon": "🥬",
+   "units": {
+    "cup": 30
+   }
+  },
+  {
+   "id": "cauliflower",
+   "name": "Cauliflower (gobi)",
+   "carbs": 5,
+   "fibre": 2,
+   "protein": 2.5,
+   "fat": 0.3,
+   "gi": 15,
+   "icon": "🥦",
+   "units": {
+    "cup": 100
+   }
+  },
+  {
+   "id": "cabbage",
+   "name": "Cabbage",
+   "carbs": 6,
+   "fibre": 2,
+   "protein": 1.3,
+   "fat": 0.1,
+   "gi": 10,
+   "icon": "🥬",
+   "units": {
+    "cup": 90
+   }
+  },
+  {
+   "id": "brinjal",
+   "name": "Brinjal (baingan)",
+   "carbs": 5,
+   "fibre": 3,
+   "protein": 1.4,
+   "fat": 0.2,
+   "gi": 15,
+   "icon": "🍆",
+   "units": {
+    "piece": 150,
+    "cup": 100
+   }
+  },
+  {
+   "id": "bhindi",
+   "name": "Okra (bhindi)",
+   "carbs": 7,
+   "fibre": 3,
+   "protein": 1.9,
+   "fat": 0.2,
+   "gi": 20,
+   "icon": "🥬",
+   "units": {
+    "cup": 100
+   }
+  },
+  {
+   "id": "lauki",
+   "name": "Bottle gourd (lauki)",
+   "carbs": 3,
+   "fibre": 1,
+   "protein": 0.5,
+   "fat": 0.1,
+   "gi": 15,
+   "icon": "🥬",
+   "units": {
+    "cup": 120
+   }
+  },
+  {
+   "id": "carrot",
+   "name": "Carrot",
+   "carbs": 10,
+   "fibre": 3,
+   "protein": 0.9,
+   "fat": 0.2,
+   "gi": 35,
+   "icon": "🥕",
+   "units": {
+    "piece": 70,
+    "cup": 120
+   }
+  },
+  {
+   "id": "peas",
+   "name": "Green peas (matar)",
+   "carbs": 14,
+   "fibre": 5,
+   "protein": 5.4,
+   "fat": 0.4,
+   "gi": 35,
+   "icon": "🟢",
+   "units": {
+    "cup": 145
+   }
+  },
+  {
+   "id": "capsicum",
+   "name": "Capsicum",
+   "carbs": 5,
+   "fibre": 2,
+   "protein": 1,
+   "fat": 0.3,
+   "gi": 15,
+   "icon": "🫑",
+   "units": {
+    "piece": 120,
+    "cup": 120
+   }
+  },
+  {
+   "id": "mushroom",
+   "name": "Mushrooms",
+   "carbs": 3,
+   "fibre": 1,
+   "protein": 3,
+   "fat": 0.3,
+   "gi": 25,
+   "icon": "🍄",
+   "units": {
+    "cup": 70
+   }
+  },
+  {
+   "id": "beans",
+   "name": "French beans",
+   "carbs": 7,
+   "fibre": 3,
+   "protein": 2,
+   "fat": 0.1,
+   "gi": 20,
+   "icon": "🥬",
+   "units": {
+    "cup": 100
+   }
+  },
+  {
+   "id": "karela",
+   "name": "Bitter gourd (karela)",
+   "carbs": 4,
+   "fibre": 3,
+   "protein": 1.6,
+   "fat": 0.2,
+   "gi": 20,
+   "icon": "🥬",
+   "units": {
+    "piece": 100
+   }
+  },
+  {
+   "id": "cucumber_raw",
+   "name": "Cucumber",
+   "carbs": 3,
+   "fibre": 0.5,
+   "protein": 0.7,
+   "fat": 0.1,
+   "gi": 15,
+   "icon": "🥒",
+   "units": {
+    "piece": 200,
+    "cup": 120
+   }
+  },
+  {
+   "id": "pumpkin",
+   "name": "Pumpkin",
+   "carbs": 5,
+   "fibre": 1,
+   "protein": 1,
+   "fat": 0.1,
+   "gi": 65,
+   "icon": "🎃",
+   "units": {
+    "cup": 116
+   }
+  },
+  {
+   "id": "garlic",
+   "name": "Garlic",
+   "carbs": 33,
+   "fibre": 2,
+   "protein": 6,
+   "fat": 0.5,
+   "gi": 30,
+   "icon": "🧄",
+   "units": {
+    "piece": 4,
+    "tbsp": 9
+   }
+  },
+  {
+   "id": "ginger",
+   "name": "Ginger",
+   "carbs": 18,
+   "fibre": 2,
+   "protein": 2,
+   "fat": 0.8,
+   "gi": 15,
+   "icon": "🫚",
+   "units": {
+    "tsp": 5,
+    "tbsp": 15
+   }
+  },
+  {
+   "id": "green_chilli",
+   "name": "Green chilli",
+   "carbs": 3,
+   "fibre": 1.5,
+   "protein": 1,
+   "fat": 0.1,
+   "gi": 10,
+   "icon": "🌶️",
+   "units": {
+    "piece": 5
+   }
+  },
+  {
+   "id": "coriander_leaves",
+   "name": "Coriander leaves",
+   "carbs": 2,
+   "fibre": 1,
+   "protein": 2,
+   "fat": 0.5,
+   "gi": 10,
+   "icon": "🌿",
+   "units": {
+    "cup": 16,
+    "tbsp": 3
+   }
+  },
+  {
+   "id": "paneer_raw",
+   "name": "Paneer",
+   "carbs": 1,
+   "fibre": 0,
+   "protein": 18,
+   "fat": 21,
+   "gi": 0,
+   "icon": "🧀",
+   "units": {
+    "cup": 150,
+    "piece": 25
+   }
+  },
+  {
+   "id": "tofu_raw",
+   "name": "Tofu",
+   "carbs": 2,
+   "fibre": 1,
+   "protein": 8,
+   "fat": 5,
+   "gi": 15,
+   "icon": "⬜",
+   "units": {
+    "cup": 250
+   }
+  },
+  {
+   "id": "curd_raw",
+   "name": "Curd / dahi",
+   "carbs": 4,
+   "fibre": 0,
+   "protein": 3,
+   "fat": 4,
+   "gi": 36,
+   "icon": "🥛",
+   "units": {
+    "cup": 240,
+    "tbsp": 15
+   }
+  },
+  {
+   "id": "milk_raw",
+   "name": "Milk",
+   "carbs": 5,
+   "fibre": 0,
+   "protein": 3,
+   "fat": 4,
+   "gi": 30,
+   "icon": "🥛",
+   "units": {
+    "cup": 240,
+    "tbsp": 15
+   }
+  },
+  {
+   "id": "cream",
+   "name": "Cream (malai)",
+   "carbs": 3,
+   "fibre": 0,
+   "protein": 2,
+   "fat": 25,
+   "gi": 0,
+   "icon": "🥛",
+   "units": {
+    "tbsp": 15
+   }
+  },
+  {
+   "id": "egg_raw",
+   "name": "Egg",
+   "carbs": 1,
+   "fibre": 0,
+   "protein": 13,
+   "fat": 10,
+   "gi": 0,
+   "icon": "🥚",
+   "units": {
+    "piece": 50
+   }
+  },
+  {
+   "id": "chicken_raw",
+   "name": "Chicken (boneless)",
+   "carbs": 0,
+   "fibre": 0,
+   "protein": 22,
+   "fat": 3,
+   "gi": 0,
+   "icon": "🍗",
+   "units": {
+    "cup": 140,
+    "piece": 150
+   }
+  },
+  {
+   "id": "mutton_raw",
+   "name": "Mutton",
+   "carbs": 0,
+   "fibre": 0,
+   "protein": 20,
+   "fat": 10,
+   "gi": 0,
+   "icon": "🍖",
+   "units": {
+    "cup": 140
+   }
+  },
+  {
+   "id": "fish_raw",
+   "name": "Fish",
+   "carbs": 0,
+   "fibre": 0,
+   "protein": 19,
+   "fat": 3,
+   "gi": 0,
+   "icon": "🐟",
+   "units": {
+    "piece": 120
+   }
+  },
+  {
+   "id": "oil",
+   "name": "Cooking oil",
+   "carbs": 0,
+   "fibre": 0,
+   "protein": 0,
+   "fat": 100,
+   "gi": 0,
+   "icon": "🫒",
+   "units": {
+    "tsp": 4.5,
+    "tbsp": 14
+   }
+  },
+  {
+   "id": "ghee_raw",
+   "name": "Ghee",
+   "carbs": 0,
+   "fibre": 0,
+   "protein": 0,
+   "fat": 100,
+   "gi": 0,
+   "icon": "🧈",
+   "units": {
+    "tsp": 4.5,
+    "tbsp": 14
+   }
+  },
+  {
+   "id": "butter_raw",
+   "name": "Butter",
+   "carbs": 0,
+   "fibre": 0,
+   "protein": 1,
+   "fat": 81,
+   "gi": 0,
+   "icon": "🧈",
+   "units": {
+    "tsp": 4.7,
+    "tbsp": 14
+   }
+  },
+  {
+   "id": "sugar",
+   "name": "Sugar",
+   "carbs": 100,
+   "fibre": 0,
+   "protein": 0,
+   "fat": 0,
+   "gi": 65,
+   "icon": "🍬",
+   "units": {
+    "tsp": 4.2,
+    "tbsp": 12.5
+   }
+  },
+  {
+   "id": "jaggery",
+   "name": "Jaggery (gur)",
+   "carbs": 95,
+   "fibre": 0,
+   "protein": 0.4,
+   "fat": 0.1,
+   "gi": 70,
+   "icon": "🟤",
+   "units": {
+    "tsp": 6,
+    "tbsp": 18
+   }
+  },
+  {
+   "id": "coconut_grated",
+   "name": "Coconut (grated)",
+   "carbs": 15,
+   "fibre": 9,
+   "protein": 3,
+   "fat": 34,
+   "gi": 45,
+   "icon": "🥥",
+   "units": {
+    "tbsp": 6,
+    "cup": 80
+   }
+  },
+  {
+   "id": "coconut_milk",
+   "name": "Coconut milk",
+   "carbs": 6,
+   "fibre": 0,
+   "protein": 2,
+   "fat": 24,
+   "gi": 40,
+   "icon": "🥥",
+   "units": {
+    "cup": 240,
+    "tbsp": 15
+   }
+  },
+  {
+   "id": "peanuts_raw",
+   "name": "Peanuts",
+   "carbs": 17,
+   "fibre": 9,
+   "protein": 26,
+   "fat": 45,
+   "gi": 15,
+   "icon": "🥜",
+   "units": {
+    "tbsp": 10,
+    "cup": 145
+   }
+  },
+  {
+   "id": "cashews_raw",
+   "name": "Cashews",
+   "carbs": 30,
+   "fibre": 3,
+   "protein": 18,
+   "fat": 44,
+   "gi": 25,
+   "icon": "🌰",
+   "units": {
+    "piece": 2,
+    "tbsp": 9
+   }
+  },
+  {
+   "id": "almonds_raw",
+   "name": "Almonds",
+   "carbs": 20,
+   "fibre": 12,
+   "protein": 21,
+   "fat": 50,
+   "gi": 15,
+   "icon": "🌰",
+   "units": {
+    "piece": 1.2,
+    "tbsp": 9
+   }
+  },
+  {
+   "id": "sesame",
+   "name": "Sesame seeds (til)",
+   "carbs": 23,
+   "fibre": 12,
+   "protein": 18,
+   "fat": 50,
+   "gi": 35,
+   "icon": "⚪",
+   "units": {
+    "tsp": 3,
+    "tbsp": 9
+   }
+  },
+  {
+   "id": "tamarind",
+   "name": "Tamarind",
+   "carbs": 62,
+   "fibre": 5,
+   "protein": 3,
+   "fat": 0.6,
+   "gi": 60,
+   "icon": "🟤",
+   "units": {
+    "tsp": 5,
+    "tbsp": 15
+   }
+  },
+  {
+   "id": "lemon_juice",
+   "name": "Lemon juice",
+   "carbs": 7,
+   "fibre": 0,
+   "protein": 0.4,
+   "fat": 0.2,
+   "gi": 20,
+   "icon": "🍋",
+   "units": {
+    "tsp": 5,
+    "tbsp": 15
+   }
+  },
+  {
+   "id": "spice_mix",
+   "name": "Dry spices (haldi, mirch, masala)",
+   "carbs": 50,
+   "fibre": 20,
+   "protein": 12,
+   "fat": 10,
+   "gi": 30,
+   "icon": "🌶️",
+   "units": {
+    "tsp": 2.5,
+    "tbsp": 7
+   }
+  }
+ ]
+}

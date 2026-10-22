@@ -3,14 +3,13 @@
 import PrintButton from "@/components/PrintButton";
 import ShareButton from "@/components/ShareButton";
 import { reportText } from "@/lib/share";
-import { FOODS } from "@/lib/foods-client";
 import { weeklyObservations } from "@/lib/insights";
 import { weekStats } from "@/lib/stats";
 import { nowMs } from "@/lib/time";
 import { useRecent } from "@/lib/useRecent";
 
 export default function ReportPage() {
-  const { ready, paired: unsorted, readings, profile } = useRecent(7);
+  const { ready, paired: unsorted, readings, profile, foods: FOODS } = useRecent(7);
   if (!ready) return <p className="text-muted">Loading…</p>;
   const paired = [...unsorted].sort((a, b) => a.eaten_at.localeCompare(b.eaten_at));
   const stats = weekStats(paired, readings, profile, FOODS);

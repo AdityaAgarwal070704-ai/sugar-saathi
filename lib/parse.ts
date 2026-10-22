@@ -24,6 +24,20 @@ export const ITEMS_SCHEMA = {
   required: ["items"],
 };
 
+// The user's own dishes (from the recipe builder), accepted from the browser. Only id and name are used, and both are
+// strictly checked; their nutrition is looked up in the browser, never taken from the request.
+export function cleanCustom(raw: unknown): Food[] {
+  if (!Array.isArray(raw)) return [];
+  const out: Food[] = [];
+  for (const f of raw.slice(0, 30)) {
+    if (f && typeof f.id === "string" && /^my_[a-z0-9]{4,24}$/.test(f.id) && typeof f.name === "string") {
+      const name = f.name.replace(/[^\p{L}\p{N} .,'()&-]/gu, "").trim().slice(0, 50);
+      if (name) out.push({ id: f.id, name: `${name} (my own dish)`, unit: "serving", carbs: 0, fibre: 0, protein: 0, fat: 0, gi: 0, category: "extra", icon: "🍲", tags: ["mine"] });
+    }
+  }
+  return out;
+}
+
 export function menuText(foods: Food[]): string {
   return foods.map((f) => `${f.id} = ${f.name} (counted in ${f.unit}s)`).join("\n");
 }

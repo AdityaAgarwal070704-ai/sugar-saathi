@@ -1,4 +1,5 @@
-import type { MealRow, MealType, Profile, Reminders, ReadingRow, RoutineItem, SavedItem, Walk, WalkTimer } from "./types";
+import { MAX_GRAMS, MAX_SERVINGS, UNITS, type Recipe } from "./recipe";
+import type { Category, Food, MealRow, MealType, Profile, Reminders, ReadingRow, RoutineItem, SavedItem, Walk, WalkTimer } from "./types";
 
 // Pure functions for the browser-storage layer (no browser APIs), so they can be tested.
 
@@ -10,6 +11,8 @@ export type Extras = {
   reminders: Reminders;
   checkinAt: string | null; // when the weekly check-in was last done
   wrapupDismissed: string | null; // "YYYY-MM-DD" of the day whose wrap-up was dismissed
+  customFoods: Food[]; // dishes the user made with the recipe builder ("my dishes")
+  recipes: Recipe[];
 };
 
 export type State = { meals: MealRow[]; readings: ReadingRow[]; profile: Profile } & Extras;
@@ -20,7 +23,7 @@ export const DEFAULT_ROUTINE: RoutineItem[] = [
   { id: "water", label: "Drink enough water", icon: "💧" },
   { id: "fasting", label: "Check fasting sugar", icon: "🩸" },
 ];
-export const DEFAULT_EXTRAS: Extras = { routine: DEFAULT_ROUTINE, ticks: {}, walks: [], timer: null, reminders: DEFAULT_REMINDERS, checkinAt: null, wrapupDismissed: null };
+export const DEFAULT_EXTRAS: Extras = { routine: DEFAULT_ROUTINE, ticks: {}, walks: [], timer: null, reminders: DEFAULT_REMINDERS, checkinAt: null, wrapupDismissed: null, customFoods: [], recipes: [] };
 
 export const DEFAULT_PROFILE: Profile = { display_name: null, meal_carb_target: 60, glucose_low: 70, glucose_high: 180, diet: "veg" };
 export const EMPTY_STATE: State = { meals: [], readings: [], profile: DEFAULT_PROFILE, ...DEFAULT_EXTRAS };
@@ -52,6 +55,8 @@ export function toPersisted(state: State): Persisted {
     reminders: state.reminders,
     checkinAt: state.checkinAt,
     wrapupDismissed: state.wrapupDismissed,
+    customFoods: state.customFoods,
+    recipes: state.recipes,
   };
 }
 
@@ -77,6 +82,35 @@ const isIso = (v: unknown): v is string => typeof v === "string" && !Number.isNa
 const isDay = (v: unknown): v is string => typeof v === "string" && /^\d{4}-\d{2}-\d{2}$/.test(v);
 const isTime = (v: unknown): v is string => typeof v === "string" && /^([01]\d|2[0-3]):[0-5]\d$/.test(v);
 
+const CATEGORIES: Category[] = ["grain", "dal", "veg", "protein", "dairy", "fruit", "sweet", "snack", "drink", "nuts", "extra"];
+const MY_ID = /^my_[a-z0-9]{4,24}$/;
+const inRange = (n: unknown, hi: number): n is number => typeof n === "number" && Number.isFinite(n) && n >= 0 && n <= hi;
+
+function validRecipes(d: Partial<Extras>): { customFoods: Food[]; recipes: Recipe[] } {
+  const customFoods: Food[] = [];
+  if (Array.isArray(d.customFoods)) {
+    for (const f of d.customFoods.slice(0, 100)) {
+      if (f && typeof f.id === "string" && MY_ID.test(f.id) && typeof f.name === "string" && f.name.trim() !== "" && CATEGORIES.includes(f.category) && inRange(f.carbs, 500) && inRange(f.fibre, 200) && inRange(f.protein, 300) && inRange(f.fat, 300) && inRange(f.gi, 100)) {
+        customFoods.push({ id: f.id, name: f.name.trim().slice(0, 60), unit: "serving", carbs: f.carbs, fibre: f.fibre, protein: f.protein, fat: f.fat, gi: f.gi, category: f.category, icon: typeof f.icon === "string" ? f.icon.slice(0, 8) : "🍲", tags: ["mine"] });
+      }
+    }
+  }
+  const have = new Set(customFoods.map((f) => f.id));
+  const recipes: Recipe[] = [];
+  if (Array.isArray(d.recipes)) {
+    for (const r of d.recipes.slice(0, 100)) {
+      if (!r || typeof r.id !== "string" || typeof r.name !== "string" || !have.has(r.foodId) || !CATEGORIES.includes(r.category)) continue;
+      if (!Number.isInteger(r.servings) || r.servings < 1 || r.servings > MAX_SERVINGS || !Array.isArray(r.lines)) continue;
+      const lines = r.lines
+        .filter((l) => l && typeof l.ingredientId === "string" && inRange(l.amount, MAX_GRAMS) && l.amount > 0 && UNITS.includes(l.unit))
+        .slice(0, 40);
+      if (lines.length === 0) continue;
+      recipes.push({ id: r.id.slice(0, 40), name: r.name.trim().slice(0, 60), servings: r.servings, lines, foodId: r.foodId, category: r.category, icon: typeof r.icon === "string" ? r.icon.slice(0, 8) : "🍲" });
+    }
+  }
+  return { customFoods, recipes };
+}
+
 function validExtras(d: Partial<Extras>): Extras {
   const routine: RoutineItem[] = Array.isArray(d.routine)
     ? d.routine
@@ -100,7 +134,8 @@ function validExtras(d: Partial<Extras>): Extras {
   const reminders: Reminders = r && isTime(r.breakfast) && isTime(r.lunch) && isTime(r.dinner)
     ? { breakfast: r.breakfast, lunch: r.lunch, dinner: r.dinner, snack: isTime(r.snack) ? r.snack : null, checks: r.checks !== false, walks: r.walks !== false }
     : DEFAULT_REMINDERS;
-  return { routine, ticks, walks, timer, reminders, checkinAt: isIso(d.checkinAt) ? d.checkinAt : null, wrapupDismissed: isDay(d.wrapupDismissed) ? d.wrapupDismissed : null };
+  const { customFoods, recipes } = validRecipes(d);
+  return { routine, ticks, walks, timer, reminders, checkinAt: isIso(d.checkinAt) ? d.checkinAt : null, wrapupDismissed: isDay(d.wrapupDismissed) ? d.wrapupDismissed : null, customFoods, recipes };
 }
 
 // Reads stored or backed-up data defensively: anything malformed is dropped, never trusted.

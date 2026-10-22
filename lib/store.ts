@@ -3,7 +3,8 @@
 import { useSyncExternalStore } from "react";
 import { dayKey } from "./day";
 import { EMPTY_STATE, fromPersisted, mergeReadings, toPersisted, type State } from "./store-core";
-import type { MealRow, Profile, Reminders, RoutineItem } from "./types";
+import type { Recipe } from "./recipe";
+import type { Food, MealRow, Profile, Reminders, RoutineItem } from "./types";
 
 // All user data lives in this browser (localStorage). No accounts, no server database.
 const KEY = "sugar-saathi:v1";
@@ -120,6 +121,19 @@ export const store = {
     const cur = s.ticks[today] ?? [];
     const ticks = s.routine.some((r) => r.id === "walk") && !cur.includes("walk") ? { ...s.ticks, [today]: [...cur, "walk"] } : s.ticks;
     return commit({ ...s, walks: [...s.walks, walk].slice(-1000), timer: null, ticks });
+  },
+  // Saves (or updates) a recipe together with the "my dish" it creates in the food list.
+  saveRecipe(recipe: Recipe, food: Food): boolean {
+    const s = getSnapshot();
+    const recipes = [...s.recipes.filter((r) => r.id !== recipe.id), recipe];
+    const customFoods = [...s.customFoods.filter((f) => f.id !== food.id), food];
+    return commit({ ...s, recipes, customFoods });
+  },
+  deleteRecipe(id: string): boolean {
+    const s = getSnapshot();
+    const r = s.recipes.find((x) => x.id === id);
+    if (!r) return true;
+    return commit({ ...s, recipes: s.recipes.filter((x) => x.id !== id), customFoods: s.customFoods.filter((f) => f.id !== r.foodId) });
   },
   markCheckin(): boolean {
     return commit({ ...getSnapshot(), checkinAt: new Date().toISOString() });

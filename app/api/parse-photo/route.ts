@@ -1,6 +1,6 @@
 import { callModel } from "@/lib/ai";
 import { loadFoods } from "@/lib/foods";
-import { cleanItems, ITEMS_SCHEMA, photoSystem } from "@/lib/parse";
+import { cleanCustom, cleanItems, ITEMS_SCHEMA, photoSystem } from "@/lib/parse";
 import { tooMany } from "@/lib/ratelimit";
 import type { ParseResponse } from "@/lib/types";
 
@@ -16,8 +16,11 @@ export async function POST(request: Request) {
   if (tooMany(request, "photo", 15)) return fail("Too many photos right now. Please wait a few minutes and try again.", 429);
 
   let image: unknown;
+  let custom: unknown;
   try {
-    image = (await request.json()).image;
+    const body = await request.json();
+    image = body.image;
+    custom = body.custom;
   } catch {
     return fail("Add a photo of your meal.", 400);
   }
@@ -25,8 +28,9 @@ export async function POST(request: Request) {
   if (image.length > MAX_CHARS) return fail("That photo is too large. Try again with a smaller one.", 413);
   if (!DATA_URL.test(image)) return fail("That doesn't look like a photo. Try again.", 400);
 
-  const foods = await loadFoods();
-  if (!foods) return fail("Food table unavailable.", 500);
+  const base = await loadFoods();
+  if (!base) return fail("Food table unavailable.", 500);
+  const foods = [...cleanCustom(custom), ...base];
 
   const result = await callModel({
     system: photoSystem(foods),

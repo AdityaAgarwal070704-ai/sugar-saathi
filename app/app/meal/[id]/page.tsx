@@ -9,7 +9,6 @@ import { Card } from "@/components/ui/Card";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { GlucoseChart } from "@/components/ui/GlucoseChart";
 import { Pill } from "@/components/ui/Pill";
-import { FOODS } from "@/lib/foods-client";
 import { MEAL_EMOJI, MEAL_LABEL } from "@/lib/meal";
 import { store } from "@/lib/store";
 import { nowMs } from "@/lib/time";
@@ -25,7 +24,7 @@ const localInput = (ms: number) => {
 export default function MealDetail() {
   const { id } = useParams<{ id: string }>();
   const router = useRouter();
-  const { ready, paired, readings, profile } = useRecent(3650);
+  const { ready, paired, readings, profile, foods: FOODS } = useRecent(3650);
   if (!ready) return <p className="text-muted">Loading…</p>;
 
   const meal = paired.find((m) => m.id === id);
