@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { Button } from "@/components/ui/Button";
 import { store } from "@/lib/store";
 
 export default function DataBackup() {
@@ -36,17 +37,17 @@ export default function DataBackup() {
   };
 
   return (
-    <div className="space-y-3 text-sm">
-      <p className="text-zinc-600">There are no accounts: your meals, readings and goals are stored only in this browser on this device. Clearing browser data or switching device loses them, so export a backup now and then.</p>
+    <div className="space-y-3">
+      <p className="text-muted">There are no accounts: your meals, readings and goals are stored only in this browser on this device. Clearing browser data or switching device loses them, so export a backup now and then.</p>
       <div className="flex flex-wrap items-center gap-2">
-        <button type="button" onClick={exportData} className="rounded-lg border border-zinc-300 px-4 py-2">Export backup</button>
-        <label className="cursor-pointer rounded-lg border border-zinc-300 px-4 py-2">
+        <Button variant="outline" onClick={exportData}>Export backup</Button>
+        <label className="inline-flex min-h-11 cursor-pointer items-center rounded-full border border-line bg-paper px-5 font-medium hover:bg-sand">
           Restore from backup
           <input type="file" accept="application/json,.json" className="hidden" onChange={importData} />
         </label>
-        <button type="button" onClick={clear} className="rounded-lg border border-red-300 px-4 py-2 text-red-700">Delete all my data</button>
+        <Button variant="danger" onClick={clear}>Delete all my data</Button>
       </div>
-      {msg && <p role="alert" className={msg.ok ? "text-emerald-800" : "text-red-700"}>{msg.text}</p>}
+      {msg && <p role="alert" className={msg.ok ? "text-leaf" : "text-terracotta"}>{msg.text}</p>}
     </div>
   );
 }

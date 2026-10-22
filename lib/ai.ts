@@ -5,7 +5,7 @@ type Schema = Record<string, unknown>;
 
 export async function callModel(opts: {
   system: string;
-  user: string;
+  user: string | unknown[]; // plain text, or content parts (for example text plus an image)
   toolName: string;
   toolDescription: string;
   schema: Schema;

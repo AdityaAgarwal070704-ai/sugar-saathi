@@ -152,3 +152,195 @@ test("store: malformed or hostile backup data is dropped, not trusted", () => {
   assert.equal(s!.profile.glucose_high, 180);
   assert.equal(s!.profile.diet, "veg");
 });
+
+import { glycemicImpact, plateGroups } from "../lib/impact";
+import { expectedRise } from "../lib/response";
+import { streakOf } from "../lib/streak";
+import { dailySeries, gmi, readingsAround, timeInRange, averageGlucose } from "../lib/trends";
+import type { PairedMeal } from "../lib/pairing";
+
+test("foods table: unique ids, complete fields, sane numbers", () => {
+  const ids = new Set<string>();
+  for (const f of foods) {
+    assert.ok(!ids.has(f.id), `duplicate id ${f.id}`);
+    ids.add(f.id);
+    assert.ok(f.name && f.unit && f.icon, `${f.id} missing text field`);
+    for (const k of ["carbs", "fibre", "protein", "fat", "gi"] as const) {
+      assert.ok(Number.isFinite(f[k]) && f[k] >= 0, `${f.id}.${k}`);
+    }
+    assert.ok(f.gi <= 100, `${f.id} gi`);
+    const kcal = 4 * f.carbs + 4 * f.protein + 9 * f.fat;
+    assert.ok(kcal >= 0 && kcal <= 700, `${f.id} kcal ${kcal} per unit looks wrong`);
+    assert.ok(Array.isArray(f.tags));
+  }
+  assert.ok(foods.length >= 200, `only ${foods.length} dishes`);
+  // every swap target must exist
+  for (const id of ["roti", "brown_rice", "gobi_sabzi", "dal", "apple", "dhokla", "coconut_water", "orange", "lassi_salted", "chai_nosugar", "roasted_chana", "poha", "boiled_sweet_potato", "pulao", "bhindi_sabzi", "black_coffee", "besan_chilla", "khichdi", "nimbu_pani_sugar"]) {
+    assert.ok(ids.has(id), `swap target ${id} missing`);
+  }
+});
+
+test("nutrition: fat and calories follow 4/4/9", () => {
+  const n = nutritionOf([{ foodId: "roti", count: 2 }, { foodId: "dal", count: 1 }, { foodId: "aloo_sabzi", count: 1 }], foods);
+  assert.equal(n.carbs, 63);
+  assert.equal(n.fat, 11.4); // 2.4 + 3 + 6
+  assert.equal(n.kcal, Math.round(4 * 63 + 4 * 17 + 9 * 11.4));
+});
+
+test("impact thresholds", () => {
+  assert.equal(glycemicImpact(10), "low");
+  assert.equal(glycemicImpact(15), "low");
+  assert.equal(glycemicImpact(16), "medium");
+  assert.equal(glycemicImpact(29), "medium");
+  assert.equal(glycemicImpact(30), "high");
+});
+
+test("plate groups", () => {
+  const g = plateGroups([{ foodId: "roti", count: 2 }, { foodId: "dal", count: 1 }, { foodId: "bhindi_sabzi", count: 1 }, { foodId: "curd", count: 1 }], foods);
+  assert.deepEqual([g.veg, g.dal, g.protein, g.grain], [true, true, true, true]);
+  assert.ok(g.grainShare > 0.4 && g.grainShare < 0.7);
+  const rice = plateGroups([{ foodId: "white_rice", count: 2 }], foods);
+  assert.deepEqual([rice.veg, rice.dal, rice.protein], [false, false, false]);
+  assert.equal(rice.grainShare, 1);
+});
+
+const pm = (id: string, carbs: number, rise: number | null, type: MealRow["meal_type"] = "lunch"): PairedMeal => ({
+  ...meal(id, "2026-10-20T08:00:00Z"), carbs, meal_type: type, pre: null, post: null, rise,
+});
+
+test("expected rise: too little data says so, never guesses", () => {
+  const r = expectedRise({ carbs: 60 }, [pm("a", 62, 50), pm("b", 58, 70), pm("c", 20, 10), pm("d", 61, null)]);
+  assert.equal(r.status, "insufficient");
+  if (r.status === "insufficient") assert.equal(r.found, 2);
+});
+
+test("expected rise: range and count come from similar meals only", () => {
+  const hist = [pm("a", 60, 40), pm("b", 62, 60), pm("c", 58, 80), pm("d", 64, 100), pm("far", 20, 5), pm("none", 61, null)];
+  const r = expectedRise({ carbs: 60 }, hist);
+  assert.equal(r.status, "ok");
+  if (r.status === "ok") {
+    assert.equal(r.n, 4);
+    assert.equal(r.median, 70);
+    assert.ok(r.low >= 40 && r.low <= r.median && r.high >= r.median && r.high <= 100);
+  }
+});
+
+test("expected rise: prefers the same meal type when there is enough of it", () => {
+  const hist = [pm("a", 60, 100, "dinner"), pm("b", 60, 110, "dinner"), pm("c", 60, 120, "dinner"), pm("d", 60, 10, "lunch"), pm("e", 60, 20, "lunch")];
+  const r = expectedRise({ carbs: 60, meal_type: "dinner" }, hist);
+  assert.equal(r.status, "ok");
+  if (r.status === "ok") {
+    assert.equal(r.sameMealType, true);
+    assert.ok(r.low >= 100);
+  }
+});
+
+test("streak: consecutive days, gentle gaps", () => {
+  const now = new Date(2026, 9, 22, 20, 0, 0);
+  const at = (daysAgo: number) => ({ eaten_at: new Date(2026, 9, 22 - daysAgo, 9, 0, 0).toISOString() });
+  assert.deepEqual(streakOf([], now).state, "new");
+  const a = streakOf([at(0), at(1), at(2), at(4)], now);
+  assert.equal(a.current, 3);
+  assert.equal(a.state, "active");
+  const b = streakOf([at(1), at(2)], now); // not logged today yet: streak survives until midnight
+  assert.equal(b.current, 2);
+  assert.equal(b.state, "keep-going");
+  const c = streakOf([at(3), at(4)], now);
+  assert.equal(c.current, 0);
+  assert.equal(c.state, "welcome-back");
+  assert.equal(streakOf([at(0), at(0), at(1)], now).loggedLast7, 2);
+});
+
+test("trends: daily series, averages, time in range, glucose window", () => {
+  const now = new Date(2026, 9, 22, 12, 0, 0);
+  const ms = [
+    { eaten_at: new Date(2026, 9, 22, 9).toISOString(), carbs: 50, fibre: 5, protein: 10, fat: 8, kcal: 300 },
+    { eaten_at: new Date(2026, 9, 22, 13).toISOString(), carbs: 30, fibre: 3, protein: 5, fat: 2, kcal: 150 },
+    { eaten_at: new Date(2026, 9, 20, 13).toISOString(), carbs: 40, fibre: 4, protein: 6, fat: 3, kcal: 200 },
+  ];
+  const s = dailySeries(ms, 3, now);
+  assert.equal(s.length, 3);
+  assert.equal(s[2].carbs, 80);
+  assert.equal(s[2].meals, 2);
+  assert.equal(s[1].meals, 0);
+  assert.equal(s[0].carbs, 40);
+  assert.equal(averageGlucose([{ value: 100 }, { value: 140 }]), 120);
+  assert.equal(timeInRange([{ value: 60 }, { value: 100 }, { value: 200 }, { value: 120 }], 70, 180), 50);
+  assert.equal(averageGlucose([]), null);
+  const around = readingsAround(
+    [reading("1", "2026-10-20T07:00:00Z", 100), reading("2", "2026-10-20T07:45:00Z", 105), reading("3", "2026-10-20T10:30:00Z", 150), reading("4", "2026-10-20T11:10:00Z", 130)],
+    "2026-10-20T08:00:00Z",
+  );
+  assert.deepEqual(around.map((r) => r.id), ["2", "3"]);
+});
+
+test("gmi: needs two weeks of CGM data, otherwise null", () => {
+  const mk = (n: number, spanDays: number, src: ReadingRow["source"]) =>
+    Array.from({ length: n }, (_, i) => ({ id: String(i), measured_at: new Date(Date.UTC(2026, 9, 1) + (i / n) * spanDays * 86400_000).toISOString(), value: 120, source: src }));
+  assert.equal(gmi(mk(300, 5, "csv")), null);
+  assert.equal(gmi(mk(100, 20, "csv")), null);
+  assert.equal(gmi(mk(300, 20, "manual")), null);
+  const g = gmi(mk(300, 20, "csv"));
+  assert.ok(g);
+  assert.equal(g!.value, Math.round((3.31 + 0.02392 * 120) * 10) / 10);
+});
+
+import { usualMeals } from "../lib/usual";
+import { rangeAlert } from "../lib/safety";
+import { cleanItems } from "../lib/parse";
+import { guessMealType } from "../lib/meal";
+import { enrichMeal } from "../lib/enrich";
+
+test("usual meals: frequent first, then recent, one entry per meal text", () => {
+  const mk = (id: string, text: string, day: number) => ({ ...meal(id, `2026-10-${10 + day}T08:00:00Z`), text });
+  const u = usualMeals([mk("1", "2 roti dal", 1), mk("2", "Idli sambar", 2), mk("3", "2 roti  dal", 3), mk("4", "poha", 4), mk("5", "2 roti dal", 5)], 3);
+  assert.equal(u.length, 3);
+  assert.equal(u[0].text.toLowerCase().replace(/\s+/g, " "), "2 roti dal");
+  assert.equal(u[0].count, 3);
+  assert.equal(u[0].id, "5");
+  assert.equal(u[1].text, "poha"); // most recent of the one-offs
+  assert.equal(usualMeals([], 4).length, 0);
+});
+
+test("safety: out-of-range readings point to the doctor and never give treatment steps", () => {
+  const p = { glucose_low: 70, glucose_high: 180 };
+  assert.equal(rangeAlert(100, p), null);
+  const low = rangeAlert(60, p)!;
+  const high = rangeAlert(250, p)!;
+  assert.equal(low.level, "low");
+  assert.equal(high.level, "high");
+  for (const a of [low, high]) {
+    assert.match(a.body, /doctor/);
+    assert.ok(!hasDosingAdvice(a.title + " " + a.body), "alert text sounded like dosing advice");
+  }
+});
+
+test("parse: AI answers are checked before use", () => {
+  const ok = cleanItems({ items: [{ typed: "roti", foodId: "roti", count: 2.1, confidence: 0.9 }, { typed: "x", foodId: "made_up", count: 1, confidence: 0.4 }] }, foods);
+  assert.ok(ok);
+  assert.equal(ok![0].foodId, "roti");
+  assert.equal(ok![0].count, 2);
+  assert.equal(ok![1].foodId, null);
+  assert.equal(cleanItems({ items: "nope" }, foods), null);
+  assert.equal(cleanItems({ items: [{ typed: 1 }] }, foods), null);
+  assert.equal(cleanItems(null, foods), null);
+  const photo = cleanItems({ items: [{ typed: "roti", foodId: "roti", count: 1, confidence: 1 }] }, foods, 0.75);
+  assert.equal(photo![0].confidence, 0.75);
+  assert.equal(cleanItems({ items: [{ typed: "roti", foodId: "roti", count: 9999, confidence: 5 }] }, foods)![0].count, 20);
+});
+
+test("meal type by hour and enrichment from the table", () => {
+  assert.equal(guessMealType(8), "breakfast");
+  assert.equal(guessMealType(13), "lunch");
+  assert.equal(guessMealType(17), "snack");
+  assert.equal(guessMealType(21), "dinner");
+  // An older meal saved before fat existed gets fat and calories recomputed from its dishes.
+  const old = { ...meal("old", "2026-10-20T08:00:00Z", [{ foodId: "roti", count: 2, typed: "roti" }, { foodId: "dal", count: 1, typed: "dal" }]), carbs: 1, protein: 1, fibre: 1, gl: 1 };
+  const e = enrichMeal(old, foods);
+  assert.equal(e.carbs, 45);
+  assert.ok(e.fat > 0 && e.kcal > 0);
+  // Unknown dishes fall back to the stored numbers instead of inventing fat.
+  const unknown = enrichMeal({ ...old, items: [{ foodId: "gone", count: 1, typed: "x" }] }, foods);
+  assert.equal(unknown.carbs, 1);
+  assert.equal(unknown.fat, 0);
+});

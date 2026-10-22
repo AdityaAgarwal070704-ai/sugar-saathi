@@ -5,7 +5,6 @@ import { allSafe } from "@/lib/guardrails";
 import { mealTips } from "@/lib/insights";
 import { tooMany } from "@/lib/ratelimit";
 
-const NON_VEG = new Set(["chicken_curry", "fish_curry"]);
 
 // The AI picks dishes and counts; code checks every dish and calculates every number.
 export async function POST(request: Request) {
@@ -23,7 +22,7 @@ export async function POST(request: Request) {
 
   const all = await loadFoods();
   if (!all) return Response.json({ error: "Food table unavailable." }, { status: 500 });
-  const allowed = all.filter((f) => (diet === "nonveg" ? true : diet === "egg" ? !NON_VEG.has(f.id) : !NON_VEG.has(f.id) && f.id !== "egg"));
+  const allowed = all.filter((f) => (diet === "nonveg" ? true : diet === "egg" ? !f.tags.includes("nonveg") : !f.tags.includes("nonveg") && !f.tags.includes("egg")));
   const allowedIds = new Set(allowed.map((f) => f.id));
   const menu = allowed.map((f) => `${f.id} = ${f.name} (per ${f.unit}: ${f.carbs} g carbs, ${f.fibre} g fibre, ${f.protein} g protein)`).join("\n");
   const slots = snacks ? ["breakfast", "lunch", "snack", "dinner"] : ["breakfast", "lunch", "dinner"];
@@ -80,7 +79,7 @@ Only call the tool.`,
       note,
       items: items.map((i) => {
         const f = all.find((x) => x.id === i.foodId)!;
-        return { name: f.name, unit: f.unit, count: i.count, carbs: Math.round(f.carbs * i.count) };
+        return { name: f.name, icon: f.icon, unit: f.unit, count: i.count, carbs: Math.round(f.carbs * i.count) };
       }),
       nutrition: n,
       overTarget: n.carbs > (m.slot === "snack" ? carbTarget / 3 : carbTarget) * 1.2,

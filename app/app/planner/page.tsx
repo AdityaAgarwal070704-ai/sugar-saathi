@@ -1,14 +1,19 @@
 "use client";
 
+import Link from "next/link";
 import Planner from "@/components/Planner";
 import { useStore } from "@/lib/store";
 
 export default function PlannerPage() {
   const { ready, profile } = useStore();
-  if (!ready) return <p className="text-zinc-500">Loading…</p>;
+  if (!ready) return <p className="text-muted">Loading…</p>;
   return (
     <>
-      <h1 className="text-2xl font-bold">Meal planner</h1>
+      <div>
+        <Link href="/app/discover" className="text-sm font-medium text-moss underline">← Discover</Link>
+        <h1 className="mt-2 font-display text-3xl font-semibold">Day meal planner</h1>
+        <p className="mt-1 text-muted">Ideas for a full day of Indian meals that fit your carb goal.</p>
+      </div>
       <Planner defaultTarget={profile.meal_carb_target} defaultDiet={profile.diet} />
     </>
   );

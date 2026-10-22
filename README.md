@@ -32,16 +32,16 @@ Live app: https://sugar-saathi.vercel.app. No sign-up. Your data stays in your o
 |---|---|---|
 | **Input** | Meal text; glucose entered or imported from CSV; goals in Settings | Human |
 | **AI** | Splits meal text into table dishes with counts and confidence; writes the weekly narrative; proposes a day plan (Gemini through OpenRouter) | AI |
-| **Logic** | Validates AI output against the table; nutrition maths; meal-to-glucose pairing (before: 45 min before to 10 min after eating; after: 90 to 150 min, nearest 2 hours); weekly stats; rule-based tips and swaps; the safety filter | Plain code |
+| **Logic** | Validates AI output against the table; nutrition maths; meal-to-glucose pairing (before: 45 min before to 10 min after eating; after: 90 to 180 min, nearest 2 hours); weekly stats; rule-based tips and swaps; the safety filter | Plain code |
 | **Action** | User confirms or edits portions and dishes, saves the meal, adds readings | Human |
 | **Output** | Dashboard, per-meal tips, history, weekly insights, educator report, meal plan | Plain code (plus AI text where marked) |
 
-Stack: Next.js (App Router) on Vercel; browser local storage for data; Gemini via OpenRouter for the three AI features.
+Stack: Next.js (App Router) on Vercel; browser local storage for data; Gemini via OpenRouter for the four AI features (meal text, meal photo, weekly summary, day plan). Installable on your phone as an app (PWA).
 
 Key files:
 - `lib/` has the engines: `carbs.ts`, `insights.ts`, `pairing.ts`, `stats.ts`, `csv.ts`, `guardrails.ts`, `ai.ts`, and the browser storage layer (`store.ts`, `store-core.ts`)
 - `app/app/` has the screens
-- `app/api/` has three routes: `parse-meal`, `insights` and `plan`
+- `app/api/` has four routes: `parse-meal`, `parse-photo`, `insights` and `plan`
 - `data/foods.json` is the food table
 - `tests/logic.test.ts` has the unit tests
 
@@ -94,7 +94,7 @@ Import the repo in Vercel (or run `npx vercel deploy --prod`), add `OPENROUTER_A
 ## Known limits
 
 - **Data lives in one browser on one device.** Clearing browser data or switching device loses it, so use Settings → Export backup. There is no sync.
-- The food table is a **starter set of 52 dishes with approximate values, not verified by a dietitian**. It must be reviewed before real use, and the app says so on screen.
+- The food table is a **starter set of 215 dishes with approximate values, not verified by a dietitian**. It must be reviewed before real use, and the app says so on screen.
 - Glycemic-load ratings and per-meal thresholds are simple starter rules, not clinically validated.
 - The abuse limit on the AI routes is best-effort (per server instance), not a hard guarantee.
 - This is not a medical device. It gives food guidance, not medical advice.

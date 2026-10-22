@@ -32,6 +32,22 @@ const SWAPS: Record<string, { to: string; note: string }> = {
   mango: { to: "apple", note: "apple has a lower glycemic index" },
   banana: { to: "apple", note: "apple has a lower glycemic index" },
   samosa: { to: "dhokla", note: "steamed dhokla avoids the deep-fried pastry" },
+  kulcha: { to: "roti", note: "roti is a lighter, higher-fibre choice" },
+  lachha_paratha: { to: "roti", note: "roti uses far less oil" },
+  cola: { to: "coconut_water", note: "coconut water has far less sugar than a soft drink" },
+  fruit_juice_packaged: { to: "orange", note: "the whole fruit keeps its fibre" },
+  lassi_sweet: { to: "lassi_salted", note: "salted lassi has far less sugar" },
+  sugarcane_juice: { to: "nimbu_pani_sugar", note: "nimbu pani has fewer carbs than sugarcane juice" },
+  chai_sugar: { to: "chai_nosugar", note: "skipping sugar in tea saves carbs every cup" },
+  coffee_sugar: { to: "black_coffee", note: "skipping sugar and milk saves carbs" },
+  biscuits: { to: "roasted_chana", note: "roasted chana adds protein and fibre" },
+  marie_biscuit: { to: "roasted_chana", note: "roasted chana adds protein and fibre" },
+  chips_packet: { to: "roasted_chana", note: "roasted chana is crunchy with more protein and fibre" },
+  maggi: { to: "poha", note: "poha with vegetables is more filling for similar carbs" },
+  pizza_slice: { to: "roti", note: "a roti-based plate has more fibre" },
+  french_fries: { to: "boiled_sweet_potato", note: "boiled sweet potato avoids the frying" },
+  fried_rice: { to: "pulao", note: "veg pulao is lighter on oil" },
+  jeera_aloo: { to: "bhindi_sabzi", note: "a non-starchy vegetable has fewer carbs" },
 };
 
 export function mealTips(items: Pick<SavedItem, "foodId" | "count">[], foods: Food[], profile: Pick<Profile, "meal_carb_target">): MealTips {
@@ -86,7 +102,7 @@ export function mealTips(items: Pick<SavedItem, "foodId" | "count">[], foods: Fo
   if (n.protein < 10) improve.push(`Low in protein (about ${n.protein} g). Curd, paneer, egg or dal alongside can help.`);
   else if (n.fibre < 4) improve.push(`Low in fibre (about ${n.fibre} g). Vegetables, salad or whole grains can add more.`);
   if (has("sweet")) improve.push("Sweets are best kept as a small, occasional portion. Worth discussing with your educator.");
-  if (lines.some((l) => l.food!.id === "chai_sugar")) improve.push("Sugar in tea adds up across the day. Consider how many cups and how much sugar, and discuss with your educator.");
+  if (lines.some((l) => ["chai_sugar", "coffee_sugar", "cola", "fruit_juice_packaged", "sugarcane_juice", "lassi_sweet"].includes(l.food!.id))) improve.push("Sweet drinks add carbs quickly, with nothing to slow them down. Worth discussing how often with your educator.");
 
   // Swaps
   for (const l of lines) {

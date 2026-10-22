@@ -69,10 +69,15 @@ export function useStore(): State & { ready: boolean } {
 }
 
 export const store = {
-  addMeal(meal: Omit<MealRow, "id">): boolean {
+  addMeal(meal: Omit<MealRow, "id">): { ok: boolean; id: string } {
     const s = getSnapshot();
     const row: MealRow = { ...meal, id: crypto.randomUUID() };
-    return commit({ ...s, meals: [row, ...s.meals].sort((a, b) => b.eaten_at.localeCompare(a.eaten_at)) });
+    const ok = commit({ ...s, meals: [row, ...s.meals].sort((a, b) => b.eaten_at.localeCompare(a.eaten_at)) });
+    return { ok, id: row.id };
+  },
+  updateMeal(id: string, patch: Partial<Omit<MealRow, "id">>): boolean {
+    const s = getSnapshot();
+    return commit({ ...s, meals: s.meals.map((m) => (m.id === id ? { ...m, ...patch } : m)).sort((a, b) => b.eaten_at.localeCompare(a.eaten_at)) });
   },
   deleteMeal(id: string): boolean {
     const s = getSnapshot();

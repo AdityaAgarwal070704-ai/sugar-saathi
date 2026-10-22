@@ -1,525 +1,2962 @@
 {
- "_note": "STARTER TABLE, UNVERIFIED. Approximate values per household unit (carbs, fibre, protein in grams; gi = glycemic index), drafted from typical Indian food composition and glycemic index data (ICMR-NIN, IFCT, published GI tables). Must be reviewed by a dietitian before real use.",
+ "_note": "STARTER TABLE, UNVERIFIED. Approximate values per household unit (carbs, fibre, protein, fat in grams; gi = glycemic index), drafted from typical Indian food composition and glycemic index data (ICMR-NIN, IFCT, published GI tables). Must be reviewed by a dietitian before real use.",
  "foods": [
   {
    "id": "roti",
    "name": "Roti / chapati / phulka",
    "unit": "piece",
    "carbs": 15,
-   "category": "grain",
-   "gi": 62,
    "fibre": 2.0,
-   "protein": 3
+   "protein": 3,
+   "fat": 1.2,
+   "gi": 62,
+   "category": "grain",
+   "icon": "🫓",
+   "tags": []
   },
   {
    "id": "plain_paratha",
    "name": "Plain paratha",
    "unit": "piece",
    "carbs": 22,
-   "category": "grain",
-   "gi": 65,
    "fibre": 2.5,
-   "protein": 4
+   "protein": 4,
+   "fat": 6,
+   "gi": 65,
+   "category": "grain",
+   "icon": "🫓",
+   "tags": []
   },
   {
    "id": "aloo_paratha",
    "name": "Aloo paratha",
    "unit": "piece",
    "carbs": 32,
-   "category": "grain",
-   "gi": 65,
    "fibre": 3,
-   "protein": 5
+   "protein": 5,
+   "fat": 8,
+   "gi": 65,
+   "category": "grain",
+   "icon": "🥔",
+   "tags": []
+  },
+  {
+   "id": "gobi_paratha",
+   "name": "Gobi paratha",
+   "unit": "piece",
+   "carbs": 28,
+   "fibre": 3,
+   "protein": 5,
+   "fat": 7,
+   "gi": 60,
+   "category": "grain",
+   "icon": "🫓",
+   "tags": []
+  },
+  {
+   "id": "paneer_paratha",
+   "name": "Paneer paratha",
+   "unit": "piece",
+   "carbs": 30,
+   "fibre": 2.5,
+   "protein": 9,
+   "fat": 9,
+   "gi": 58,
+   "category": "grain",
+   "icon": "🫓",
+   "tags": []
+  },
+  {
+   "id": "methi_paratha",
+   "name": "Methi paratha",
+   "unit": "piece",
+   "carbs": 22,
+   "fibre": 3,
+   "protein": 5,
+   "fat": 6,
+   "gi": 55,
+   "category": "grain",
+   "icon": "🌿",
+   "tags": []
+  },
+  {
+   "id": "lachha_paratha",
+   "name": "Lachha paratha",
+   "unit": "piece",
+   "carbs": 28,
+   "fibre": 1.5,
+   "protein": 4,
+   "fat": 9,
+   "gi": 68,
+   "category": "grain",
+   "icon": "🫓",
+   "tags": [
+    "restaurant"
+   ]
   },
   {
    "id": "thepla",
    "name": "Thepla",
    "unit": "piece",
    "carbs": 14,
-   "category": "grain",
-   "gi": 55,
    "fibre": 2,
-   "protein": 4
+   "protein": 4,
+   "fat": 4,
+   "gi": 55,
+   "category": "grain",
+   "icon": "🫓",
+   "tags": []
   },
   {
-   "id": "puri",
-   "name": "Puri",
+   "id": "missi_roti",
+   "name": "Missi roti (besan + atta)",
    "unit": "piece",
-   "carbs": 12,
+   "carbs": 16,
+   "fibre": 3,
+   "protein": 5,
+   "fat": 2.5,
+   "gi": 50,
    "category": "grain",
+   "icon": "🫓",
+   "tags": []
+  },
+  {
+   "id": "bajra_roti",
+   "name": "Bajra roti",
+   "unit": "piece",
+   "carbs": 18,
+   "fibre": 2.5,
+   "protein": 3,
+   "fat": 1.5,
+   "gi": 55,
+   "category": "grain",
+   "icon": "🌾",
+   "tags": []
+  },
+  {
+   "id": "jowar_roti",
+   "name": "Jowar roti",
+   "unit": "piece",
+   "carbs": 17,
+   "fibre": 2.5,
+   "protein": 3,
+   "fat": 0.8,
+   "gi": 62,
+   "category": "grain",
+   "icon": "🌾",
+   "tags": []
+  },
+  {
+   "id": "ragi_roti",
+   "name": "Ragi roti",
+   "unit": "piece",
+   "carbs": 18,
+   "fibre": 2.5,
+   "protein": 2.5,
+   "fat": 0.7,
+   "gi": 55,
+   "category": "grain",
+   "icon": "🌾",
+   "tags": []
+  },
+  {
+   "id": "makki_roti",
+   "name": "Makki di roti",
+   "unit": "piece",
+   "carbs": 20,
+   "fibre": 2.5,
+   "protein": 3,
+   "fat": 2,
    "gi": 65,
+   "category": "grain",
+   "icon": "🌽",
+   "tags": []
+  },
+  {
+   "id": "tandoori_roti",
+   "name": "Tandoori roti",
+   "unit": "piece",
+   "carbs": 22,
+   "fibre": 2.5,
+   "protein": 4,
+   "fat": 0.8,
+   "gi": 62,
+   "category": "grain",
+   "icon": "🫓",
+   "tags": [
+    "restaurant"
+   ]
+  },
+  {
+   "id": "rumali_roti",
+   "name": "Rumali roti",
+   "unit": "piece",
+   "carbs": 15,
    "fibre": 1,
-   "protein": 3
+   "protein": 3,
+   "fat": 0.5,
+   "gi": 65,
+   "category": "grain",
+   "icon": "🫓",
+   "tags": [
+    "restaurant"
+   ]
   },
   {
    "id": "naan",
    "name": "Naan",
    "unit": "piece",
    "carbs": 45,
-   "category": "grain",
-   "gi": 71,
    "fibre": 2,
-   "protein": 8
+   "protein": 8,
+   "fat": 6,
+   "gi": 71,
+   "category": "grain",
+   "icon": "🫓",
+   "tags": [
+    "restaurant"
+   ]
+  },
+  {
+   "id": "kulcha",
+   "name": "Kulcha",
+   "unit": "piece",
+   "carbs": 35,
+   "fibre": 1.5,
+   "protein": 6,
+   "fat": 5,
+   "gi": 70,
+   "category": "grain",
+   "icon": "🫓",
+   "tags": [
+    "restaurant"
+   ]
+  },
+  {
+   "id": "puri",
+   "name": "Puri",
+   "unit": "piece",
+   "carbs": 12,
+   "fibre": 1,
+   "protein": 3,
+   "fat": 6,
+   "gi": 65,
+   "category": "grain",
+   "icon": "🟡",
+   "tags": []
+  },
+  {
+   "id": "luchi",
+   "name": "Luchi",
+   "unit": "piece",
+   "carbs": 12,
+   "fibre": 0.5,
+   "protein": 2,
+   "fat": 6,
+   "gi": 70,
+   "category": "grain",
+   "icon": "🟡",
+   "tags": []
   },
   {
    "id": "bhatura",
    "name": "Bhatura",
    "unit": "piece",
    "carbs": 35,
-   "category": "grain",
-   "gi": 70,
    "fibre": 2,
-   "protein": 6
+   "protein": 6,
+   "fat": 10,
+   "gi": 70,
+   "category": "grain",
+   "icon": "🟡",
+   "tags": [
+    "restaurant"
+   ]
+  },
+  {
+   "id": "puran_poli",
+   "name": "Puran poli",
+   "unit": "piece",
+   "carbs": 45,
+   "fibre": 2.5,
+   "protein": 5,
+   "fat": 6,
+   "gi": 70,
+   "category": "grain",
+   "icon": "🫓",
+   "tags": [
+    "festival"
+   ]
   },
   {
    "id": "plain_dosa",
    "name": "Plain dosa",
    "unit": "piece",
    "carbs": 25,
-   "category": "grain",
-   "gi": 77,
    "fibre": 1,
-   "protein": 3
+   "protein": 3,
+   "fat": 4,
+   "gi": 77,
+   "category": "grain",
+   "icon": "🥞",
+   "tags": []
   },
   {
    "id": "masala_dosa",
    "name": "Masala dosa",
    "unit": "piece",
    "carbs": 42,
-   "category": "grain",
-   "gi": 70,
    "fibre": 3,
-   "protein": 5
+   "protein": 5,
+   "fat": 10,
+   "gi": 70,
+   "category": "grain",
+   "icon": "🥞",
+   "tags": [
+    "restaurant"
+   ]
   },
   {
-   "id": "idli",
-   "name": "Idli",
+   "id": "rava_dosa",
+   "name": "Rava dosa",
    "unit": "piece",
-   "carbs": 8,
-   "category": "grain",
-   "gi": 69,
+   "carbs": 25,
    "fibre": 1,
-   "protein": 2
+   "protein": 3,
+   "fat": 5,
+   "gi": 70,
+   "category": "grain",
+   "icon": "🥞",
+   "tags": [
+    "restaurant"
+   ]
+  },
+  {
+   "id": "pesarattu",
+   "name": "Pesarattu (moong dosa)",
+   "unit": "piece",
+   "carbs": 15,
+   "fibre": 3,
+   "protein": 6,
+   "fat": 3,
+   "gi": 40,
+   "category": "protein",
+   "icon": "🥞",
+   "tags": []
+  },
+  {
+   "id": "adai",
+   "name": "Adai (mixed dal dosa)",
+   "unit": "piece",
+   "carbs": 18,
+   "fibre": 3,
+   "protein": 6,
+   "fat": 4,
+   "gi": 45,
+   "category": "protein",
+   "icon": "🥞",
+   "tags": []
   },
   {
    "id": "uttapam",
    "name": "Uttapam",
    "unit": "piece",
    "carbs": 30,
-   "category": "grain",
-   "gi": 65,
    "fibre": 2,
-   "protein": 6
+   "protein": 6,
+   "fat": 5,
+   "gi": 65,
+   "category": "grain",
+   "icon": "🥞",
+   "tags": []
+  },
+  {
+   "id": "idli",
+   "name": "Idli",
+   "unit": "piece",
+   "carbs": 8,
+   "fibre": 1,
+   "protein": 2,
+   "fat": 0.4,
+   "gi": 69,
+   "category": "grain",
+   "icon": "⚪",
+   "tags": []
+  },
+  {
+   "id": "rava_idli",
+   "name": "Rava idli",
+   "unit": "piece",
+   "carbs": 12,
+   "fibre": 1,
+   "protein": 2,
+   "fat": 2,
+   "gi": 65,
+   "category": "grain",
+   "icon": "⚪",
+   "tags": []
+  },
+  {
+   "id": "appam",
+   "name": "Appam",
+   "unit": "piece",
+   "carbs": 18,
+   "fibre": 0.5,
+   "protein": 2,
+   "fat": 2,
+   "gi": 70,
+   "category": "grain",
+   "icon": "🥞",
+   "tags": []
+  },
+  {
+   "id": "idiyappam",
+   "name": "Idiyappam (string hoppers)",
+   "unit": "piece",
+   "carbs": 12,
+   "fibre": 0.5,
+   "protein": 1.5,
+   "fat": 0.5,
+   "gi": 70,
+   "category": "grain",
+   "icon": "🍜",
+   "tags": []
   },
   {
    "id": "besan_chilla",
    "name": "Besan chilla",
    "unit": "piece",
    "carbs": 12,
-   "category": "protein",
-   "gi": 35,
    "fibre": 2,
-   "protein": 5
+   "protein": 5,
+   "fat": 4,
+   "gi": 35,
+   "category": "protein",
+   "icon": "🥞",
+   "tags": []
   },
   {
-   "id": "dhokla",
-   "name": "Dhokla",
+   "id": "moong_cheela",
+   "name": "Moong dal cheela",
    "unit": "piece",
-   "carbs": 8,
-   "category": "snack",
+   "carbs": 10,
+   "fibre": 2,
+   "protein": 6,
+   "fat": 3,
    "gi": 35,
-   "fibre": 1,
-   "protein": 3
+   "category": "protein",
+   "icon": "🥞",
+   "tags": []
   },
   {
    "id": "bread_slice",
    "name": "Bread slice",
    "unit": "piece",
    "carbs": 13,
-   "category": "grain",
-   "gi": 70,
    "fibre": 1,
-   "protein": 3
+   "protein": 3,
+   "fat": 1,
+   "gi": 70,
+   "category": "grain",
+   "icon": "🍞",
+   "tags": []
   },
   {
    "id": "pav",
    "name": "Pav",
    "unit": "piece",
    "carbs": 18,
-   "category": "grain",
-   "gi": 73,
    "fibre": 1,
-   "protein": 3
-  },
-  {
-   "id": "vada_pav",
-   "name": "Vada pav",
-   "unit": "piece",
-   "carbs": 38,
-   "category": "snack",
-   "gi": 70,
-   "fibre": 3,
-   "protein": 6
-  },
-  {
-   "id": "samosa",
-   "name": "Samosa",
-   "unit": "piece",
-   "carbs": 24,
-   "category": "snack",
-   "gi": 65,
-   "fibre": 2,
-   "protein": 3
+   "protein": 3,
+   "fat": 2,
+   "gi": 73,
+   "category": "grain",
+   "icon": "🍞",
+   "tags": []
   },
   {
    "id": "white_rice",
    "name": "Steamed white rice",
    "unit": "katori",
    "carbs": 40,
-   "category": "grain",
-   "gi": 73,
    "fibre": 0.5,
-   "protein": 4
-  },
-  {
-   "id": "jeera_rice",
-   "name": "Jeera rice",
-   "unit": "katori",
-   "carbs": 42,
+   "protein": 4,
+   "fat": 0.3,
+   "gi": 73,
    "category": "grain",
-   "gi": 70,
-   "fibre": 1,
-   "protein": 4
+   "icon": "🍚",
+   "tags": []
   },
   {
    "id": "brown_rice",
    "name": "Brown rice",
    "unit": "katori",
    "carbs": 36,
-   "category": "grain",
-   "gi": 50,
    "fibre": 3,
-   "protein": 5
+   "protein": 5,
+   "fat": 1,
+   "gi": 50,
+   "category": "grain",
+   "icon": "🍚",
+   "tags": []
+  },
+  {
+   "id": "jeera_rice",
+   "name": "Jeera rice",
+   "unit": "katori",
+   "carbs": 42,
+   "fibre": 1,
+   "protein": 4,
+   "fat": 4,
+   "gi": 70,
+   "category": "grain",
+   "icon": "🍚",
+   "tags": [
+    "restaurant"
+   ]
+  },
+  {
+   "id": "curd_rice",
+   "name": "Curd rice",
+   "unit": "katori",
+   "carbs": 30,
+   "fibre": 0.5,
+   "protein": 5,
+   "fat": 4,
+   "gi": 60,
+   "category": "grain",
+   "icon": "🍚",
+   "tags": []
+  },
+  {
+   "id": "lemon_rice",
+   "name": "Lemon rice",
+   "unit": "katori",
+   "carbs": 40,
+   "fibre": 1,
+   "protein": 4,
+   "fat": 6,
+   "gi": 65,
+   "category": "grain",
+   "icon": "🍋",
+   "tags": []
+  },
+  {
+   "id": "tamarind_rice",
+   "name": "Tamarind rice (puliyogare)",
+   "unit": "katori",
+   "carbs": 40,
+   "fibre": 1,
+   "protein": 4,
+   "fat": 6,
+   "gi": 65,
+   "category": "grain",
+   "icon": "🍚",
+   "tags": []
+  },
+  {
+   "id": "tomato_rice",
+   "name": "Tomato rice",
+   "unit": "katori",
+   "carbs": 40,
+   "fibre": 1.5,
+   "protein": 4,
+   "fat": 5,
+   "gi": 65,
+   "category": "grain",
+   "icon": "🍅",
+   "tags": []
   },
   {
    "id": "pulao",
    "name": "Veg pulao",
    "unit": "katori",
    "carbs": 38,
-   "category": "grain",
-   "gi": 62,
    "fibre": 3,
-   "protein": 5
+   "protein": 5,
+   "fat": 6,
+   "gi": 62,
+   "category": "grain",
+   "icon": "🍚",
+   "tags": []
   },
   {
    "id": "veg_biryani",
    "name": "Veg biryani",
    "unit": "katori",
    "carbs": 40,
-   "category": "grain",
-   "gi": 65,
    "fibre": 3,
-   "protein": 6
+   "protein": 6,
+   "fat": 9,
+   "gi": 65,
+   "category": "grain",
+   "icon": "🍛",
+   "tags": [
+    "restaurant"
+   ]
+  },
+  {
+   "id": "chicken_biryani",
+   "name": "Chicken biryani",
+   "unit": "katori",
+   "carbs": 42,
+   "fibre": 1.5,
+   "protein": 14,
+   "fat": 12,
+   "gi": 58,
+   "category": "grain",
+   "icon": "🍛",
+   "tags": [
+    "nonveg",
+    "restaurant"
+   ]
+  },
+  {
+   "id": "egg_biryani",
+   "name": "Egg biryani",
+   "unit": "katori",
+   "carbs": 41,
+   "fibre": 1.5,
+   "protein": 10,
+   "fat": 11,
+   "gi": 60,
+   "category": "grain",
+   "icon": "🍛",
+   "tags": [
+    "egg",
+    "restaurant"
+   ]
+  },
+  {
+   "id": "mutton_biryani",
+   "name": "Mutton biryani",
+   "unit": "katori",
+   "carbs": 42,
+   "fibre": 1.5,
+   "protein": 14,
+   "fat": 13,
+   "gi": 58,
+   "category": "grain",
+   "icon": "🍛",
+   "tags": [
+    "festival",
+    "nonveg",
+    "restaurant"
+   ]
   },
   {
    "id": "khichdi",
    "name": "Dal khichdi",
    "unit": "katori",
    "carbs": 30,
-   "category": "grain",
-   "gi": 55,
    "fibre": 4,
-   "protein": 8
+   "protein": 8,
+   "fat": 5,
+   "gi": 55,
+   "category": "grain",
+   "icon": "🍲",
+   "tags": []
+  },
+  {
+   "id": "millet_khichdi",
+   "name": "Millet khichdi",
+   "unit": "katori",
+   "carbs": 30,
+   "fibre": 4,
+   "protein": 7,
+   "fat": 5,
+   "gi": 50,
+   "category": "grain",
+   "icon": "🍲",
+   "tags": []
+  },
+  {
+   "id": "bisi_bele_bath",
+   "name": "Bisi bele bath",
+   "unit": "katori",
+   "carbs": 40,
+   "fibre": 4,
+   "protein": 8,
+   "fat": 6,
+   "gi": 55,
+   "category": "grain",
+   "icon": "🍲",
+   "tags": []
+  },
+  {
+   "id": "pongal",
+   "name": "Ven pongal",
+   "unit": "katori",
+   "carbs": 35,
+   "fibre": 2,
+   "protein": 6,
+   "fat": 7,
+   "gi": 65,
+   "category": "grain",
+   "icon": "🍲",
+   "tags": []
   },
   {
    "id": "poha",
    "name": "Poha",
    "unit": "katori",
    "carbs": 30,
-   "category": "grain",
-   "gi": 60,
    "fibre": 2,
-   "protein": 4
+   "protein": 4,
+   "fat": 5,
+   "gi": 60,
+   "category": "grain",
+   "icon": "🍚",
+   "tags": []
   },
   {
    "id": "upma",
    "name": "Upma",
    "unit": "katori",
    "carbs": 30,
-   "category": "grain",
-   "gi": 65,
    "fibre": 2,
-   "protein": 4
+   "protein": 4,
+   "fat": 6,
+   "gi": 65,
+   "category": "grain",
+   "icon": "🍚",
+   "tags": []
+  },
+  {
+   "id": "semiya_upma",
+   "name": "Semiya (vermicelli) upma",
+   "unit": "katori",
+   "carbs": 32,
+   "fibre": 2,
+   "protein": 4,
+   "fat": 5,
+   "gi": 65,
+   "category": "grain",
+   "icon": "🍜",
+   "tags": []
+  },
+  {
+   "id": "daliya",
+   "name": "Daliya (broken wheat) porridge",
+   "unit": "katori",
+   "carbs": 30,
+   "fibre": 4,
+   "protein": 6,
+   "fat": 2,
+   "gi": 50,
+   "category": "grain",
+   "icon": "🥣",
+   "tags": []
+  },
+  {
+   "id": "oats_porridge",
+   "name": "Oats porridge (no sugar)",
+   "unit": "katori",
+   "carbs": 20,
+   "fibre": 3,
+   "protein": 5,
+   "fat": 3,
+   "gi": 55,
+   "category": "grain",
+   "icon": "🥣",
+   "tags": []
+  },
+  {
+   "id": "ragi_mudde",
+   "name": "Ragi mudde (ball)",
+   "unit": "ball",
+   "carbs": 40,
+   "fibre": 3,
+   "protein": 3,
+   "fat": 0.5,
+   "gi": 60,
+   "category": "grain",
+   "icon": "🌾",
+   "tags": []
   },
   {
    "id": "sabudana_khichdi",
    "name": "Sabudana khichdi",
    "unit": "katori",
    "carbs": 40,
-   "category": "grain",
-   "gi": 70,
    "fibre": 2,
-   "protein": 2
+   "protein": 2,
+   "fat": 9,
+   "gi": 70,
+   "category": "grain",
+   "icon": "🥣",
+   "tags": [
+    "vrat"
+   ]
   },
   {
    "id": "dal",
    "name": "Dal (plain toor / moong / masoor)",
    "unit": "katori",
    "carbs": 15,
-   "category": "dal",
-   "gi": 30,
    "fibre": 5,
-   "protein": 8
+   "protein": 8,
+   "fat": 3,
+   "gi": 30,
+   "category": "dal",
+   "icon": "🍲",
+   "tags": []
+  },
+  {
+   "id": "dal_tadka",
+   "name": "Dal tadka",
+   "unit": "katori",
+   "carbs": 15,
+   "fibre": 5,
+   "protein": 8,
+   "fat": 4,
+   "gi": 30,
+   "category": "dal",
+   "icon": "🍲",
+   "tags": [
+    "restaurant"
+   ]
   },
   {
    "id": "dal_makhani",
    "name": "Dal makhani",
    "unit": "katori",
    "carbs": 18,
-   "category": "dal",
-   "gi": 30,
    "fibre": 6,
-   "protein": 9
+   "protein": 9,
+   "fat": 10,
+   "gi": 30,
+   "category": "dal",
+   "icon": "🍲",
+   "tags": [
+    "restaurant"
+   ]
+  },
+  {
+   "id": "moong_dal",
+   "name": "Moong dal",
+   "unit": "katori",
+   "carbs": 14,
+   "fibre": 4,
+   "protein": 8,
+   "fat": 2,
+   "gi": 28,
+   "category": "dal",
+   "icon": "🍲",
+   "tags": []
+  },
+  {
+   "id": "masoor_dal",
+   "name": "Masoor dal",
+   "unit": "katori",
+   "carbs": 14,
+   "fibre": 4,
+   "protein": 9,
+   "fat": 2,
+   "gi": 30,
+   "category": "dal",
+   "icon": "🍲",
+   "tags": []
+  },
+  {
+   "id": "chana_dal",
+   "name": "Chana dal",
+   "unit": "katori",
+   "carbs": 18,
+   "fibre": 6,
+   "protein": 9,
+   "fat": 3,
+   "gi": 28,
+   "category": "dal",
+   "icon": "🍲",
+   "tags": []
+  },
+  {
+   "id": "urad_dal",
+   "name": "Urad dal",
+   "unit": "katori",
+   "carbs": 14,
+   "fibre": 5,
+   "protein": 8,
+   "fat": 3,
+   "gi": 30,
+   "category": "dal",
+   "icon": "🍲",
+   "tags": []
+  },
+  {
+   "id": "dal_palak",
+   "name": "Dal palak",
+   "unit": "katori",
+   "carbs": 14,
+   "fibre": 5,
+   "protein": 9,
+   "fat": 4,
+   "gi": 28,
+   "category": "dal",
+   "icon": "🥬",
+   "tags": []
   },
   {
    "id": "rajma",
    "name": "Rajma curry",
    "unit": "katori",
    "carbs": 22,
-   "category": "dal",
-   "gi": 29,
    "fibre": 8,
-   "protein": 9
+   "protein": 9,
+   "fat": 5,
+   "gi": 29,
+   "category": "dal",
+   "icon": "🫘",
+   "tags": []
   },
   {
    "id": "chole",
    "name": "Chole / chana masala",
    "unit": "katori",
    "carbs": 25,
-   "category": "dal",
-   "gi": 33,
    "fibre": 9,
-   "protein": 10
+   "protein": 10,
+   "fat": 8,
+   "gi": 33,
+   "category": "dal",
+   "icon": "🫘",
+   "tags": []
+  },
+  {
+   "id": "black_chana",
+   "name": "Kala chana curry",
+   "unit": "katori",
+   "carbs": 20,
+   "fibre": 7,
+   "protein": 9,
+   "fat": 3,
+   "gi": 28,
+   "category": "dal",
+   "icon": "🫘",
+   "tags": []
   },
   {
    "id": "sambar",
    "name": "Sambar",
    "unit": "katori",
    "carbs": 12,
-   "category": "dal",
-   "gi": 40,
    "fibre": 3,
-   "protein": 4
+   "protein": 4,
+   "fat": 3,
+   "gi": 40,
+   "category": "dal",
+   "icon": "🍲",
+   "tags": []
+  },
+  {
+   "id": "rasam",
+   "name": "Rasam",
+   "unit": "katori",
+   "carbs": 5,
+   "fibre": 0.8,
+   "protein": 1.5,
+   "fat": 2,
+   "gi": 40,
+   "category": "dal",
+   "icon": "🍲",
+   "tags": []
   },
   {
    "id": "kadhi",
    "name": "Kadhi",
    "unit": "katori",
    "carbs": 10,
-   "category": "dal",
-   "gi": 40,
    "fibre": 1,
-   "protein": 4
+   "protein": 4,
+   "fat": 6,
+   "gi": 40,
+   "category": "dal",
+   "icon": "🍲",
+   "tags": []
+  },
+  {
+   "id": "sprouts_salad",
+   "name": "Sprouts salad",
+   "unit": "katori",
+   "carbs": 12,
+   "fibre": 5,
+   "protein": 8,
+   "fat": 1,
+   "gi": 30,
+   "category": "dal",
+   "icon": "🌱",
+   "tags": []
+  },
+  {
+   "id": "boiled_chana",
+   "name": "Boiled chana",
+   "unit": "katori",
+   "carbs": 22,
+   "fibre": 6,
+   "protein": 9,
+   "fat": 2.5,
+   "gi": 28,
+   "category": "dal",
+   "icon": "🫘",
+   "tags": []
+  },
+  {
+   "id": "soya_chunks",
+   "name": "Soya chunks curry",
+   "unit": "katori",
+   "carbs": 8,
+   "fibre": 5,
+   "protein": 16,
+   "fat": 1,
+   "gi": 15,
+   "category": "protein",
+   "icon": "🥘",
+   "tags": []
   },
   {
    "id": "aloo_sabzi",
    "name": "Aloo sabzi",
    "unit": "katori",
    "carbs": 18,
-   "category": "veg",
-   "gi": 70,
    "fibre": 3,
-   "protein": 3
+   "protein": 3,
+   "fat": 6,
+   "gi": 70,
+   "category": "veg",
+   "icon": "🥔",
+   "tags": []
+  },
+  {
+   "id": "jeera_aloo",
+   "name": "Jeera aloo",
+   "unit": "katori",
+   "carbs": 20,
+   "fibre": 2.5,
+   "protein": 3,
+   "fat": 7,
+   "gi": 70,
+   "category": "veg",
+   "icon": "🥔",
+   "tags": []
+  },
+  {
+   "id": "aloo_gobi",
+   "name": "Aloo gobi",
+   "unit": "katori",
+   "carbs": 14,
+   "fibre": 3,
+   "protein": 3,
+   "fat": 7,
+   "gi": 45,
+   "category": "veg",
+   "icon": "🥦",
+   "tags": []
+  },
+  {
+   "id": "aloo_matar",
+   "name": "Aloo matar",
+   "unit": "katori",
+   "carbs": 18,
+   "fibre": 4,
+   "protein": 4,
+   "fat": 6,
+   "gi": 55,
+   "category": "veg",
+   "icon": "🥔",
+   "tags": []
   },
   {
    "id": "bhindi_sabzi",
    "name": "Bhindi sabzi",
    "unit": "katori",
    "carbs": 8,
-   "category": "veg",
-   "gi": 20,
    "fibre": 3,
-   "protein": 2
+   "protein": 2,
+   "fat": 5,
+   "gi": 20,
+   "category": "veg",
+   "icon": "🥬",
+   "tags": []
   },
   {
    "id": "gobi_sabzi",
    "name": "Gobi sabzi",
    "unit": "katori",
    "carbs": 8,
-   "category": "veg",
-   "gi": 20,
    "fibre": 3,
-   "protein": 3
+   "protein": 3,
+   "fat": 5,
+   "gi": 20,
+   "category": "veg",
+   "icon": "🥦",
+   "tags": []
+  },
+  {
+   "id": "lauki_sabzi",
+   "name": "Lauki sabzi",
+   "unit": "katori",
+   "carbs": 6,
+   "fibre": 2,
+   "protein": 1.5,
+   "fat": 3,
+   "gi": 15,
+   "category": "veg",
+   "icon": "🥬",
+   "tags": []
+  },
+  {
+   "id": "turai_sabzi",
+   "name": "Turai / tori sabzi",
+   "unit": "katori",
+   "carbs": 6,
+   "fibre": 2,
+   "protein": 1.5,
+   "fat": 3,
+   "gi": 15,
+   "category": "veg",
+   "icon": "🥬",
+   "tags": []
+  },
+  {
+   "id": "karela_sabzi",
+   "name": "Karela sabzi",
+   "unit": "katori",
+   "carbs": 7,
+   "fibre": 3.5,
+   "protein": 2,
+   "fat": 4,
+   "gi": 20,
+   "category": "veg",
+   "icon": "🥬",
+   "tags": []
   },
   {
    "id": "baingan_bharta",
    "name": "Baingan bharta",
    "unit": "katori",
    "carbs": 8,
-   "category": "veg",
-   "gi": 20,
    "fibre": 3,
-   "protein": 2
+   "protein": 2,
+   "fat": 6,
+   "gi": 20,
+   "category": "veg",
+   "icon": "🍆",
+   "tags": []
   },
   {
    "id": "mixed_veg",
    "name": "Mixed vegetable sabzi",
    "unit": "katori",
    "carbs": 10,
-   "category": "veg",
-   "gi": 30,
    "fibre": 4,
-   "protein": 3
+   "protein": 3,
+   "fat": 5,
+   "gi": 30,
+   "category": "veg",
+   "icon": "🥕",
+   "tags": []
+  },
+  {
+   "id": "poriyal",
+   "name": "Vegetable poriyal (dry stir-fry)",
+   "unit": "katori",
+   "carbs": 8,
+   "fibre": 3,
+   "protein": 2,
+   "fat": 5,
+   "gi": 25,
+   "category": "veg",
+   "icon": "🥬",
+   "tags": []
+  },
+  {
+   "id": "kootu",
+   "name": "Kootu (veg + dal)",
+   "unit": "katori",
+   "carbs": 12,
+   "fibre": 4,
+   "protein": 5,
+   "fat": 5,
+   "gi": 35,
+   "category": "veg",
+   "icon": "🥘",
+   "tags": []
+  },
+  {
+   "id": "avial",
+   "name": "Avial",
+   "unit": "katori",
+   "carbs": 12,
+   "fibre": 3,
+   "protein": 3,
+   "fat": 10,
+   "gi": 40,
+   "category": "veg",
+   "icon": "🥥",
+   "tags": []
+  },
+  {
+   "id": "mushroom_masala",
+   "name": "Mushroom masala",
+   "unit": "katori",
+   "carbs": 7,
+   "fibre": 2,
+   "protein": 4,
+   "fat": 7,
+   "gi": 25,
+   "category": "veg",
+   "icon": "🍄",
+   "tags": []
+  },
+  {
+   "id": "lauki_kofta",
+   "name": "Lauki kofta curry",
+   "unit": "katori",
+   "carbs": 12,
+   "fibre": 2,
+   "protein": 4,
+   "fat": 10,
+   "gi": 40,
+   "category": "veg",
+   "icon": "🥘",
+   "tags": []
+  },
+  {
+   "id": "gatte_sabzi",
+   "name": "Gatte ki sabzi",
+   "unit": "katori",
+   "carbs": 18,
+   "fibre": 3,
+   "protein": 7,
+   "fat": 9,
+   "gi": 45,
+   "category": "veg",
+   "icon": "🥘",
+   "tags": []
+  },
+  {
+   "id": "undhiyu",
+   "name": "Undhiyu",
+   "unit": "katori",
+   "carbs": 18,
+   "fibre": 4,
+   "protein": 4,
+   "fat": 10,
+   "gi": 45,
+   "category": "veg",
+   "icon": "🥘",
+   "tags": [
+    "festival"
+   ]
+  },
+  {
+   "id": "sarson_saag",
+   "name": "Sarson ka saag",
+   "unit": "katori",
+   "carbs": 8,
+   "fibre": 4,
+   "protein": 4,
+   "fat": 8,
+   "gi": 25,
+   "category": "veg",
+   "icon": "🥬",
+   "tags": []
+  },
+  {
+   "id": "pav_bhaji",
+   "name": "Pav bhaji (bhaji, 1 katori)",
+   "unit": "katori",
+   "carbs": 25,
+   "fibre": 4,
+   "protein": 5,
+   "fat": 12,
+   "gi": 65,
+   "category": "veg",
+   "icon": "🥘",
+   "tags": [
+    "restaurant"
+   ]
+  },
+  {
+   "id": "boiled_potato",
+   "name": "Boiled potato",
+   "unit": "piece",
+   "carbs": 17,
+   "fibre": 2,
+   "protein": 2,
+   "fat": 0.1,
+   "gi": 78,
+   "category": "veg",
+   "icon": "🥔",
+   "tags": []
+  },
+  {
+   "id": "boiled_sweet_potato",
+   "name": "Boiled sweet potato",
+   "unit": "piece",
+   "carbs": 25,
+   "fibre": 3.5,
+   "protein": 2,
+   "fat": 0.2,
+   "gi": 50,
+   "category": "veg",
+   "icon": "🍠",
+   "tags": []
+  },
+  {
+   "id": "corn_on_cob",
+   "name": "Corn on the cob (bhutta)",
+   "unit": "piece",
+   "carbs": 25,
+   "fibre": 3,
+   "protein": 3,
+   "fat": 1.5,
+   "gi": 52,
+   "category": "veg",
+   "icon": "🌽",
+   "tags": []
+  },
+  {
+   "id": "salad",
+   "name": "Salad (cucumber, tomato, onion)",
+   "unit": "katori",
+   "carbs": 5,
+   "fibre": 1.5,
+   "protein": 1,
+   "fat": 0.2,
+   "gi": 15,
+   "category": "veg",
+   "icon": "🥗",
+   "tags": []
+  },
+  {
+   "id": "cucumber",
+   "name": "Cucumber",
+   "unit": "piece",
+   "carbs": 3,
+   "fibre": 0.5,
+   "protein": 0.5,
+   "fat": 0.1,
+   "gi": 15,
+   "category": "veg",
+   "icon": "🥒",
+   "tags": []
   },
   {
    "id": "palak_paneer",
    "name": "Palak paneer",
    "unit": "katori",
    "carbs": 7,
-   "category": "protein",
-   "gi": 15,
    "fibre": 3,
-   "protein": 9
+   "protein": 9,
+   "fat": 14,
+   "gi": 15,
+   "category": "protein",
+   "icon": "🥬",
+   "tags": [
+    "restaurant"
+   ]
+  },
+  {
+   "id": "paneer_butter_masala",
+   "name": "Paneer butter masala",
+   "unit": "katori",
+   "carbs": 10,
+   "fibre": 2,
+   "protein": 12,
+   "fat": 22,
+   "gi": 30,
+   "category": "protein",
+   "icon": "🧈",
+   "tags": [
+    "restaurant"
+   ]
+  },
+  {
+   "id": "matar_paneer",
+   "name": "Matar paneer",
+   "unit": "katori",
+   "carbs": 10,
+   "fibre": 3,
+   "protein": 12,
+   "fat": 16,
+   "gi": 35,
+   "category": "protein",
+   "icon": "🥘",
+   "tags": [
+    "restaurant"
+   ]
+  },
+  {
+   "id": "shahi_paneer",
+   "name": "Shahi paneer",
+   "unit": "katori",
+   "carbs": 10,
+   "fibre": 1.5,
+   "protein": 11,
+   "fat": 20,
+   "gi": 30,
+   "category": "protein",
+   "icon": "🥘",
+   "tags": [
+    "festival",
+    "restaurant"
+   ]
+  },
+  {
+   "id": "kadai_paneer",
+   "name": "Kadai paneer",
+   "unit": "katori",
+   "carbs": 8,
+   "fibre": 2,
+   "protein": 12,
+   "fat": 17,
+   "gi": 30,
+   "category": "protein",
+   "icon": "🥘",
+   "tags": [
+    "restaurant"
+   ]
   },
   {
    "id": "paneer_bhurji",
    "name": "Paneer bhurji",
    "unit": "katori",
    "carbs": 6,
-   "category": "protein",
-   "gi": 15,
    "fibre": 1,
-   "protein": 12
+   "protein": 12,
+   "fat": 14,
+   "gi": 15,
+   "category": "protein",
+   "icon": "🧀",
+   "tags": []
   },
   {
-   "id": "chicken_curry",
-   "name": "Chicken curry",
+   "id": "paneer_tikka",
+   "name": "Paneer tikka (4 pieces)",
+   "unit": "serving",
+   "carbs": 4,
+   "fibre": 0.5,
+   "protein": 12,
+   "fat": 10,
+   "gi": 20,
+   "category": "protein",
+   "icon": "🧀",
+   "tags": [
+    "restaurant"
+   ]
+  },
+  {
+   "id": "paneer_cubes",
+   "name": "Paneer (plain, 50 g)",
+   "unit": "serving",
+   "carbs": 1,
+   "fibre": 0,
+   "protein": 9,
+   "fat": 10,
+   "gi": 0,
+   "category": "protein",
+   "icon": "🧀",
+   "tags": []
+  },
+  {
+   "id": "tofu_bhurji",
+   "name": "Tofu bhurji",
    "unit": "katori",
    "carbs": 5,
+   "fibre": 2,
+   "protein": 13,
+   "fat": 8,
+   "gi": 15,
    "category": "protein",
-   "gi": 0,
-   "fibre": 1,
-   "protein": 20
-  },
-  {
-   "id": "fish_curry",
-   "name": "Fish curry",
-   "unit": "katori",
-   "carbs": 4,
-   "category": "protein",
-   "gi": 0,
-   "fibre": 1,
-   "protein": 18
+   "icon": "🥘",
+   "tags": []
   },
   {
    "id": "egg",
    "name": "Boiled egg",
    "unit": "piece",
    "carbs": 1,
-   "category": "protein",
-   "gi": 0,
    "fibre": 0,
-   "protein": 6
+   "protein": 6,
+   "fat": 5,
+   "gi": 0,
+   "category": "protein",
+   "icon": "🥚",
+   "tags": [
+    "egg"
+   ]
+  },
+  {
+   "id": "omelette",
+   "name": "Omelette (2 egg)",
+   "unit": "piece",
+   "carbs": 2,
+   "fibre": 0.2,
+   "protein": 12,
+   "fat": 14,
+   "gi": 0,
+   "category": "protein",
+   "icon": "🍳",
+   "tags": [
+    "egg"
+   ]
+  },
+  {
+   "id": "egg_bhurji",
+   "name": "Egg bhurji",
+   "unit": "katori",
+   "carbs": 3,
+   "fibre": 0.5,
+   "protein": 12,
+   "fat": 12,
+   "gi": 15,
+   "category": "protein",
+   "icon": "🍳",
+   "tags": [
+    "egg"
+   ]
+  },
+  {
+   "id": "egg_curry",
+   "name": "Egg curry (2 eggs)",
+   "unit": "katori",
+   "carbs": 6,
+   "fibre": 1.5,
+   "protein": 12,
+   "fat": 14,
+   "gi": 25,
+   "category": "protein",
+   "icon": "🥘",
+   "tags": [
+    "egg"
+   ]
+  },
+  {
+   "id": "chicken_curry",
+   "name": "Chicken curry",
+   "unit": "katori",
+   "carbs": 5,
+   "fibre": 1,
+   "protein": 20,
+   "fat": 12,
+   "gi": 0,
+   "category": "protein",
+   "icon": "🍗",
+   "tags": [
+    "nonveg"
+   ]
+  },
+  {
+   "id": "butter_chicken",
+   "name": "Butter chicken",
+   "unit": "katori",
+   "carbs": 10,
+   "fibre": 1,
+   "protein": 20,
+   "fat": 20,
+   "gi": 30,
+   "category": "protein",
+   "icon": "🍗",
+   "tags": [
+    "nonveg",
+    "restaurant"
+   ]
+  },
+  {
+   "id": "chicken_tikka",
+   "name": "Chicken tikka (4 pieces)",
+   "unit": "serving",
+   "carbs": 3,
+   "fibre": 0.5,
+   "protein": 24,
+   "fat": 8,
+   "gi": 0,
+   "category": "protein",
+   "icon": "🍗",
+   "tags": [
+    "nonveg",
+    "restaurant"
+   ]
+  },
+  {
+   "id": "tandoori_chicken",
+   "name": "Tandoori chicken (1 leg)",
+   "unit": "piece",
+   "carbs": 2,
+   "fibre": 0,
+   "protein": 26,
+   "fat": 10,
+   "gi": 0,
+   "category": "protein",
+   "icon": "🍗",
+   "tags": [
+    "nonveg",
+    "restaurant"
+   ]
+  },
+  {
+   "id": "mutton_curry",
+   "name": "Mutton curry",
+   "unit": "katori",
+   "carbs": 5,
+   "fibre": 1,
+   "protein": 20,
+   "fat": 22,
+   "gi": 0,
+   "category": "protein",
+   "icon": "🍖",
+   "tags": [
+    "festival",
+    "nonveg"
+   ]
+  },
+  {
+   "id": "keema",
+   "name": "Keema (mince) curry",
+   "unit": "katori",
+   "carbs": 4,
+   "fibre": 1,
+   "protein": 18,
+   "fat": 16,
+   "gi": 0,
+   "category": "protein",
+   "icon": "🍖",
+   "tags": [
+    "nonveg"
+   ]
+  },
+  {
+   "id": "fish_curry",
+   "name": "Fish curry",
+   "unit": "katori",
+   "carbs": 4,
+   "fibre": 1,
+   "protein": 18,
+   "fat": 8,
+   "gi": 0,
+   "category": "protein",
+   "icon": "🐟",
+   "tags": [
+    "nonveg"
+   ]
+  },
+  {
+   "id": "fish_fry",
+   "name": "Fish fry (1 piece)",
+   "unit": "piece",
+   "carbs": 5,
+   "fibre": 0.3,
+   "protein": 16,
+   "fat": 10,
+   "gi": 0,
+   "category": "protein",
+   "icon": "🐟",
+   "tags": [
+    "nonveg"
+   ]
+  },
+  {
+   "id": "prawn_curry",
+   "name": "Prawn curry",
+   "unit": "katori",
+   "carbs": 6,
+   "fibre": 0.5,
+   "protein": 18,
+   "fat": 12,
+   "gi": 0,
+   "category": "protein",
+   "icon": "🦐",
+   "tags": [
+    "nonveg"
+   ]
   },
   {
    "id": "curd",
    "name": "Curd / dahi",
    "unit": "katori",
    "carbs": 6,
-   "category": "dairy",
-   "gi": 36,
    "fibre": 0,
-   "protein": 4
+   "protein": 4,
+   "fat": 4,
+   "gi": 36,
+   "category": "dairy",
+   "icon": "🥛",
+   "tags": []
   },
   {
    "id": "raita",
    "name": "Raita",
    "unit": "katori",
    "carbs": 7,
-   "category": "dairy",
-   "gi": 36,
    "fibre": 0.5,
-   "protein": 3
+   "protein": 3,
+   "fat": 3,
+   "gi": 36,
+   "category": "dairy",
+   "icon": "🥣",
+   "tags": []
   },
   {
-   "id": "chaas",
-   "name": "Chaas / buttermilk",
-   "unit": "glass",
-   "carbs": 5,
-   "category": "drink",
-   "gi": 30,
-   "fibre": 0,
-   "protein": 2
-  },
-  {
-   "id": "milk",
-   "name": "Milk",
-   "unit": "glass",
-   "carbs": 10,
-   "category": "drink",
-   "gi": 30,
-   "fibre": 0,
-   "protein": 6
-  },
-  {
-   "id": "chai_sugar",
-   "name": "Chai with sugar",
-   "unit": "cup",
-   "carbs": 12,
-   "category": "drink",
-   "gi": 65,
-   "fibre": 0,
-   "protein": 2
-  },
-  {
-   "id": "banana",
-   "name": "Banana",
+   "id": "dahi_vada",
+   "name": "Dahi vada",
    "unit": "piece",
-   "carbs": 23,
-   "category": "fruit",
-   "gi": 55,
-   "fibre": 2.6,
-   "protein": 1.3
+   "carbs": 12,
+   "fibre": 1,
+   "protein": 4,
+   "fat": 5,
+   "gi": 50,
+   "category": "snack",
+   "icon": "🥣",
+   "tags": [
+    "festival"
+   ]
   },
   {
-   "id": "apple",
-   "name": "Apple",
+   "id": "samosa",
+   "name": "Samosa",
+   "unit": "piece",
+   "carbs": 24,
+   "fibre": 2,
+   "protein": 3,
+   "fat": 12,
+   "gi": 65,
+   "category": "snack",
+   "icon": "🥟",
+   "tags": []
+  },
+  {
+   "id": "kachori",
+   "name": "Kachori",
+   "unit": "piece",
+   "carbs": 25,
+   "fibre": 2,
+   "protein": 4,
+   "fat": 12,
+   "gi": 65,
+   "category": "snack",
+   "icon": "🥟",
+   "tags": []
+  },
+  {
+   "id": "pakora",
+   "name": "Pakora / bhajiya",
+   "unit": "piece",
+   "carbs": 6,
+   "fibre": 1,
+   "protein": 1.5,
+   "fat": 5,
+   "gi": 50,
+   "category": "snack",
+   "icon": "🧆",
+   "tags": []
+  },
+  {
+   "id": "vada_pav",
+   "name": "Vada pav",
+   "unit": "piece",
+   "carbs": 38,
+   "fibre": 3,
+   "protein": 6,
+   "fat": 12,
+   "gi": 70,
+   "category": "snack",
+   "icon": "🍔",
+   "tags": [
+    "restaurant"
+   ]
+  },
+  {
+   "id": "medu_vada",
+   "name": "Medu vada",
+   "unit": "piece",
+   "carbs": 10,
+   "fibre": 1.5,
+   "protein": 3,
+   "fat": 6,
+   "gi": 55,
+   "category": "snack",
+   "icon": "🍩",
+   "tags": []
+  },
+  {
+   "id": "aloo_tikki",
+   "name": "Aloo tikki",
    "unit": "piece",
    "carbs": 20,
-   "category": "fruit",
-   "gi": 36,
-   "fibre": 2.4,
-   "protein": 0.5
+   "fibre": 2,
+   "protein": 3,
+   "fat": 8,
+   "gi": 65,
+   "category": "snack",
+   "icon": "🥔",
+   "tags": [
+    "restaurant"
+   ]
   },
   {
-   "id": "mango",
-   "name": "Mango slices",
+   "id": "pani_puri",
+   "name": "Pani puri (1 puri)",
+   "unit": "piece",
+   "carbs": 7,
+   "fibre": 0.5,
+   "protein": 1,
+   "fat": 2.5,
+   "gi": 65,
+   "category": "snack",
+   "icon": "🫧",
+   "tags": [
+    "restaurant"
+   ]
+  },
+  {
+   "id": "bhel_puri",
+   "name": "Bhel puri",
+   "unit": "plate",
+   "carbs": 40,
+   "fibre": 3,
+   "protein": 6,
+   "fat": 8,
+   "gi": 65,
+   "category": "snack",
+   "icon": "🥗",
+   "tags": [
+    "restaurant"
+   ]
+  },
+  {
+   "id": "papdi_chaat",
+   "name": "Papdi chaat",
+   "unit": "plate",
+   "carbs": 35,
+   "fibre": 3,
+   "protein": 7,
+   "fat": 12,
+   "gi": 60,
+   "category": "snack",
+   "icon": "🥗",
+   "tags": [
+    "restaurant"
+   ]
+  },
+  {
+   "id": "dhokla",
+   "name": "Dhokla",
+   "unit": "piece",
+   "carbs": 8,
+   "fibre": 1,
+   "protein": 3,
+   "fat": 1.5,
+   "gi": 35,
+   "category": "snack",
+   "icon": "🟨",
+   "tags": []
+  },
+  {
+   "id": "khandvi",
+   "name": "Khandvi",
+   "unit": "piece",
+   "carbs": 5,
+   "fibre": 0.5,
+   "protein": 2,
+   "fat": 2,
+   "gi": 40,
+   "category": "snack",
+   "icon": "🟨",
+   "tags": []
+  },
+  {
+   "id": "sabudana_vada",
+   "name": "Sabudana vada",
+   "unit": "piece",
+   "carbs": 20,
+   "fibre": 1,
+   "protein": 2,
+   "fat": 8,
+   "gi": 70,
+   "category": "snack",
+   "icon": "🟤",
+   "tags": [
+    "vrat"
+   ]
+  },
+  {
+   "id": "murukku",
+   "name": "Murukku / chakli",
+   "unit": "piece",
+   "carbs": 8,
+   "fibre": 0.5,
+   "protein": 1.5,
+   "fat": 5,
+   "gi": 70,
+   "category": "snack",
+   "icon": "🌀",
+   "tags": [
+    "festival"
+   ]
+  },
+  {
+   "id": "namkeen",
+   "name": "Namkeen mixture (small katori)",
    "unit": "katori",
-   "carbs": 25,
-   "category": "fruit",
-   "gi": 51,
+   "carbs": 15,
+   "fibre": 1,
+   "protein": 3,
+   "fat": 10,
+   "gi": 60,
+   "category": "snack",
+   "icon": "🥜",
+   "tags": []
+  },
+  {
+   "id": "roasted_chana",
+   "name": "Roasted chana (handful)",
+   "unit": "handful",
+   "carbs": 10,
+   "fibre": 3,
+   "protein": 5,
+   "fat": 2,
+   "gi": 28,
+   "category": "nuts",
+   "icon": "🫘",
+   "tags": []
+  },
+  {
+   "id": "makhana",
+   "name": "Roasted makhana (katori)",
+   "unit": "katori",
+   "carbs": 12,
    "fibre": 2,
-   "protein": 1
+   "protein": 3,
+   "fat": 1,
+   "gi": 45,
+   "category": "nuts",
+   "icon": "⚪",
+   "tags": [
+    "vrat"
+   ]
+  },
+  {
+   "id": "peanuts",
+   "name": "Peanuts (handful)",
+   "unit": "handful",
+   "carbs": 4,
+   "fibre": 2.5,
+   "protein": 7,
+   "fat": 14,
+   "gi": 15,
+   "category": "nuts",
+   "icon": "🥜",
+   "tags": []
+  },
+  {
+   "id": "almonds",
+   "name": "Almonds (handful)",
+   "unit": "handful",
+   "carbs": 3,
+   "fibre": 3,
+   "protein": 6,
+   "fat": 14,
+   "gi": 15,
+   "category": "nuts",
+   "icon": "🌰",
+   "tags": []
+  },
+  {
+   "id": "mixed_nuts",
+   "name": "Mixed nuts (handful)",
+   "unit": "handful",
+   "carbs": 5,
+   "fibre": 2,
+   "protein": 5,
+   "fat": 13,
+   "gi": 20,
+   "category": "nuts",
+   "icon": "🥜",
+   "tags": []
+  },
+  {
+   "id": "popcorn",
+   "name": "Popcorn (katori)",
+   "unit": "katori",
+   "carbs": 12,
+   "fibre": 2,
+   "protein": 1.5,
+   "fat": 3,
+   "gi": 65,
+   "category": "snack",
+   "icon": "🍿",
+   "tags": []
+  },
+  {
+   "id": "marie_biscuit",
+   "name": "Marie biscuit",
+   "unit": "piece",
+   "carbs": 5.5,
+   "fibre": 0.2,
+   "protein": 0.7,
+   "fat": 1,
+   "gi": 65,
+   "category": "snack",
+   "icon": "🍪",
+   "tags": []
+  },
+  {
+   "id": "digestive_biscuit",
+   "name": "Digestive biscuit",
+   "unit": "piece",
+   "carbs": 11,
+   "fibre": 0.5,
+   "protein": 1,
+   "fat": 3,
+   "gi": 60,
+   "category": "snack",
+   "icon": "🍪",
+   "tags": []
+  },
+  {
+   "id": "chips_packet",
+   "name": "Potato chips (small packet)",
+   "unit": "packet",
+   "carbs": 15,
+   "fibre": 1,
+   "protein": 2,
+   "fat": 10,
+   "gi": 55,
+   "category": "snack",
+   "icon": "🥔",
+   "tags": []
   },
   {
    "id": "gulab_jamun",
    "name": "Gulab jamun",
    "unit": "piece",
    "carbs": 30,
-   "category": "sweet",
-   "gi": 76,
    "fibre": 0.5,
-   "protein": 2
+   "protein": 2,
+   "fat": 9,
+   "gi": 76,
+   "category": "sweet",
+   "icon": "🍮",
+   "tags": [
+    "festival"
+   ]
+  },
+  {
+   "id": "jalebi",
+   "name": "Jalebi",
+   "unit": "piece",
+   "carbs": 20,
+   "fibre": 0,
+   "protein": 1,
+   "fat": 6,
+   "gi": 75,
+   "category": "sweet",
+   "icon": "🍥",
+   "tags": [
+    "festival"
+   ]
+  },
+  {
+   "id": "rasgulla",
+   "name": "Rasgulla",
+   "unit": "piece",
+   "carbs": 25,
+   "fibre": 0,
+   "protein": 3,
+   "fat": 1,
+   "gi": 70,
+   "category": "sweet",
+   "icon": "⚪",
+   "tags": [
+    "festival"
+   ]
+  },
+  {
+   "id": "kheer",
+   "name": "Kheer / payasam",
+   "unit": "katori",
+   "carbs": 35,
+   "fibre": 0.5,
+   "protein": 6,
+   "fat": 6,
+   "gi": 60,
+   "category": "sweet",
+   "icon": "🍚",
+   "tags": [
+    "festival"
+   ]
   },
   {
    "id": "suji_halwa",
    "name": "Suji halwa",
    "unit": "katori",
    "carbs": 40,
-   "category": "sweet",
-   "gi": 65,
    "fibre": 1,
-   "protein": 3
+   "protein": 3,
+   "fat": 12,
+   "gi": 65,
+   "category": "sweet",
+   "icon": "🍮",
+   "tags": [
+    "festival",
+    "vrat"
+   ]
+  },
+  {
+   "id": "gajar_halwa",
+   "name": "Gajar halwa",
+   "unit": "katori",
+   "carbs": 40,
+   "fibre": 2,
+   "protein": 5,
+   "fat": 12,
+   "gi": 65,
+   "category": "sweet",
+   "icon": "🥕",
+   "tags": [
+    "festival"
+   ]
+  },
+  {
+   "id": "besan_ladoo",
+   "name": "Besan ladoo",
+   "unit": "piece",
+   "carbs": 20,
+   "fibre": 1,
+   "protein": 3,
+   "fat": 8,
+   "gi": 60,
+   "category": "sweet",
+   "icon": "🟡",
+   "tags": [
+    "festival"
+   ]
+  },
+  {
+   "id": "motichoor_ladoo",
+   "name": "Motichoor ladoo",
+   "unit": "piece",
+   "carbs": 22,
+   "fibre": 0.5,
+   "protein": 2,
+   "fat": 7,
+   "gi": 70,
+   "category": "sweet",
+   "icon": "🟠",
+   "tags": [
+    "festival"
+   ]
+  },
+  {
+   "id": "kaju_katli",
+   "name": "Kaju katli",
+   "unit": "piece",
+   "carbs": 8,
+   "fibre": 0.5,
+   "protein": 1.5,
+   "fat": 3,
+   "gi": 55,
+   "category": "sweet",
+   "icon": "💠",
+   "tags": [
+    "festival"
+   ]
+  },
+  {
+   "id": "barfi",
+   "name": "Milk barfi",
+   "unit": "piece",
+   "carbs": 18,
+   "fibre": 0.3,
+   "protein": 3,
+   "fat": 5,
+   "gi": 65,
+   "category": "sweet",
+   "icon": "🟦",
+   "tags": [
+    "festival"
+   ]
+  },
+  {
+   "id": "peda",
+   "name": "Peda",
+   "unit": "piece",
+   "carbs": 14,
+   "fibre": 0,
+   "protein": 2.5,
+   "fat": 3,
+   "gi": 65,
+   "category": "sweet",
+   "icon": "🟤",
+   "tags": [
+    "festival"
+   ]
+  },
+  {
+   "id": "sandesh",
+   "name": "Sandesh",
+   "unit": "piece",
+   "carbs": 12,
+   "fibre": 0,
+   "protein": 3,
+   "fat": 3,
+   "gi": 60,
+   "category": "sweet",
+   "icon": "⚪",
+   "tags": [
+    "festival"
+   ]
+  },
+  {
+   "id": "chikki",
+   "name": "Chikki (peanut)",
+   "unit": "piece",
+   "carbs": 15,
+   "fibre": 1,
+   "protein": 3,
+   "fat": 5,
+   "gi": 55,
+   "category": "sweet",
+   "icon": "🟫",
+   "tags": [
+    "festival"
+   ]
+  },
+  {
+   "id": "ice_cream",
+   "name": "Ice cream (1 scoop)",
+   "unit": "scoop",
+   "carbs": 14,
+   "fibre": 0.5,
+   "protein": 2,
+   "fat": 7,
+   "gi": 60,
+   "category": "sweet",
+   "icon": "🍨",
+   "tags": []
+  },
+  {
+   "id": "khajoor",
+   "name": "Dates (1 piece)",
+   "unit": "piece",
+   "carbs": 6,
+   "fibre": 0.7,
+   "protein": 0.2,
+   "fat": 0,
+   "gi": 45,
+   "category": "sweet",
+   "icon": "🌴",
+   "tags": [
+    "vrat"
+   ]
+  },
+  {
+   "id": "chai_sugar",
+   "name": "Chai with sugar",
+   "unit": "cup",
+   "carbs": 12,
+   "fibre": 0,
+   "protein": 2,
+   "fat": 2.5,
+   "gi": 65,
+   "category": "drink",
+   "icon": "☕",
+   "tags": []
+  },
+  {
+   "id": "chai_nosugar",
+   "name": "Chai without sugar",
+   "unit": "cup",
+   "carbs": 5,
+   "fibre": 0,
+   "protein": 2,
+   "fat": 2,
+   "gi": 30,
+   "category": "drink",
+   "icon": "☕",
+   "tags": []
+  },
+  {
+   "id": "coffee_sugar",
+   "name": "Coffee with milk and sugar",
+   "unit": "cup",
+   "carbs": 12,
+   "fibre": 0,
+   "protein": 2,
+   "fat": 2,
+   "gi": 60,
+   "category": "drink",
+   "icon": "☕",
+   "tags": []
+  },
+  {
+   "id": "black_coffee",
+   "name": "Black coffee (no sugar)",
+   "unit": "cup",
+   "carbs": 0.5,
+   "fibre": 0,
+   "protein": 0.3,
+   "fat": 0,
+   "gi": 0,
+   "category": "drink",
+   "icon": "☕",
+   "tags": []
+  },
+  {
+   "id": "milk",
+   "name": "Milk",
+   "unit": "glass",
+   "carbs": 10,
+   "fibre": 0,
+   "protein": 6,
+   "fat": 6,
+   "gi": 30,
+   "category": "drink",
+   "icon": "🥛",
+   "tags": []
+  },
+  {
+   "id": "chaas",
+   "name": "Chaas / buttermilk",
+   "unit": "glass",
+   "carbs": 5,
+   "fibre": 0,
+   "protein": 2,
+   "fat": 1,
+   "gi": 30,
+   "category": "drink",
+   "icon": "🥛",
+   "tags": []
+  },
+  {
+   "id": "lassi_sweet",
+   "name": "Sweet lassi",
+   "unit": "glass",
+   "carbs": 35,
+   "fibre": 0,
+   "protein": 7,
+   "fat": 6,
+   "gi": 55,
+   "category": "drink",
+   "icon": "🥛",
+   "tags": [
+    "restaurant"
+   ]
+  },
+  {
+   "id": "lassi_salted",
+   "name": "Salted lassi",
+   "unit": "glass",
+   "carbs": 8,
+   "fibre": 0,
+   "protein": 6,
+   "fat": 4,
+   "gi": 35,
+   "category": "drink",
+   "icon": "🥛",
+   "tags": []
+  },
+  {
+   "id": "nimbu_pani_sugar",
+   "name": "Nimbu pani with sugar",
+   "unit": "glass",
+   "carbs": 18,
+   "fibre": 0,
+   "protein": 0,
+   "fat": 0,
+   "gi": 65,
+   "category": "drink",
+   "icon": "🍋",
+   "tags": []
+  },
+  {
+   "id": "coconut_water",
+   "name": "Coconut water",
+   "unit": "glass",
+   "carbs": 9,
+   "fibre": 0,
+   "protein": 0.5,
+   "fat": 0.3,
+   "gi": 55,
+   "category": "drink",
+   "icon": "🥥",
+   "tags": []
+  },
+  {
+   "id": "sugarcane_juice",
+   "name": "Sugarcane juice",
+   "unit": "glass",
+   "carbs": 40,
+   "fibre": 0,
+   "protein": 0.3,
+   "fat": 0,
+   "gi": 70,
+   "category": "drink",
+   "icon": "🧃",
+   "tags": []
+  },
+  {
+   "id": "cola",
+   "name": "Cola / soft drink",
+   "unit": "glass",
+   "carbs": 26,
+   "fibre": 0,
+   "protein": 0,
+   "fat": 0,
+   "gi": 63,
+   "category": "drink",
+   "icon": "🥤",
+   "tags": []
+  },
+  {
+   "id": "fruit_juice_packaged",
+   "name": "Packaged fruit juice",
+   "unit": "glass",
+   "carbs": 24,
+   "fibre": 0.3,
+   "protein": 0.5,
+   "fat": 0.1,
+   "gi": 65,
+   "category": "drink",
+   "icon": "🧃",
+   "tags": []
+  },
+  {
+   "id": "sattu_drink",
+   "name": "Sattu drink",
+   "unit": "glass",
+   "carbs": 15,
+   "fibre": 3,
+   "protein": 8,
+   "fat": 1,
+   "gi": 30,
+   "category": "drink",
+   "icon": "🥤",
+   "tags": []
+  },
+  {
+   "id": "badam_milk",
+   "name": "Badam milk",
+   "unit": "glass",
+   "carbs": 20,
+   "fibre": 1,
+   "protein": 8,
+   "fat": 7,
+   "gi": 40,
+   "category": "drink",
+   "icon": "🥛",
+   "tags": []
+  },
+  {
+   "id": "haldi_milk",
+   "name": "Haldi doodh (turmeric milk)",
+   "unit": "glass",
+   "carbs": 11,
+   "fibre": 0,
+   "protein": 6,
+   "fat": 6,
+   "gi": 30,
+   "category": "drink",
+   "icon": "🥛",
+   "tags": []
+  },
+  {
+   "id": "jaljeera",
+   "name": "Jaljeera",
+   "unit": "glass",
+   "carbs": 8,
+   "fibre": 0.5,
+   "protein": 0.5,
+   "fat": 0,
+   "gi": 50,
+   "category": "drink",
+   "icon": "🥤",
+   "tags": []
+  },
+  {
+   "id": "thandai",
+   "name": "Thandai",
+   "unit": "glass",
+   "carbs": 30,
+   "fibre": 1,
+   "protein": 5,
+   "fat": 8,
+   "gi": 55,
+   "category": "drink",
+   "icon": "🥛",
+   "tags": [
+    "festival"
+   ]
+  },
+  {
+   "id": "aam_panna",
+   "name": "Aam panna",
+   "unit": "glass",
+   "carbs": 25,
+   "fibre": 0.5,
+   "protein": 0.5,
+   "fat": 0,
+   "gi": 60,
+   "category": "drink",
+   "icon": "🥭",
+   "tags": []
+  },
+  {
+   "id": "banana",
+   "name": "Banana",
+   "unit": "piece",
+   "carbs": 23,
+   "fibre": 2.6,
+   "protein": 1.3,
+   "fat": 0.3,
+   "gi": 55,
+   "category": "fruit",
+   "icon": "🍌",
+   "tags": []
+  },
+  {
+   "id": "apple",
+   "name": "Apple",
+   "unit": "piece",
+   "carbs": 20,
+   "fibre": 2.4,
+   "protein": 0.5,
+   "fat": 0.3,
+   "gi": 36,
+   "category": "fruit",
+   "icon": "🍎",
+   "tags": []
+  },
+  {
+   "id": "mango",
+   "name": "Mango slices",
+   "unit": "katori",
+   "carbs": 25,
+   "fibre": 2,
+   "protein": 1,
+   "fat": 0.5,
+   "gi": 51,
+   "category": "fruit",
+   "icon": "🥭",
+   "tags": []
+  },
+  {
+   "id": "papaya",
+   "name": "Papaya (katori)",
+   "unit": "katori",
+   "carbs": 11,
+   "fibre": 2,
+   "protein": 0.7,
+   "fat": 0.2,
+   "gi": 55,
+   "category": "fruit",
+   "icon": "🍈",
+   "tags": []
+  },
+  {
+   "id": "guava",
+   "name": "Guava",
+   "unit": "piece",
+   "carbs": 14,
+   "fibre": 5,
+   "protein": 2.5,
+   "fat": 1,
+   "gi": 30,
+   "category": "fruit",
+   "icon": "🍐",
+   "tags": []
+  },
+  {
+   "id": "orange",
+   "name": "Orange / mosambi",
+   "unit": "piece",
+   "carbs": 12,
+   "fibre": 2.5,
+   "protein": 1,
+   "fat": 0.2,
+   "gi": 40,
+   "category": "fruit",
+   "icon": "🍊",
+   "tags": []
+  },
+  {
+   "id": "pomegranate",
+   "name": "Pomegranate (katori)",
+   "unit": "katori",
+   "carbs": 20,
+   "fibre": 4,
+   "protein": 2,
+   "fat": 1,
+   "gi": 35,
+   "category": "fruit",
+   "icon": "🍎",
+   "tags": []
+  },
+  {
+   "id": "grapes",
+   "name": "Grapes (katori)",
+   "unit": "katori",
+   "carbs": 17,
+   "fibre": 1,
+   "protein": 1,
+   "fat": 0.2,
+   "gi": 55,
+   "category": "fruit",
+   "icon": "🍇",
+   "tags": []
+  },
+  {
+   "id": "watermelon",
+   "name": "Watermelon (katori)",
+   "unit": "katori",
+   "carbs": 11,
+   "fibre": 0.5,
+   "protein": 1,
+   "fat": 0.2,
+   "gi": 72,
+   "category": "fruit",
+   "icon": "🍉",
+   "tags": []
+  },
+  {
+   "id": "pear",
+   "name": "Pear",
+   "unit": "piece",
+   "carbs": 21,
+   "fibre": 5,
+   "protein": 0.7,
+   "fat": 0.2,
+   "gi": 38,
+   "category": "fruit",
+   "icon": "🍐",
+   "tags": []
+  },
+  {
+   "id": "chikoo",
+   "name": "Chikoo (sapota)",
+   "unit": "piece",
+   "carbs": 20,
+   "fibre": 5,
+   "protein": 0.5,
+   "fat": 1,
+   "gi": 55,
+   "category": "fruit",
+   "icon": "🟤",
+   "tags": []
+  },
+  {
+   "id": "jamun",
+   "name": "Jamun (katori)",
+   "unit": "katori",
+   "carbs": 14,
+   "fibre": 1.5,
+   "protein": 1,
+   "fat": 0.3,
+   "gi": 25,
+   "category": "fruit",
+   "icon": "🫐",
+   "tags": []
+  },
+  {
+   "id": "muskmelon",
+   "name": "Muskmelon (katori)",
+   "unit": "katori",
+   "carbs": 8,
+   "fibre": 0.8,
+   "protein": 1,
+   "fat": 0.2,
+   "gi": 65,
+   "category": "fruit",
+   "icon": "🍈",
+   "tags": []
+  },
+  {
+   "id": "pineapple",
+   "name": "Pineapple (katori)",
+   "unit": "katori",
+   "carbs": 13,
+   "fibre": 1.5,
+   "protein": 0.5,
+   "fat": 0.1,
+   "gi": 60,
+   "category": "fruit",
+   "icon": "🍍",
+   "tags": []
+  },
+  {
+   "id": "fruit_chaat",
+   "name": "Fruit chaat (katori)",
+   "unit": "katori",
+   "carbs": 20,
+   "fibre": 3,
+   "protein": 1,
+   "fat": 0.4,
+   "gi": 50,
+   "category": "fruit",
+   "icon": "🍓",
+   "tags": [
+    "vrat"
+   ]
+  },
+  {
+   "id": "papad",
+   "name": "Papad (roasted)",
+   "unit": "piece",
+   "carbs": 5,
+   "fibre": 1,
+   "protein": 2.5,
+   "fat": 0.5,
+   "gi": 50,
+   "category": "extra",
+   "icon": "⭕",
+   "tags": []
+  },
+  {
+   "id": "pickle",
+   "name": "Pickle (1 tsp)",
+   "unit": "tsp",
+   "carbs": 0.5,
+   "fibre": 0.2,
+   "protein": 0.1,
+   "fat": 2,
+   "gi": 0,
+   "category": "extra",
+   "icon": "🫙",
+   "tags": []
+  },
+  {
+   "id": "ghee",
+   "name": "Ghee (1 tsp)",
+   "unit": "tsp",
+   "carbs": 0,
+   "fibre": 0,
+   "protein": 0,
+   "fat": 5,
+   "gi": 0,
+   "category": "extra",
+   "icon": "🧈",
+   "tags": []
+  },
+  {
+   "id": "butter",
+   "name": "Butter (1 tsp)",
+   "unit": "tsp",
+   "carbs": 0,
+   "fibre": 0,
+   "protein": 0,
+   "fat": 4,
+   "gi": 0,
+   "category": "extra",
+   "icon": "🧈",
+   "tags": []
+  },
+  {
+   "id": "coconut_chutney",
+   "name": "Coconut chutney (tbsp)",
+   "unit": "tbsp",
+   "carbs": 1,
+   "fibre": 0.5,
+   "protein": 0.5,
+   "fat": 3,
+   "gi": 30,
+   "category": "extra",
+   "icon": "🥥",
+   "tags": []
+  },
+  {
+   "id": "kuttu_puri",
+   "name": "Kuttu puri",
+   "unit": "piece",
+   "carbs": 14,
+   "fibre": 1.5,
+   "protein": 2,
+   "fat": 6,
+   "gi": 55,
+   "category": "grain",
+   "icon": "🟡",
+   "tags": [
+    "vrat"
+   ]
+  },
+  {
+   "id": "sama_rice",
+   "name": "Sama (vrat) rice",
+   "unit": "katori",
+   "carbs": 30,
+   "fibre": 3,
+   "protein": 3,
+   "fat": 1.5,
+   "gi": 55,
+   "category": "grain",
+   "icon": "🍚",
+   "tags": [
+    "vrat"
+   ]
+  },
+  {
+   "id": "aloo_vrat",
+   "name": "Vrat aloo",
+   "unit": "katori",
+   "carbs": 18,
+   "fibre": 2.5,
+   "protein": 2,
+   "fat": 8,
+   "gi": 65,
+   "category": "veg",
+   "icon": "🥔",
+   "tags": [
+    "vrat"
+   ]
+  },
+  {
+   "id": "rajgira_paratha",
+   "name": "Rajgira paratha",
+   "unit": "piece",
+   "carbs": 22,
+   "fibre": 2.5,
+   "protein": 4,
+   "fat": 6,
+   "gi": 60,
+   "category": "grain",
+   "icon": "🫓",
+   "tags": [
+    "vrat"
+   ]
+  },
+  {
+   "id": "makhana_kheer",
+   "name": "Makhana kheer",
+   "unit": "katori",
+   "carbs": 25,
+   "fibre": 1,
+   "protein": 6,
+   "fat": 6,
+   "gi": 55,
+   "category": "sweet",
+   "icon": "🍚",
+   "tags": [
+    "vrat"
+   ]
+  },
+  {
+   "id": "veg_momos",
+   "name": "Veg momos (1 piece)",
+   "unit": "piece",
+   "carbs": 6,
+   "fibre": 0.5,
+   "protein": 1.5,
+   "fat": 1,
+   "gi": 60,
+   "category": "snack",
+   "icon": "🥟",
+   "tags": [
+    "restaurant"
+   ]
+  },
+  {
+   "id": "noodles",
+   "name": "Hakka noodles",
+   "unit": "katori",
+   "carbs": 38,
+   "fibre": 2,
+   "protein": 6,
+   "fat": 7,
+   "gi": 60,
+   "category": "grain",
+   "icon": "🍜",
+   "tags": [
+    "restaurant"
+   ]
+  },
+  {
+   "id": "fried_rice",
+   "name": "Veg fried rice",
+   "unit": "katori",
+   "carbs": 40,
+   "fibre": 2,
+   "protein": 6,
+   "fat": 8,
+   "gi": 65,
+   "category": "grain",
+   "icon": "🍚",
+   "tags": [
+    "restaurant"
+   ]
+  },
+  {
+   "id": "pizza_slice",
+   "name": "Pizza slice",
+   "unit": "piece",
+   "carbs": 30,
+   "fibre": 2,
+   "protein": 10,
+   "fat": 10,
+   "gi": 60,
+   "category": "snack",
+   "icon": "🍕",
+   "tags": [
+    "restaurant"
+   ]
+  },
+  {
+   "id": "burger",
+   "name": "Burger",
+   "unit": "piece",
+   "carbs": 40,
+   "fibre": 3,
+   "protein": 15,
+   "fat": 15,
+   "gi": 65,
+   "category": "snack",
+   "icon": "🍔",
+   "tags": [
+    "restaurant"
+   ]
+  },
+  {
+   "id": "french_fries",
+   "name": "French fries (katori)",
+   "unit": "katori",
+   "carbs": 30,
+   "fibre": 3,
+   "protein": 3,
+   "fat": 14,
+   "gi": 65,
+   "category": "snack",
+   "icon": "🍟",
+   "tags": [
+    "restaurant"
+   ]
+  },
+  {
+   "id": "sandwich_veg",
+   "name": "Veg sandwich",
+   "unit": "piece",
+   "carbs": 30,
+   "fibre": 3,
+   "protein": 7,
+   "fat": 8,
+   "gi": 60,
+   "category": "snack",
+   "icon": "🥪",
+   "tags": [
+    "restaurant"
+   ]
+  },
+  {
+   "id": "maggi",
+   "name": "Maggi noodles (1 packet)",
+   "unit": "packet",
+   "carbs": 45,
+   "fibre": 2,
+   "protein": 9,
+   "fat": 15,
+   "gi": 65,
+   "category": "snack",
+   "icon": "🍜",
+   "tags": []
   }
  ]
 }

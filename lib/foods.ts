@@ -14,7 +14,9 @@ export async function loadFoods(): Promise<Food[] | null> {
         typeof f.name !== "string" ||
         typeof f.unit !== "string" ||
         typeof f.category !== "string" ||
-        ![f.carbs, f.fibre, f.protein, f.gi].every((n) => typeof n === "number")
+        typeof f.icon !== "string" ||
+        !Array.isArray(f.tags) ||
+        ![f.carbs, f.fibre, f.protein, f.fat, f.gi].every((n) => typeof n === "number")
       ) {
         return null;
       }

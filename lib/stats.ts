@@ -1,5 +1,5 @@
 import type { PairedMeal } from "./pairing";
-import type { Food, MealType, Profile, ReadingRow } from "./types";
+import type { Food, MealRow, MealType, Profile, ReadingRow } from "./types";
 
 export type DishRise = { foodId: string; name: string; meals: number; avgRise: number };
 
@@ -23,7 +23,7 @@ export type WeekStats = {
 const avg = (xs: number[]) => (xs.length ? xs.reduce((a, b) => a + b, 0) / xs.length : 0);
 const round = (n: number) => Math.round(n);
 
-export function weekStats(meals: PairedMeal[], readings: ReadingRow[], profile: Pick<Profile, "meal_carb_target" | "glucose_low" | "glucose_high">, foods: Food[]): WeekStats {
+export function weekStats(meals: PairedMeal<MealRow>[], readings: ReadingRow[], profile: Pick<Profile, "meal_carb_target" | "glucose_low" | "glucose_high">, foods: Food[]): WeekStats {
   const dayKeys = new Set(meals.map((m) => new Date(m.eaten_at).toDateString()));
   const rises = meals.filter((m) => m.rise !== null);
 

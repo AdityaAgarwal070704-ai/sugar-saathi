@@ -1,6 +1,8 @@
 "use client";
 
 import { useState } from "react";
+import { Button } from "@/components/ui/Button";
+import { Card } from "@/components/ui/Card";
 import type { WeekStats } from "@/lib/stats";
 import type { Profile } from "@/lib/types";
 
@@ -30,33 +32,33 @@ export default function InsightsAI({ stats, goals }: { stats: WeekStats; goals: 
   };
 
   return (
-    <section className="rounded-xl border border-zinc-200 bg-white p-4">
+    <Card>
       <div className="flex flex-wrap items-center justify-between gap-2">
-        <h2 className="font-semibold">AI weekly summary</h2>
-        <button type="button" disabled={busy} onClick={run} className="rounded-lg bg-emerald-700 px-4 py-2 text-sm text-white disabled:opacity-50">
+        <h2 className="font-display text-xl font-semibold">AI weekly summary</h2>
+        <Button size="sm" disabled={busy} onClick={run}>
           {busy ? "Writing…" : result ? "Refresh" : "Generate summary"}
-        </button>
+        </Button>
       </div>
-      {error && <p role="alert" className="mt-2 text-sm text-red-700">{error}</p>}
-      {blocked && <p className="mt-2 text-sm text-amber-800">The AI text was blocked by the safety filter, so nothing is shown. The rule-based insights above are unaffected. Try again.</p>}
+      {error && <p role="alert" className="mt-2 text-sm text-terracotta">{error}</p>}
+      {blocked && <p className="mt-2 text-sm text-saffron-ink">The AI text was blocked by the safety filter, so nothing is shown. The rule-based insights above are unaffected. Try again.</p>}
       {result && (
         <div className="mt-3 space-y-3 text-sm">
           <p>{result.summary}</p>
           {result.links.length > 0 && (
             <div>
               <h3 className="font-semibold">Possible links to discuss with your educator</h3>
-              <ul className="list-disc pl-5 text-zinc-700">{result.links.map((l) => <li key={l.title}><strong>{l.title}.</strong> {l.detail}</li>)}</ul>
+              <ul className="list-disc pl-5 text-ink">{result.links.map((l) => <li key={l.title}><strong>{l.title}.</strong> {l.detail}</li>)}</ul>
             </div>
           )}
           {result.suggestions.length > 0 && (
             <div>
               <h3 className="font-semibold">Food ideas for next week</h3>
-              <ul className="list-disc pl-5 text-zinc-700">{result.suggestions.map((s) => <li key={s}>{s}</li>)}</ul>
+              <ul className="list-disc pl-5 text-ink">{result.suggestions.map((s) => <li key={s}>{s}</li>)}</ul>
             </div>
           )}
-          <p className="text-xs text-zinc-500">Written by AI from your own numbers. Not medical advice.</p>
+          <p className="text-xs text-muted">Written by AI from your own numbers. Not medical advice.</p>
         </div>
       )}
-    </section>
+    </Card>
   );
 }

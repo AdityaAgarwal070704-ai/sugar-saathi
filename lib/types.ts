@@ -1,4 +1,4 @@
-export type Category = "grain" | "dal" | "veg" | "protein" | "dairy" | "fruit" | "sweet" | "snack" | "drink";
+export type Category = "grain" | "dal" | "veg" | "protein" | "dairy" | "fruit" | "sweet" | "snack" | "drink" | "nuts" | "extra";
 
 export type Food = {
   id: string;
@@ -7,8 +7,11 @@ export type Food = {
   carbs: number; // grams per one unit
   fibre: number; // grams per one unit
   protein: number; // grams per one unit
+  fat: number; // grams per one unit
   gi: number; // glycemic index, 0 to 100
   category: Category;
+  icon: string; // emoji
+  tags: string[]; // for example "vrat", "festival", "restaurant"
 };
 
 // One line of a meal. foodId is null when the dish isn't in our table.

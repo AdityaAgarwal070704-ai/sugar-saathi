@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { Button } from "@/components/ui/Button";
 import { store } from "@/lib/store";
 import type { Profile } from "@/lib/types";
 
@@ -22,9 +23,9 @@ export default function SettingsForm({ profile }: { profile: Profile }) {
     setMsg(ok ? { ok: true, text: "Saved." } : { ok: false, text: "Your browser couldn't save this (storage blocked)." });
   };
 
-  const input = "rounded border border-zinc-300 px-2 py-1";
+  const input = "min-h-11 rounded-xl border border-line bg-cream px-3";
   return (
-    <form onSubmit={save} className="space-y-3 text-sm">
+    <form onSubmit={save} className="space-y-4">
       <label className="block">Name <input className={`${input} ml-2`} value={name} maxLength={40} onChange={(e) => setName(e.target.value)} /></label>
       <label className="block">Carb goal per meal (g) <input inputMode="numeric" className={`${input} ml-2 w-20`} value={carbs} onChange={(e) => setCarbs(e.target.value)} /></label>
       <div className="flex flex-wrap gap-4">
@@ -34,9 +35,9 @@ export default function SettingsForm({ profile }: { profile: Profile }) {
       <label className="block">Diet <select className={`${input} ml-2`} value={diet} onChange={(e) => setDiet(e.target.value as typeof diet)}>
         <option value="veg">Vegetarian</option><option value="egg">Vegetarian + egg</option><option value="nonveg">Non-vegetarian</option>
       </select></label>
-      <p className="text-xs text-zinc-500">Ask your doctor or educator what goals suit you. These only change how the app labels your data.</p>
-      <button type="submit" className="rounded-lg bg-emerald-700 px-4 py-2 text-white">Save settings</button>
-      {msg && <span role="alert" className={`ml-3 ${msg.ok ? "text-emerald-800" : "text-red-700"}`}>{msg.text}</span>}
+      <p className="text-xs text-muted">Ask your doctor or educator what goals suit you. These only change how the app labels your data.</p>
+      <Button type="submit">Save settings</Button>
+      {msg && <span role="alert" className={`ml-3 ${msg.ok ? "text-leaf" : "text-terracotta"}`}>{msg.text}</span>}
     </form>
   );
 }

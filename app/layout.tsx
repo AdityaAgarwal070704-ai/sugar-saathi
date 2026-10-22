@@ -1,29 +1,31 @@
-import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import type { Metadata, Viewport } from "next";
+import { DM_Sans, Fraunces } from "next/font/google";
 import "./globals.css";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
+const dmSans = DM_Sans({ variable: "--font-dm-sans", subsets: ["latin"] });
+const fraunces = Fraunces({ variable: "--font-fraunces", subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Sugar Saathi: Indian food and glucose tracker for type 2 diabetes",
-  description: "Turn a meal described in everyday words into a carb estimate beside your glucose.",
+  title: {
+    default: "Sugar Saathi: your daily companion for Indian diabetes food and glucose",
+    template: "%s · Sugar Saathi",
+  },
+  description:
+    "Describe a meal in everyday words and see carbs, protein, fibre, fat and how it affects your sugar. Free, private, built for Indian food.",
+  applicationName: "Sugar Saathi",
+  appleWebApp: { capable: true, title: "Sugar Saathi", statusBarStyle: "default" },
+};
+
+export const viewport: Viewport = {
+  themeColor: "#1b4d3e",
+  width: "device-width",
+  initialScale: 1,
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
-    <html
-      lang="en"
-      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
-    >
-      <body className="min-h-full flex flex-col">{children}</body>
+    <html lang="en" className={`${dmSans.variable} ${fraunces.variable} h-full antialiased`}>
+      <body className="flex min-h-full flex-col">{children}</body>
     </html>
   );
 }

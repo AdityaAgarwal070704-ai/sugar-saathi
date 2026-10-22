@@ -34,12 +34,12 @@ export default function CsvImport() {
 
   return (
     <div className="space-y-2">
-      <label className="inline-block cursor-pointer rounded-lg border border-zinc-300 px-4 py-2 text-sm">
+      <label className="inline-flex min-h-11 cursor-pointer items-center rounded-full border border-line bg-paper px-5 font-medium hover:bg-sand">
         {busy ? "Importing…" : "Choose a CSV file"}
         <input type="file" accept=".csv,text/csv" className="hidden" disabled={busy} onChange={onFile} />
       </label>
-      <p className="text-xs text-zinc-500">Works with LibreView and similar exports (a time column and a glucose column, mg/dL or mmol/L). Dates are read day-first unless the file shows otherwise. The file is read on your device and never uploaded.</p>
-      {msg && <p role="alert" className={`text-sm ${msg.ok ? "text-emerald-800" : "text-red-700"}`}>{msg.text}</p>}
+      <p className="text-xs text-muted">Works with LibreView and similar exports (a time column and a glucose column, mg/dL or mmol/L). Dates are read day-first unless the file shows otherwise. The file is read on your device and never uploaded.</p>
+      {msg && <p role="alert" className={`text-sm ${msg.ok ? "text-leaf" : "text-terracotta"}`}>{msg.text}</p>}
     </div>
   );
 }

@@ -24,11 +24,12 @@ export function totalCarbs(items: Item[], foods: Food[]) {
   return { grams, counted, skipped };
 }
 
-export type Nutrition = { carbs: number; fibre: number; protein: number; gl: number };
+export type Nutrition = { carbs: number; fibre: number; protein: number; fat: number; kcal: number; gl: number };
 
 // Totals for a list of saved lines. Glycemic load = GI x carbs / 100, summed per dish.
+// Calories = 4 x carbs + 4 x protein + 9 x fat. Everything comes from the food table.
 export function nutritionOf(items: Pick<SavedItem, "foodId" | "count">[], foods: Food[]): Nutrition {
-  const n = { carbs: 0, fibre: 0, protein: 0, gl: 0 };
+  const n = { carbs: 0, fibre: 0, protein: 0, fat: 0, gl: 0 };
   for (const it of items) {
     const f = foods.find((x) => x.id === it.foodId);
     if (!f) continue;
@@ -36,12 +37,15 @@ export function nutritionOf(items: Pick<SavedItem, "foodId" | "count">[], foods:
     n.carbs += carbs;
     n.fibre += f.fibre * it.count;
     n.protein += f.protein * it.count;
+    n.fat += f.fat * it.count;
     n.gl += (f.gi * carbs) / 100;
   }
   return {
     carbs: Math.round(n.carbs),
     fibre: Math.round(n.fibre * 10) / 10,
     protein: Math.round(n.protein * 10) / 10,
+    fat: Math.round(n.fat * 10) / 10,
+    kcal: Math.round(4 * n.carbs + 4 * n.protein + 9 * n.fat),
     gl: Math.round(n.gl),
   };
 }
