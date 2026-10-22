@@ -4,8 +4,8 @@ Decided with the user on 2026-10-22. This expands [MVP_SCOPE.md](MVP_SCOPE.md) i
 
 ## Decisions
 - **Glucose data:** real readings only, from quick manual entry or CSV import (LibreView-style exports). The app never invents readings. Every meal also gets a glycemic-load estimate from the food table, labelled as an estimate.
-- **Accounts and storage:** none. Fully free, no sign-up. All data lives in the browser (local storage) with export and restore. Supabase login and a database were built and then removed on 2026-10-22 (see git history, commit "Sugar Saathi v2").
-- **Subscription:** deferred. Payments are not built; every user gets every feature, with a per-IP abuse limit on the AI routes. Stripe code was removed (git history).
+- **Accounts:** Google sign-in only, required once configured, with no database (signed cookies). Health data stays in the browser, one slot per account. No cloud sync yet.
+- **Plans:** Free forever + a 7-day Pro trial for every new account. Pro is not on sale; the upgrade screen says "coming soon". Pro access can be granted through the `PRO_EMAILS` list. See README.md for the Free vs Pro table and limits.
 - **Advice rules:** food guidance only, worded as suggestions to discuss with an educator or doctor. No medication or dose advice.
 
 ## Screens

@@ -1,6 +1,6 @@
 import { callModel } from "@/lib/ai";
 import { loadIngredients } from "@/lib/ingredients";
-import { tooMany } from "@/lib/ratelimit";
+import { authorize } from "@/lib/auth/server";
 import { MAX_GRAMS, UNITS, unitsFor, type Unit } from "@/lib/recipe";
 
 const MAX_TEXT = 500;
@@ -14,8 +14,8 @@ export type ParsedRecipe = { name: string; servings: number | null; lines: { typ
 // Turns "1 cup toor dal, 1 onion, 2 tsp oil, makes 4 servings" into ingredient lines. The AI only identifies
 // ingredients and amounts; all nutrition is calculated from the ingredient table in the browser.
 export async function POST(request: Request) {
-  if (tooMany(request, "recipe", 20)) return fail("Too many requests right now. Please wait a few minutes and try again.", 429);
-
+const auth = await authorize(request, "recipe");
+  if (!auth.ok) return auth.response;
   let text: unknown;
   try {
     text = (await request.json()).text;
@@ -80,6 +80,7 @@ Rules:
   }
   if (lines.length === 0) return fail("I couldn't find any ingredients in that. Try listing them, for example: 1 cup toor dal, 1 onion, 2 tsp oil.", 422);
 
+  auth.commit();
   const servings = typeof result.servings === "number" && Number.isInteger(result.servings) && result.servings >= 1 && result.servings <= 50 ? result.servings : null;
   const name = typeof result.name === "string" ? result.name.replace(/[^\p{L}\p{N} .,'()&-]/gu, "").trim().slice(0, 50) : "";
   const body: ParsedRecipe = { name, servings, lines };

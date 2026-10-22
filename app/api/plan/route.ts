@@ -3,13 +3,13 @@ import { nutritionOf } from "@/lib/carbs";
 import { loadFoods } from "@/lib/foods";
 import { allSafe } from "@/lib/guardrails";
 import { mealTips } from "@/lib/insights";
-import { tooMany } from "@/lib/ratelimit";
+import { authorize } from "@/lib/auth/server";
 
 
 // The AI picks dishes and counts; code checks every dish and calculates every number.
 export async function POST(request: Request) {
-  if (tooMany(request, "plan", 15)) return Response.json({ error: "Too many requests right now. Please wait a few minutes." }, { status: 429 });
-
+const auth = await authorize(request, "plan");
+  if (!auth.ok) return auth.response;
   let body: { carbTarget?: unknown; diet?: unknown; snacks?: unknown };
   try {
     body = await request.json();
@@ -88,5 +88,6 @@ Only call the tool.`,
   }
   if (meals.length === 0) return Response.json({ error: "The planner didn't return a usable plan. Try again." }, { status: 502 });
 
+  auth.commit();
   return Response.json({ meals, carbTarget, diet });
 }

@@ -577,3 +577,49 @@ test("learn: both languages complete, table numbers fill in, links point to real
   }
   assert.equal(fill("A roti has {c:roti} g.", foods), "A roti has 15 g.");
 });
+
+import { DAILY_LIMITS, PRO_FEATURES, ROUTE_FEATURE, TRIAL_DAYS, can, parseEmailList, planStatus } from "../lib/plan";
+
+test("plan: trial lasts 7 days, then Free; pro grants override", () => {
+  const start = Date.UTC(2026, 9, 1, 12, 0, 0);
+  const day = 86400_000;
+  const at = (ms: number, isPro = false) => planStatus({ trialStartMs: start, isPro, nowMs: ms });
+  assert.equal(TRIAL_DAYS, 7);
+  assert.equal(at(start).tier, "trial");
+  assert.equal(at(start).trialDaysLeft, 7);
+  assert.equal(at(start + 6 * day + 1000).trialDaysLeft, 1);
+  assert.equal(at(start + 7 * day - 1).tier, "trial"); // last second still counts
+  const over = at(start + 7 * day);
+  assert.equal(over.tier, "free");
+  assert.equal(over.trialExpired, true);
+  assert.equal(over.trialDaysLeft, 0);
+  assert.equal(at(start + 30 * day, true).tier, "pro");
+  assert.equal(at(start, true).tier, "pro"); // a grant wins even during a trial
+  const fresh = planStatus({ trialStartMs: null, isPro: false, nowMs: start });
+  assert.equal(fresh.tier, "free");
+  assert.equal(fresh.trialExpired, false);
+});
+
+test("plan: features and limits", () => {
+  for (const f of PRO_FEATURES) {
+    assert.equal(can("free", f), false, f);
+    assert.equal(can("trial", f), true, f);
+    assert.equal(can("pro", f), true, f);
+  }
+  // every Pro-only AI route is locked for Free and has a zero daily limit there
+  for (const kind of ["photo", "recipe", "insights", "plan"] as const) {
+    assert.ok(ROUTE_FEATURE[kind]);
+    assert.equal(DAILY_LIMITS.free[kind], 0);
+    assert.ok(DAILY_LIMITS.pro[kind] > 0);
+  }
+  assert.equal(ROUTE_FEATURE.parse, null);
+  assert.equal(DAILY_LIMITS.free.parse, 8);
+  assert.ok(DAILY_LIMITS.trial.parse >= DAILY_LIMITS.free.parse);
+});
+
+test("plan: email allowlist parsing", () => {
+  const s = parseEmailList(" Ada@X.com, bob@y.com ;nonsense  carol@z.org");
+  assert.deepEqual([...s].sort(), ["ada@x.com", "bob@y.com", "carol@z.org"]);
+  assert.equal(parseEmailList(undefined).size, 0);
+  assert.equal(parseEmailList("").size, 0);
+});

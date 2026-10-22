@@ -1,11 +1,37 @@
 # Sugar Saathi
 
-A free web app for Indian adults managing type 2 diabetes. Describe a meal in everyday words, get an honest carb estimate and practical feedback, and see every meal beside your glucose.
+A web app for Indian adults managing type 2 diabetes. Free plan forever, plus a 7-day Pro trial for every new account. Describe a meal in everyday words, get an honest carb estimate and practical feedback, and see every meal beside your glucose.
 
-Live app: https://sugar-saathi.vercel.app. No sign-up. Your data stays in your own browser.
+Live app: https://sugar-saathi.vercel.app. Sign in with Google. Your meals and readings stay on your own device.
 
 - Original MVP scope: [MVP_SCOPE.md](MVP_SCOPE.md)
 - Current product scope and decisions: [PRODUCT.md](PRODUCT.md)
+
+## Free, trial and Pro
+
+Sign-in is with Google. There is no database: the app remembers you with signed cookies, and your health data stays in your browser.
+
+| | Free (forever) | Pro (7-day trial now, paid later) |
+|---|---|---|
+| AI-read meals (typing, voice, "your usual") | 8 a day | 60 a day |
+| Photo logging | No | Yes |
+| Meal report: nutrition, glycemic gauge, plate balance, tips, swaps | Yes | Yes |
+| Expected change in your sugar (from your own paired meals) | Locked, with a teaser | Yes |
+| Today, routine, walk timer, streak, reminders, Learn, Eating out, Fasting and festivals, Hindi | Yes | Yes |
+| Glucose entry and out-of-range safety cards | Yes | Yes |
+| Progress | 7-day overview | 30 days, gentle vs spiky dishes, walks, GMI |
+| Recipe builder | Manual | Plus "describe it" AI fill |
+| AI weekly summary, day meal planner | No | Yes |
+| Educator report, WhatsApp share, CSV import | No | Yes |
+| Backup, restore, delete my data | Yes | Yes |
+
+Safety is never locked. Pro is **not on sale yet**: after the trial everyone is on Free and the upgrade screen says "coming soon". Cloud sync across devices is planned, not built.
+
+How it works, and its honest limits:
+- **The trial is best-effort.** With no database there is nowhere to record who has used a trial. The start date is kept in a signed cookie that survives sign-outs, so clearing browser data (or using another browser) can restart it.
+- **Pro-only AI features are enforced on the server** (photo, recipe AI, weekly summary, planner), by the signed login cookie. The free daily cap on AI-read meals is counted in server memory, so it is a good guard, not an exact meter. Pro features that run on your device (the report, 30-day charts and so on) are locked in the interface; a determined person could get around that with browser tools.
+- **Grant Pro** to testers by adding their email to `PRO_EMAILS` in Vercel.
+- If the Google keys are not set, the app stays open to everyone with every feature, exactly as before accounts existed.
 
 ## What it does
 
@@ -32,7 +58,7 @@ Live app: https://sugar-saathi.vercel.app. No sign-up. Your data stays in your o
 - **Numbers come from code, not AI.** Carbs, fibre, protein and glycemic load come only from `data/foods.json`. The AI only turns words into dishes, writes the weekly narrative from numbers that were already calculated, and proposes plans using table dishes that code then checks and calculates.
 - **Glucose is never invented.** Readings are only what the user enters or imports. The app does not predict glucose.
 - **Food guidance only.** No insulin, dose or medication advice. Every piece of AI text goes through a filter (`lib/guardrails.ts`) that blocks dosing and medication language, and the prompts forbid it. Patterns are worded as "possible links to discuss with your educator".
-- **Private by design.** There are no accounts and no database. Meals, readings and goals live in the browser's local storage on the user's own device. The only things sent to a server are the meal text (to be split into dishes) and, for the AI summary, statistics the browser calculated. CSV files are read on the device and never uploaded.
+- **Private by design.** There is no health database. Meals, readings and goals live in the browser's local storage on the user's own device, one storage slot per signed-in account. The only things sent to a server are what an AI feature needs (a meal text or photo, a recipe description, or calculated statistics). Your Google name and email live only in a signed cookie. CSV files are read on the device and never uploaded.
 
 ## Architecture: Input → AI → Logic → Action → Output
 
@@ -56,18 +82,20 @@ Key files:
 
 ## Run it locally
 
-You need Node.js (LTS) and an OpenRouter key.
+You need Node.js (LTS) and an OpenRouter key. Google sign-in is optional while developing.
 
 ```bash
 npm install
 cp .env.example .env.local
 ```
 
-Open `.env.local` and replace the placeholder with your key from openrouter.ai (never commit this file; git already ignores it):
+Open `.env.local` and fill in your values (never commit this file; git already ignores it). The only required value is your key from openrouter.ai:
 
 ```
 OPENROUTER_API_KEY=your-key-here
 ```
+
+To turn on login, add `GOOGLE_CLIENT_ID`, `GOOGLE_CLIENT_SECRET` and `AUTH_SECRET` (see `.env.example` for how to get them). To try Free, trial and Pro without Google, add `AUTH_SECRET` and `AUTH_MOCK=1`: a fake sign-in panel appears on the login page (development only, ignored in production).
 
 Then start the app and open http://localhost:3000:
 
@@ -83,7 +111,7 @@ npx tsx --test tests/logic.test.ts
 
 ## Deploy to Vercel
 
-Import the repo in Vercel (or run `npx vercel deploy --prod`), add `OPENROUTER_API_KEY` under Project Settings → Environment Variables, and redeploy.
+Import the repo in Vercel (or run `npx vercel deploy --prod`), add `OPENROUTER_API_KEY` (and, for login, `GOOGLE_CLIENT_ID`, `GOOGLE_CLIENT_SECRET`, `AUTH_SECRET`) under Project Settings → Environment Variables, and redeploy. In Google Cloud, add `https://YOUR-SITE/api/auth/callback` as an authorised redirect URI.
 
 ## Failure cases and how the screen handles them
 
@@ -102,7 +130,7 @@ Import the repo in Vercel (or run `npx vercel deploy --prod`), add `OPENROUTER_A
 
 ## Known limits
 
-- **Data lives in one browser on one device.** Clearing browser data or switching device loses it, so use Settings → Export backup. There is no sync.
+- **Data lives in one browser on one device per account.** Clearing browser data or switching device loses it, so use Settings → Export backup. There is no sync.
 - The food table is a **starter set of 215 dishes with approximate values, not verified by a dietitian**. It must be reviewed before real use, and the app says so on screen.
 - Glycemic-load ratings and per-meal thresholds are simple starter rules, not clinically validated.
 - The abuse limit on the AI routes is best-effort (per server instance), not a hard guarantee.

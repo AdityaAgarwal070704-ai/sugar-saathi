@@ -3,6 +3,7 @@
 import { useRouter, useSearchParams } from "next/navigation";
 import { useState } from "react";
 import type { ParsedRecipe } from "@/app/api/parse-recipe/route";
+import ProGate from "@/components/ProGate";
 import { IngredientPicker } from "@/components/recipes/IngredientPicker";
 import { Button } from "@/components/ui/Button";
 import { Card } from "@/components/ui/Card";
@@ -89,6 +90,7 @@ export default function RecipeBuilder() {
   const input = "min-h-11 rounded-xl border border-line bg-cream px-3";
   return (
     <div className="space-y-5">
+      <ProGate feature="aiRecipe" compact>
       <Card tone="sand">
         <h2 className="font-display text-lg font-semibold">✨ Describe it, we&apos;ll fill the list</h2>
         <p className="mb-2 text-sm text-muted">Type what you put in, in your own words. You can fix anything afterwards.</p>
@@ -98,6 +100,7 @@ export default function RecipeBuilder() {
           {aiError && <p role="alert" className="text-sm text-terracotta">{aiError}</p>}
         </div>
       </Card>
+      </ProGate>
 
       <Card className="space-y-4">
         <div className="grid gap-3 sm:grid-cols-2">

@@ -1,15 +1,15 @@
 import { callModel } from "@/lib/ai";
 import { allSafe } from "@/lib/guardrails";
 import { weeklyObservations } from "@/lib/insights";
-import { tooMany } from "@/lib/ratelimit";
+import { authorize } from "@/lib/auth/server";
 import type { WeekStats } from "@/lib/stats";
 
 const num = (n: unknown, lo = -1e6, hi = 1e6) => typeof n === "number" && Number.isFinite(n) && n >= lo && n <= hi;
 
 // The browser sends statistics it already calculated from the user's own data; the AI only words them.
 export async function POST(request: Request) {
-  if (tooMany(request, "insights", 15)) return Response.json({ error: "Too many requests right now. Please wait a few minutes." }, { status: 429 });
-
+const auth = await authorize(request, "insights");
+  if (!auth.ok) return auth.response;
   let body: { stats?: Partial<WeekStats>; goals?: { meal_carb_target?: number; glucose_low?: number; glucose_high?: number } };
   try {
     body = await request.json();
@@ -71,5 +71,6 @@ Only call the tool.`,
 
   // Safety filter: if anything sounds like dosing or medication advice, show nothing from the AI.
   if (!allSafe([result.summary, ...links.flatMap((l) => [l.title, l.detail]), ...suggestions])) return Response.json({ blocked: true });
+  auth.commit();
   return Response.json({ summary: result.summary, links, suggestions });
 }

@@ -1,7 +1,7 @@
 import { callModel } from "@/lib/ai";
 import { loadFoods } from "@/lib/foods";
 import { cleanCustom, cleanItems, ITEMS_SCHEMA, textSystem } from "@/lib/parse";
-import { tooMany } from "@/lib/ratelimit";
+import { authorize } from "@/lib/auth/server";
 import type { ParseResponse } from "@/lib/types";
 
 const MAX_TEXT = 300;
@@ -11,8 +11,8 @@ function fail(message: string, status: number) {
 }
 
 export async function POST(request: Request) {
-  if (tooMany(request, "parse", 40)) return fail("Too many requests right now. Please wait a few minutes and try again.", 429);
-
+const auth = await authorize(request, "parse");
+  if (!auth.ok) return auth.response;
   let text: unknown;
   let custom: unknown;
   try {
@@ -41,6 +41,7 @@ export async function POST(request: Request) {
   const items = cleanItems(result, foods);
   if (!items) return fail("Couldn't reach the AI, try again.", 502);
 
+  auth.commit();
   const body: ParseResponse = { items };
   return Response.json(body);
 }

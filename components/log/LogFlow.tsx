@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useRef, useState } from "react";
+import { useAuth } from "@/components/auth/AuthProvider";
 import MealReport from "@/components/MealReport";
 import { Button, ButtonLink } from "@/components/ui/Button";
 import { Card } from "@/components/ui/Card";
@@ -49,6 +50,7 @@ function LogFlowInner() {
   const { meals, readings, profile, customFoods } = useStore();
   const FOODS = useFoods();
   const { t: tr, lang, name } = useT();
+  const { can } = useAuth();
 
   const editId = params.get("edit");
   const fromId = params.get("from");
@@ -219,10 +221,16 @@ function LogFlowInner() {
                 </div>
               </>
             )}
-            <label className="inline-flex min-h-11 cursor-pointer items-center gap-2 rounded-full bg-moss-soft px-5 font-medium text-moss hover:bg-[#d3e6da]">
-              <CameraIcon className="h-5 w-5" /> {tr("log.photo")}
-              <input type="file" accept="image/*" capture="environment" className="sr-only" onChange={onPhoto} disabled={loading !== null} />
-            </label>
+            {can("photo") ? (
+              <label className="inline-flex min-h-11 cursor-pointer items-center gap-2 rounded-full bg-moss-soft px-5 font-medium text-moss hover:bg-[#d3e6da]">
+                <CameraIcon className="h-5 w-5" /> {tr("log.photo")}
+                <input type="file" accept="image/*" capture="environment" className="sr-only" onChange={onPhoto} disabled={loading !== null} />
+              </label>
+            ) : (
+              <Button variant="soft" onClick={() => setError("Photo logging is part of Pro. Pro is coming soon. You can still type or speak your meal on Free.")}>
+                <CameraIcon className="h-5 w-5" /> {tr("log.photo")} 🔒
+              </Button>
+            )}
             <span className="ml-auto text-xs text-muted tabular">{text.length}/{MAX_TEXT}</span>
           </div>
           {error && <p role="alert" className="rounded-2xl bg-terracotta-soft px-4 py-2 text-sm text-terracotta">{error}</p>}

@@ -5,12 +5,14 @@ import { Button } from "@/components/ui/Button";
 import { Card } from "@/components/ui/Card";
 import type { Checkin } from "@/lib/checkin";
 import { shareText } from "@/lib/share";
+import { useAuth } from "@/components/auth/AuthProvider";
 import { store } from "@/lib/store";
 import { useT } from "@/lib/useT";
 
 export default function CheckinCard({ checkin, text }: { checkin: Checkin; text: string }) {
   const [msg, setMsg] = useState<string | null>(null);
   const { t } = useT();
+  const { can } = useAuth();
   const share = async () => {
     const r = await shareText(text);
     setMsg(r === "shared" ? t("checkin.shared") : r === "opened" ? t("checkin.opened") : r === "copied" ? t("checkin.copied") : null);
@@ -26,7 +28,7 @@ export default function CheckinCard({ checkin, text }: { checkin: Checkin; text:
         <p className="mt-1">{checkin.tryThis}</p>
       </div>
       <div className="mt-4 flex flex-wrap gap-2">
-        <Button variant="saffron" onClick={share}>{t("checkin.share")}</Button>
+        {can("share") ? <Button variant="saffron" onClick={share}>{t("checkin.share")}</Button> : <span className="rounded-full bg-white/15 px-4 py-2 text-sm">🔒 {t("checkin.share")} (Pro)</span>}
         <Button variant="outline" onClick={() => store.markCheckin()}>{t("checkin.done")}</Button>
       </div>
       {msg && <p className="mt-2 text-sm text-white/80">{msg}</p>}

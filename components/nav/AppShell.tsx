@@ -2,6 +2,8 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import LegacyDataPrompt from "@/components/auth/LegacyDataPrompt";
+import PlanBanner from "@/components/auth/PlanBanner";
 import Disclaimer from "@/components/Disclaimer";
 import LanguageToggle from "@/components/LanguageToggle";
 import { ChartIcon, CompassIcon, HomeIcon, LogoMark, PlusIcon, UserIcon } from "@/components/ui/icons";
@@ -53,6 +55,9 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
         </Link>
         <LanguageToggle />
       </header>
+
+      <PlanBanner />
+      <LegacyDataPrompt />
 
       <main className="mx-auto max-w-5xl px-4 pb-32 pt-4 md:px-6 md:pb-12 md:pt-8">
         <div className="space-y-5">{children}</div>

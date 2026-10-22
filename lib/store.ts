@@ -7,14 +7,17 @@ import type { Recipe } from "./recipe";
 import type { Food, MealRow, Profile, Reminders, RoutineItem } from "./types";
 
 // All user data lives in this browser (localStorage). No accounts, no server database.
-const KEY = "sugar-saathi:v1";
+const LEGACY_KEY = "sugar-saathi:v1";
+// With login, each account gets its own storage slot, so two people on one phone never see each other's data.
+let activeKey = LEGACY_KEY;
+const handledKey = (userId: string) => `sugar-saathi:legacy-handled:${userId}`;
 
 let cache: State | null = null;
 const listeners = new Set<() => void>();
 
 function load(): State {
   try {
-    const raw = window.localStorage.getItem(KEY);
+    const raw = window.localStorage.getItem(activeKey);
     if (raw) {
       const parsed = fromPersisted(JSON.parse(raw));
       if (parsed) return parsed;
@@ -34,7 +37,7 @@ function commit(next: State): boolean {
   cache = next;
   let ok = true;
   try {
-    window.localStorage.setItem(KEY, JSON.stringify(toPersisted(next)));
+    window.localStorage.setItem(activeKey, JSON.stringify(toPersisted(next)));
   } catch {
     ok = false;
   }
@@ -45,7 +48,7 @@ function commit(next: State): boolean {
 function subscribe(cb: () => void) {
   listeners.add(cb);
   const onStorage = (e: StorageEvent) => {
-    if (e.key === KEY || e.key === null) {
+    if (e.key === activeKey || e.key === null) {
       cache = null;
       emit();
     }
@@ -70,7 +73,58 @@ export function useStore(): State & { ready: boolean } {
   return { ...state, ready };
 }
 
+function legacyHasData(): boolean {
+  try {
+    const raw = window.localStorage.getItem(LEGACY_KEY);
+    if (!raw) return false;
+    const parsed = fromPersisted(JSON.parse(raw));
+    return Boolean(parsed && (parsed.meals.length > 0 || parsed.readings.length > 0 || parsed.recipes.length > 0));
+  } catch {
+    return false;
+  }
+}
+
 export const store = {
+  // Switches to a signed-in user's own data (or back to the shared slot when signed out / no login).
+  setUser(userId: string | null): void {
+    const next = userId ? `${LEGACY_KEY}:${userId}` : LEGACY_KEY;
+    if (next === activeKey) return;
+    activeKey = next;
+    cache = null;
+    emit();
+  },
+  // Data saved on this device before accounts existed. Offered once to the first account that signs in.
+  hasLegacyData(userId: string): boolean {
+    if (activeKey === LEGACY_KEY) return false;
+    try {
+      if (window.localStorage.getItem(handledKey(userId))) return false;
+      if (window.localStorage.getItem(activeKey)) return false; // this account already has its own data
+    } catch {
+      return false;
+    }
+    return legacyHasData();
+  },
+  adoptLegacy(userId: string): boolean {
+    try {
+      const raw = window.localStorage.getItem(LEGACY_KEY);
+      const parsed = raw ? fromPersisted(JSON.parse(raw)) : null;
+      if (!parsed) return false;
+      const ok = commit(parsed);
+      window.localStorage.setItem(handledKey(userId), "1");
+      if (ok) window.localStorage.removeItem(LEGACY_KEY); // so a second account is not offered the same data
+      return ok;
+    } catch {
+      return false;
+    }
+  },
+  dismissLegacy(userId: string): void {
+    try {
+      window.localStorage.setItem(handledKey(userId), "1");
+    } catch {
+      // ignore
+    }
+    emit();
+  },
   addMeal(meal: Omit<MealRow, "id">): { ok: boolean; id: string } {
     const s = getSnapshot();
     const row: MealRow = { ...meal, id: crypto.randomUUID() };
@@ -158,7 +212,7 @@ export const store = {
   clearAll(): void {
     commit(EMPTY_STATE);
     try {
-      window.localStorage.removeItem(KEY);
+      window.localStorage.removeItem(activeKey);
     } catch {
       // ignore
     }

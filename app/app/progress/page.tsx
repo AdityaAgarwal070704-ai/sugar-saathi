@@ -1,7 +1,9 @@
 "use client";
 
 import { useState } from "react";
+import { useAuth } from "@/components/auth/AuthProvider";
 import InsightsAI from "@/components/InsightsAI";
+import ProGate from "@/components/ProGate";
 import ProgressTabs from "@/components/ProgressTabs";
 import { ButtonLink } from "@/components/ui/Button";
 import { BarChart } from "@/components/ui/BarChart";
@@ -28,7 +30,9 @@ function Big({ label, value, sub }: { label: string; value: string; sub?: string
 }
 
 export default function Progress() {
-  const [days, setDays] = useState<7 | 30>(7);
+  const [wanted, setDays] = useState<7 | 30>(7);
+  const { can } = useAuth();
+  const days: 7 | 30 = wanted === 30 && can("progress30") ? 30 : 7;
   const { ready, paired, readings, profile, walks, foods: FOODS } = useRecent(days);
   if (!ready) return <p className="text-muted">Loading…</p>;
 
@@ -52,7 +56,7 @@ export default function Progress() {
         <h1 className="font-display text-3xl font-semibold">Progress</h1>
         <div className="inline-flex rounded-full border border-line bg-paper p-1" role="group" aria-label="Time range">
           {([7, 30] as const).map((d) => (
-            <button key={d} type="button" onClick={() => setDays(d)} aria-pressed={days === d} className={`min-h-9 rounded-full px-4 text-sm font-medium ${days === d ? "bg-moss text-white" : "hover:bg-sand"}`}>{d} days</button>
+            <button key={d} type="button" onClick={() => setDays(d)} aria-pressed={wanted === d} className={`min-h-9 rounded-full px-4 text-sm font-medium ${wanted === d ? "bg-moss text-white" : "hover:bg-sand"}`}>{d} days{d === 30 && !can("progress30") ? " 🔒" : ""}</button>
           ))}
         </div>
       </div>
@@ -96,6 +100,7 @@ export default function Progress() {
             </dl>
           </Card>
 
+          <ProGate feature="dishRanking" teaser="Once a dish appears in 2 or more meals with before and 2-hour readings, it is ranked here using your own data.">
           <Card>
             <h2 className="font-display text-xl font-semibold">Gentle and spiky dishes, for you</h2>
             {stats.dishRises.length < 2 ? (
@@ -114,7 +119,9 @@ export default function Progress() {
             )}
             <p className="mt-3 text-xs text-muted">Average rise in mg/dL for meals that included the dish. Portions, other dishes, activity and timing all matter, so treat these as possible links to discuss.</p>
           </Card>
+          </ProGate>
 
+          <ProGate feature="walkEffect" teaser="See how meals followed by a walk compare with meals that were not, using your own readings.">
           <Card>
             <h2 className="font-display text-xl font-semibold">🚶 Walks</h2>
             <p className="mt-1 text-sm text-muted">{walkCount} walk{walkCount === 1 ? "" : "s"} logged in the last {days} days.</p>
@@ -126,6 +133,7 @@ export default function Progress() {
               <p className="mt-2 text-sm text-muted">Once you have 3 meals with a walk and 3 without, all with before and 2-hour readings, you will see how they compare for you.</p>
             )}
           </Card>
+          </ProGate>
 
           {Object.keys(stats.byMealType).length > 0 && (
             <Card>
@@ -148,13 +156,19 @@ export default function Progress() {
           </Card>
 
           {g && (
+            <ProGate feature="gmi" compact>
             <Card>
               <h2 className="font-display text-xl font-semibold">Estimated GMI: {g.value}%</h2>
               <p className="mt-1 text-sm text-muted">From {g.readings} imported CGM readings over {g.days} days. GMI is an estimate from average glucose and is not a lab HbA1c. Ask your doctor how to read it.</p>
             </Card>
+            </ProGate>
           )}
 
-          {days === 7 && <InsightsAI stats={stats} goals={profile} />}
+          {days === 7 && (
+            <ProGate feature="aiSummary" teaser="A plain-language write-up of your week: possible links to discuss, things to note for your educator, and food ideas for next week.">
+              <InsightsAI stats={stats} goals={profile} />
+            </ProGate>
+          )}
         </>
       )}
     </>

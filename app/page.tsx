@@ -18,12 +18,13 @@ const FEATURES = [
   ["📈", "What meals do to you", "Add readings and Sugar Saathi learns your own pattern, then shows a range like +45 to +80 mg/dL for meals like this one."],
   ["🔄", "Swaps that save real carbs", "Brown rice for white, roti for naan, nimbu pani for cola, each with the grams saved."],
   ["🍽️", "A day meal planner", "Ideas for a full day of Indian meals within your carb goal, vegetarian or not."],
-  ["🔒", "Private by design", "No account. Your data stays in your browser, with backup and restore."],
+  ["🔒", "Private by design", "Your meals and readings are stored only on your own device, with backup and restore. We keep no health database."],
 ];
 
 const FAQ = [
-  ["Is Sugar Saathi free?", "Yes. There is no sign-up and no payment."],
-  ["Where is my data stored?", "Only in your own browser on your own device. Nothing is saved on a server. Use the backup in Me to move it or keep it safe."],
+  ["Is Sugar Saathi free?", "Yes. There is a free plan forever. Every new account also gets all Pro features free for 7 days, with no card. Pro isn't on sale yet, and nothing is charged today."],
+  ["What is in Free and what is in Pro?", "Free covers the daily essentials: logging, nutrition and tips, your routine, glucose entry and safety cards, Learn and more. Pro adds photo logging, your personal expected sugar change, 30-day progress, the AI weekly summary, the day planner, the educator report, sharing and CSV import."],
+  ["Where is my data stored?", "Your meals, readings and goals are stored only in your own browser on your own device. We keep just your Google name and email in a sign-in cookie. Use the backup in Me to move your data or keep it safe."],
   ["Does the AI calculate my carbs?", "No. The AI only works out which dishes you ate. Every number comes from the food table and is calculated by code, so it can't invent nutrition."],
   ["Will it tell me how much insulin or medicine to take?", "Never. Sugar Saathi gives food guidance only. Questions about medicines or doses are for your doctor or diabetes educator."],
   ["How accurate are the numbers?", "They are estimates from a starter table that has not been checked by a dietitian yet, and portions are your own judgement. Treat them as a helpful guide, not lab results."],
@@ -37,22 +38,22 @@ export default function Landing() {
         <Link href="/" className="flex items-center gap-2 font-display text-xl font-semibold text-moss">
           <LogoMark /> Sugar Saathi
         </Link>
-        <ButtonLink href="/app" size="sm">Open the app</ButtonLink>
+        <ButtonLink href="/login" size="sm">Sign in</ButtonLink>
       </header>
 
       {/* Hero */}
       <section className="mx-auto grid max-w-6xl items-center gap-10 px-5 pb-16 pt-6 md:grid-cols-[1.1fr_1fr] md:pt-12">
         <div className="rise-in">
-          <p className="inline-block rounded-full bg-saffron-soft px-3 py-1 text-sm font-medium text-saffron-ink">Free · No sign-up · Made for Indian food</p>
+          <p className="inline-block rounded-full bg-saffron-soft px-3 py-1 text-sm font-medium text-saffron-ink">Free plan · 7-day Pro trial · Made for Indian food</p>
           <h1 className="mt-4 font-display text-5xl font-semibold leading-[1.05] text-moss-deep sm:text-6xl">Know what your meals do to your sugar.</h1>
           <p className="mt-5 max-w-xl text-lg text-muted">
             Say what you ate in Hindi or English. Get carbs, protein, fibre, fat and an honest read on how it may affect you. Then see it beside your glucose, day after day.
           </p>
           <div className="mt-7 flex flex-wrap gap-3">
-            <ButtonLink href="/app" size="lg" variant="saffron">Start logging, it&apos;s free</ButtonLink>
+            <ButtonLink href="/login" size="lg" variant="saffron">Start free: 7 days of Pro</ButtonLink>
             <ButtonLink href="#day" size="lg" variant="outline">See a day with it</ButtonLink>
           </div>
-          <p className="mt-4 text-sm text-muted">Works on your phone. Add it to your home screen like an app.</p>
+          <p className="mt-4 text-sm text-muted">Sign in with Google. Your meals and readings stay on your device. Works on your phone, and you can add it to your home screen.</p>
         </div>
 
         {/* A sample meal report, built from the real components */}
@@ -145,11 +146,12 @@ export default function Landing() {
           ))}
         </div>
         <div className="mt-8 text-center">
-          <ButtonLink href="/app" size="lg">Open Sugar Saathi</ButtonLink>
+          <ButtonLink href="/login" size="lg">Start free</ButtonLink>
         </div>
       </section>
 
-      <footer className="mx-auto max-w-3xl px-5 pb-12">
+      <footer className="mx-auto max-w-3xl space-y-3 px-5 pb-12">
+        <p className="text-sm"><Link href="/privacy" className="text-moss underline">Privacy</Link> · <Link href="/terms" className="text-moss underline">Terms</Link> · <Link href="/login" className="text-moss underline">Sign in</Link></p>
         <Disclaimer />
       </footer>
     </div>

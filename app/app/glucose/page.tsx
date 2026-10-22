@@ -2,6 +2,7 @@
 
 import CsvImport from "@/components/CsvImport";
 import GlucoseQuickAdd from "@/components/GlucoseQuickAdd";
+import ProGate from "@/components/ProGate";
 import ProgressTabs from "@/components/ProgressTabs";
 import { Card } from "@/components/ui/Card";
 import { GlucoseChart } from "@/components/ui/GlucoseChart";
@@ -34,7 +35,7 @@ export default function GlucosePage() {
         </Card>
         <Card>
           <h2 className="font-display text-xl font-semibold">Import from your meter or CGM</h2>
-          <div className="mt-3"><CsvImport /></div>
+          <div className="mt-3"><ProGate feature="csvImport" compact><CsvImport /></ProGate></div>
         </Card>
       </div>
 

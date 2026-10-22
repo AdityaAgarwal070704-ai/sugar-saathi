@@ -1,5 +1,7 @@
 "use client";
 
+import Link from "next/link";
+import { useAuth } from "@/components/auth/AuthProvider";
 import TipsCard from "@/components/TipsCard";
 import { Card } from "@/components/ui/Card";
 import { GlycemicGauge } from "@/components/ui/GlycemicGauge";
@@ -26,6 +28,7 @@ type Props = {
 // The full report for one meal: macros, glycemic impact, plate balance, expected change in the user's sugar, tips.
 export default function MealReport({ items, mealType, foods, profile, history, mealId }: Props) {
   const { t, lang } = useT();
+  const { can } = useAuth();
   const n = nutritionOf(items, foods);
   const tips = mealTips(items, foods, profile, { t, lang });
   const groups = plateGroups(items, foods);
@@ -52,7 +55,12 @@ export default function MealReport({ items, mealType, foods, profile, history, m
 
       <Card tone="saffron">
         <h2 className="font-display text-xl font-semibold">{t("report.expected")}</h2>
-        {expected.status === "ok" ? (
+        {!can("personalResponse") ? (
+          <>
+            <p className="mt-2 text-sm">🔒 Part of Pro. After a few meals with before and 2-hour readings, this shows a personal range learned only from your own data, for example <strong>+45 to +80 mg/dL</strong>.</p>
+            <p className="mt-2 text-sm text-muted">Keep adding readings: they are saved on your device and will show here as soon as Pro is available. <Link href="/app/upgrade" className="font-medium text-moss underline">See Free vs Pro</Link></p>
+          </>
+        ) : expected.status === "ok" ? (
           <>
             <p className="tabular mt-2 text-3xl font-bold">
               {expected.low >= 0 ? "+" : ""}{expected.low} to {expected.high >= 0 ? "+" : ""}{expected.high} <span className="text-lg font-medium">mg/dL</span>

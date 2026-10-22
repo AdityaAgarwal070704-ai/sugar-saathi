@@ -1,7 +1,7 @@
 import { callModel } from "@/lib/ai";
 import { loadFoods } from "@/lib/foods";
 import { cleanCustom, cleanItems, ITEMS_SCHEMA, photoSystem } from "@/lib/parse";
-import { tooMany } from "@/lib/ratelimit";
+import { authorize } from "@/lib/auth/server";
 import type { ParseResponse } from "@/lib/types";
 
 const MAX_CHARS = 4_500_000; // about 3.3 MB of image after base64
@@ -13,8 +13,8 @@ function fail(message: string, status: number) {
 
 // The photo is sent to the AI for this one request only. It is never stored by this app.
 export async function POST(request: Request) {
-  if (tooMany(request, "photo", 15)) return fail("Too many photos right now. Please wait a few minutes and try again.", 429);
-
+const auth = await authorize(request, "photo");
+  if (!auth.ok) return auth.response;
   let image: unknown;
   let custom: unknown;
   try {
@@ -48,6 +48,7 @@ export async function POST(request: Request) {
   const items = cleanItems(result, foods, 0.75);
   if (!items) return fail("Couldn't reach the AI, try again.", 502);
 
+  auth.commit();
   const body: ParseResponse = { items };
   return Response.json(body);
 }
