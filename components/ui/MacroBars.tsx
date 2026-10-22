@@ -9,8 +9,8 @@ export function MacroBars({ carbs, protein, fibre, fat, carbGoal }: { carbs: num
   const rows: Row[] = [
     { label: t("macro.carbs"), grams: carbs, max: Math.max(carbGoal * 1.4, carbs), color: "#e9a23b" },
     { label: t("macro.protein"), grams: protein, max: Math.max(40, protein), color: "#1b4d3e" },
-    { label: t("macro.fibre"), grams: fibre, max: Math.max(15, fibre), color: "#2f7d4f" },
-    { label: t("macro.fat"), grams: fat, max: Math.max(40, fat), color: "#b84a32" },
+    { label: t("macro.fibre"), grams: fibre, max: Math.max(15, fibre), color: "#276b44" },
+    { label: t("macro.fat"), grams: fat, max: Math.max(40, fat), color: "#a63f29" },
   ];
   return (
     <ul className="space-y-2.5">

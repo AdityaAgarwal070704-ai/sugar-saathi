@@ -3,7 +3,7 @@
 import { useT } from "@/lib/useT";
 
 // Donut of where the calories come from (carbs, protein, fat), with total calories in the middle.
-const COLORS = { carbs: "#e9a23b", protein: "#1b4d3e", fat: "#b84a32" };
+const COLORS = { carbs: "#e9a23b", protein: "#1b4d3e", fat: "#a63f29" };
 const COLORS_DARK = { carbs: "#f2b95c", protein: "#8fd0a6", fat: "#ee8a72" }; // lighter, for dark backgrounds
 
 export function MacroRing({ carbs, protein, fat, kcal, size = 132, onDark = false }: { carbs: number; protein: number; fat: number; kcal: number; size?: number; onDark?: boolean }) {

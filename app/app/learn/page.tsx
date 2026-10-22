@@ -17,7 +17,7 @@ export default function Learn() {
   return (
     <>
       <div>
-        <Link href="/app/discover" className="text-sm font-medium text-moss underline">← {t("nav.discover")}</Link>
+        <Link href="/app/discover" className="inline-block py-2 text-sm font-medium text-moss underline">← {t("nav.discover")}</Link>
         <h1 className="mt-2 font-display text-3xl font-semibold">{hi ? "सीखें" : "Learn"}</h1>
         <p className="mt-1 text-muted">{hi ? "रोज़ की ज़िंदगी के लिए छोटे, व्यावहारिक पाठ।" : "Short, practical lessons for everyday life with diabetes."}</p>
       </div>

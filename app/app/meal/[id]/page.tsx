@@ -50,7 +50,7 @@ export default function MealDetail() {
   return (
     <>
       <div className="rise-in">
-        <Link href="/app/progress" className="text-sm font-medium text-moss underline">← All meals</Link>
+        <Link href="/app/progress" className="inline-block py-2 text-sm font-medium text-moss underline">← All meals</Link>
         <p className="mt-3 text-sm text-muted">{MEAL_EMOJI[meal.meal_type]} {MEAL_LABEL[meal.meal_type]} · {new Date(meal.eaten_at).toLocaleString("en-IN", { dateStyle: "medium", timeStyle: "short" })}</p>
         <h1 className="font-display text-3xl font-semibold">{meal.text}</h1>
         <p className="mt-2 text-2xl" aria-hidden="true">{[...new Set(meal.items.map((i) => FOODS.find((f) => f.id === i.foodId)?.icon).filter(Boolean))].join(" ")}</p>

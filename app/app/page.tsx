@@ -189,7 +189,7 @@ export default function Today() {
         <Card>
           <div className="flex items-center justify-between">
             <h2 className="font-display text-xl font-semibold">{t("today.sugarToday")}</h2>
-            <Link href="/app/glucose" className="text-sm font-medium text-moss underline">{t("today.addImport")}</Link>
+            <Link href="/app/glucose" className="inline-block py-2 text-sm font-medium text-moss underline">{t("today.addImport")}</Link>
           </div>
           <div className="mt-2">
             <GlucoseChart

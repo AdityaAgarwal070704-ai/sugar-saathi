@@ -42,7 +42,7 @@ export default function Occasions() {
   return (
     <>
       <div>
-        <Link href="/app/discover" className="text-sm font-medium text-moss underline">← Discover</Link>
+        <Link href="/app/discover" className="inline-block py-2 text-sm font-medium text-moss underline">← Discover</Link>
         <h1 className="mt-2 font-display text-3xl font-semibold">Fasting and festivals</h1>
         <p className="mt-1 text-muted">Enjoy the occasion with a plan.</p>
       </div>

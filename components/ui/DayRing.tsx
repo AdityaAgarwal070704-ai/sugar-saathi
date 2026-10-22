@@ -4,7 +4,7 @@ export function DayRing({ value, max, size = 150, unit = "g", caption }: { value
   const r = 52;
   const c = 2 * Math.PI * r;
   const ratio = max > 0 ? value / max : 0;
-  const color = ratio <= 1 ? "#1b4d3e" : ratio <= 1.2 ? "#e9a23b" : "#b84a32";
+  const color = ratio <= 1 ? "#1b4d3e" : ratio <= 1.2 ? "#e9a23b" : "#a63f29";
   return (
     <svg width={size} height={size} viewBox="0 0 130 130" role="img" aria-label={`${value} ${unit} of ${max} ${unit} ${caption}`}>
       <circle cx="65" cy="65" r={r} fill="none" stroke="#f2e9da" strokeWidth="13" />

@@ -22,7 +22,7 @@ export default function CheckinCard({ checkin, text }: { checkin: Checkin; text:
         {checkin.highlights.map((h) => <li key={h}>• {h}</li>)}
       </ul>
       <div className="mt-4 rounded-2xl bg-white/12 px-4 py-3">
-        <p className="text-xs font-semibold uppercase tracking-wide text-saffron">{t("checkin.try")}</p>
+        <p className="text-xs font-semibold uppercase tracking-wide text-[#f2b95c]">{t("checkin.try")}</p>
         <p className="mt-1">{checkin.tryThis}</p>
       </div>
       <div className="mt-4 flex flex-wrap gap-2">

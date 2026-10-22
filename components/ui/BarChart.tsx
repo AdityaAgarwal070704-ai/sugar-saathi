@@ -22,7 +22,7 @@ export function BarChart({ bars, goal, unit = "g", height = 140, ariaLabel }: { 
         const w = bw * 0.64;
         return (
           <g key={b.label + i}>
-            <rect x={x} y={y(b.value)} width={w} height={Math.max(0, H - pad.b - y(b.value))} rx="4" fill={b.value === 0 ? "#f2e9da" : over ? "#b84a32" : "#e9a23b"} />
+            <rect x={x} y={y(b.value)} width={w} height={Math.max(0, H - pad.b - y(b.value))} rx="4" fill={b.value === 0 ? "#f2e9da" : over ? "#a63f29" : "#e9a23b"} />
             {b.value > 0 && bars.length <= 14 && <text x={x + w / 2} y={y(b.value) - 3} textAnchor="middle" style={{ font: "600 9px var(--font-dm-sans)", fill: "#1f2a24" }}>{Math.round(b.value)}</text>}
             {(bars.length <= 10 || i % Math.ceil(bars.length / 8) === 0) && <text x={x + w / 2} y={H - 7} textAnchor="middle" style={{ font: "9px var(--font-dm-sans)", fill: "#5b6b61" }}>{b.label}</text>}
           </g>

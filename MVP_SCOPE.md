@@ -1,3 +1,5 @@
+> **Status:** this is the original hackathon MVP scope. The product has since grown into a free, no-account daily companion for Indian diabetes food and glucose. See [PRODUCT.md](PRODUCT.md) and [README.md](README.md) for what is built now. The rules in "Limitations" below still apply.
+
 # Sugar Saathi – MVP Scope (reference)
 
 Source: "Sugar Saathi – MVP Scope.docx" (Oct 21, 2026, Aditya Agarwal). Build-relevant parts only; the original has the research, sources and Apify dataset IDs.

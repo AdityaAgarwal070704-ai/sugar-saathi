@@ -20,7 +20,7 @@ export default function Recipes() {
     <>
       <div className="flex flex-wrap items-end justify-between gap-3">
         <div>
-          <Link href="/app/discover" className="text-sm font-medium text-moss underline">← Discover</Link>
+          <Link href="/app/discover" className="inline-block py-2 text-sm font-medium text-moss underline">← Discover</Link>
           <h1 className="mt-2 font-display text-3xl font-semibold">My dishes</h1>
           <p className="mt-1 text-muted">Home-cooked dishes with nutrition worked out from your own ingredients.</p>
         </div>

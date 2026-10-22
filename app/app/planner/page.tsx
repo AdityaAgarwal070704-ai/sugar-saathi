@@ -10,7 +10,7 @@ export default function PlannerPage() {
   return (
     <>
       <div>
-        <Link href="/app/discover" className="text-sm font-medium text-moss underline">← Discover</Link>
+        <Link href="/app/discover" className="inline-block py-2 text-sm font-medium text-moss underline">← Discover</Link>
         <h1 className="mt-2 font-display text-3xl font-semibold">Day meal planner</h1>
         <p className="mt-1 text-muted">Ideas for a full day of Indian meals that fit your carb goal.</p>
       </div>

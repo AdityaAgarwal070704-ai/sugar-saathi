@@ -10,7 +10,7 @@ export default function RoutinePage() {
   return (
     <>
       <div>
-        <Link href="/app/me" className="text-sm font-medium text-moss underline">← Me</Link>
+        <Link href="/app/me" className="inline-block py-2 text-sm font-medium text-moss underline">← Me</Link>
         <h1 className="mt-2 font-display text-3xl font-semibold">Routine and reminders</h1>
         <p className="mt-1 text-muted">Build a daily rhythm you can keep.</p>
       </div>

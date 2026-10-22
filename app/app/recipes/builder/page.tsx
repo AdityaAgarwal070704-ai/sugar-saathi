@@ -15,7 +15,7 @@ export default function BuilderPage() {
   return (
     <>
       <div>
-        <Link href="/app/recipes" className="text-sm font-medium text-moss underline">← My dishes</Link>
+        <Link href="/app/recipes" className="inline-block py-2 text-sm font-medium text-moss underline">← My dishes</Link>
         <h1 className="mt-2 font-display text-3xl font-semibold">Recipe builder</h1>
         <p className="mt-1 text-muted">Cook by feel? Add your ingredients once and get nutrition for one serving.</p>
       </div>
