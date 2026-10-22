@@ -3,6 +3,7 @@ export type Category = "grain" | "dal" | "veg" | "protein" | "dairy" | "fruit" |
 export type Food = {
   id: string;
   name: string;
+  hi?: string; // Hindi name
   unit: string;
   carbs: number; // grams per one unit
   fibre: number; // grams per one unit
@@ -58,6 +59,7 @@ export type Profile = {
   glucose_low: number; // mg/dL
   glucose_high: number; // mg/dL
   diet: "veg" | "nonveg" | "egg";
+  language: "en" | "hi";
 };
 
 // ----- Habit layer (all stored in the browser)

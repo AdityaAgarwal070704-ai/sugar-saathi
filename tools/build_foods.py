@@ -278,7 +278,12 @@ R = [(*r[:10], sorted(set(r[10]) | ({"nonveg"} if r[0] in NONVEG else set()) | (
 ids=[r[0] for r in R]
 dups={i for i in ids if ids.count(i)>1}
 assert not dups, dups
-foods=[dict(id=i,name=n,unit=u,carbs=c,fibre=fi,protein=p,fat=f,gi=g,category=cat,icon=ic,tags=t) for (i,n,u,c,fi,p,f,g,cat,ic,t) in R]
+HI=json.load(open('tools/hi_names.json'))
+missing=[r[0] for r in R if r[0] not in HI]
+assert not missing, missing
+extra=[k for k in HI if k not in set(r[0] for r in R)]
+assert not extra, extra
+foods=[dict(id=i,name=n,hi=HI[i],unit=u,carbs=c,fibre=fi,protein=p,fat=f,gi=g,category=cat,icon=ic,tags=t) for (i,n,u,c,fi,p,f,g,cat,ic,t) in R]
 for f in foods:
     assert 0<=f['gi']<=100 and f['carbs']>=0 and f['fat']>=0 and f['protein']>=0 and f['fibre']>=0, f
     assert f['fibre']<=f['carbs']+8, f   # fibre can exceed available carbs slightly (e.g. legumes)

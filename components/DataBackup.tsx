@@ -3,9 +3,11 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/Button";
 import { store } from "@/lib/store";
+import { useT } from "@/lib/useT";
 
 export default function DataBackup() {
   const [msg, setMsg] = useState<{ ok: boolean; text: string } | null>(null);
+  const { t } = useT();
 
   const exportData = () => {
     const blob = new Blob([store.exportJson()], { type: "application/json" });
@@ -38,14 +40,14 @@ export default function DataBackup() {
 
   return (
     <div className="space-y-3">
-      <p className="text-muted">There are no accounts: your meals, readings and goals are stored only in this browser on this device. Clearing browser data or switching device loses them, so export a backup now and then.</p>
+      <p className="text-muted">{t("me.backupNote")}</p>
       <div className="flex flex-wrap items-center gap-2">
-        <Button variant="outline" onClick={exportData}>Export backup</Button>
+        <Button variant="outline" onClick={exportData}>{t("me.export")}</Button>
         <label className="inline-flex min-h-11 cursor-pointer items-center rounded-full border border-line bg-paper px-5 font-medium hover:bg-sand">
-          Restore from backup
+          {t("me.restore")}
           <input type="file" accept="application/json,.json" className="hidden" onChange={importData} />
         </label>
-        <Button variant="danger" onClick={clear}>Delete all my data</Button>
+        <Button variant="danger" onClick={clear}>{t("me.deleteAll")}</Button>
       </div>
       {msg && <p role="alert" className={msg.ok ? "text-leaf" : "text-terracotta"}>{msg.text}</p>}
     </div>

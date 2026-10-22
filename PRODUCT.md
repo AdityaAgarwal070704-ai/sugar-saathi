@@ -16,4 +16,4 @@ Landing, dashboard, log a meal, history, glucose (add and import), weekly insigh
 - **Code:** all carb, fibre, protein and glycemic-load maths; meal-to-glucose pairing; stats; tips and swaps; abuse limits; the dosing-language filter on all AI text.
 
 ## Out of scope for now
-Direct CGM or meter sync, photo and voice input, regional languages, medication logging, an educator-side dashboard, native mobile apps.
+Direct CGM or meter sync, languages other than English and Hindi, medication logging, an educator-side dashboard, native mobile apps.

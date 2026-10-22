@@ -1,5 +1,6 @@
-import type { Food, Profile, SavedItem } from "./types";
 import { nutritionOf } from "./carbs";
+import { foodName, tEn, type Lang, type MessageKey, type T } from "./i18n";
+import type { Food, Profile, SavedItem } from "./types";
 
 // Rule-based, deterministic meal feedback. Plain code, no AI.
 // Every line is a suggestion to discuss with an educator or doctor, never a medical instruction.
@@ -15,42 +16,45 @@ export type MealTips = {
   swaps: Swap[];
 };
 
-const SWAPS: Record<string, { to: string; note: string }> = {
-  white_rice: { to: "brown_rice", note: "brown rice has more fibre and a lower glycemic index" },
-  jeera_rice: { to: "brown_rice", note: "brown rice has more fibre and a lower glycemic index" },
-  naan: { to: "roti", note: "roti is a smaller, higher-fibre carb portion than naan" },
-  bhatura: { to: "roti", note: "roti is lighter and has more fibre" },
-  puri: { to: "roti", note: "roti avoids the deep-fried portion" },
-  plain_paratha: { to: "roti", note: "roti uses less oil for the same carb base" },
-  bread_slice: { to: "roti", note: "whole-wheat roti has more fibre" },
-  pav: { to: "roti", note: "whole-wheat roti has more fibre" },
-  plain_dosa: { to: "besan_chilla", note: "besan chilla has more protein and a lower glycemic index" },
-  masala_dosa: { to: "besan_chilla", note: "besan chilla has more protein and a lower glycemic index" },
-  poha: { to: "khichdi", note: "dal khichdi adds protein and fibre" },
-  aloo_sabzi: { to: "gobi_sabzi", note: "a non-starchy vegetable sabzi has fewer carbs" },
-  dal_makhani: { to: "dal", note: "plain dal has fewer carbs and less cream and butter" },
-  mango: { to: "apple", note: "apple has a lower glycemic index" },
-  banana: { to: "apple", note: "apple has a lower glycemic index" },
-  samosa: { to: "dhokla", note: "steamed dhokla avoids the deep-fried pastry" },
-  kulcha: { to: "roti", note: "roti is a lighter, higher-fibre choice" },
-  lachha_paratha: { to: "roti", note: "roti uses far less oil" },
-  cola: { to: "coconut_water", note: "coconut water has far less sugar than a soft drink" },
-  fruit_juice_packaged: { to: "orange", note: "the whole fruit keeps its fibre" },
-  lassi_sweet: { to: "lassi_salted", note: "salted lassi has far less sugar" },
-  sugarcane_juice: { to: "nimbu_pani_sugar", note: "nimbu pani has fewer carbs than sugarcane juice" },
-  chai_sugar: { to: "chai_nosugar", note: "skipping sugar in tea saves carbs every cup" },
-  coffee_sugar: { to: "black_coffee", note: "skipping sugar and milk saves carbs" },
-  biscuits: { to: "roasted_chana", note: "roasted chana adds protein and fibre" },
-  marie_biscuit: { to: "roasted_chana", note: "roasted chana adds protein and fibre" },
-  chips_packet: { to: "roasted_chana", note: "roasted chana is crunchy with more protein and fibre" },
-  maggi: { to: "poha", note: "poha with vegetables is more filling for similar carbs" },
-  pizza_slice: { to: "roti", note: "a roti-based plate has more fibre" },
-  french_fries: { to: "boiled_sweet_potato", note: "boiled sweet potato avoids the frying" },
-  fried_rice: { to: "pulao", note: "veg pulao is lighter on oil" },
-  jeera_aloo: { to: "bhindi_sabzi", note: "a non-starchy vegetable has fewer carbs" },
+const SWAPS: Record<string, { to: string; note: MessageKey }> = {
+  white_rice: { to: "brown_rice", note: "swap.brownrice" },
+  jeera_rice: { to: "brown_rice", note: "swap.brownrice" },
+  naan: { to: "roti", note: "swap.naan" },
+  bhatura: { to: "roti", note: "swap.light" },
+  puri: { to: "roti", note: "swap.fried" },
+  plain_paratha: { to: "roti", note: "swap.oil" },
+  bread_slice: { to: "roti", note: "swap.wheat" },
+  pav: { to: "roti", note: "swap.wheat" },
+  plain_dosa: { to: "besan_chilla", note: "swap.chilla" },
+  masala_dosa: { to: "besan_chilla", note: "swap.chilla" },
+  poha: { to: "khichdi", note: "swap.khichdi" },
+  aloo_sabzi: { to: "gobi_sabzi", note: "swap.sabzi" },
+  dal_makhani: { to: "dal", note: "swap.dal" },
+  mango: { to: "apple", note: "swap.apple" },
+  banana: { to: "apple", note: "swap.apple" },
+  samosa: { to: "dhokla", note: "swap.dhokla" },
+  kulcha: { to: "roti", note: "swap.light" },
+  lachha_paratha: { to: "roti", note: "swap.oilfar" },
+  cola: { to: "coconut_water", note: "swap.coconut" },
+  fruit_juice_packaged: { to: "orange", note: "swap.fruit" },
+  lassi_sweet: { to: "lassi_salted", note: "swap.lassi" },
+  sugarcane_juice: { to: "nimbu_pani_sugar", note: "swap.nimbu" },
+  chai_sugar: { to: "chai_nosugar", note: "swap.chai" },
+  coffee_sugar: { to: "black_coffee", note: "swap.coffee" },
+  marie_biscuit: { to: "roasted_chana", note: "swap.chana" },
+  chips_packet: { to: "roasted_chana", note: "swap.chanaCrunch" },
+  maggi: { to: "poha", note: "swap.poha" },
+  pizza_slice: { to: "roti", note: "swap.roti" },
+  french_fries: { to: "boiled_sweet_potato", note: "swap.sweetpotato" },
+  fried_rice: { to: "pulao", note: "swap.pulao" },
+  jeera_aloo: { to: "bhindi_sabzi", note: "swap.sabzi" },
 };
 
-export function mealTips(items: Pick<SavedItem, "foodId" | "count">[], foods: Food[], profile: Pick<Profile, "meal_carb_target">): MealTips {
+export type Loc = { t: T; lang: Lang };
+export const EN: Loc = { t: tEn, lang: "en" };
+
+export function mealTips(items: Pick<SavedItem, "foodId" | "count">[], foods: Food[], profile: Pick<Profile, "meal_carb_target">, loc: Loc = EN): MealTips {
+  const { t, lang } = loc;
   const byId = new Map(foods.map((f) => [f.id, f]));
   const lines = items.map((i) => ({ ...i, food: byId.get(i.foodId) })).filter((l) => l.food);
   const n = nutritionOf(items, foods);
@@ -66,51 +70,37 @@ export function mealTips(items: Pick<SavedItem, "foodId" | "count">[], foods: Fo
   let rating: Rating = "moderate";
   if (n.carbs > target * 1.2 || n.gl >= 35) rating = "higher";
   else if (n.carbs <= target * 0.8 && n.gl <= 20) rating = "lower";
-  const headline =
-    rating === "higher"
-      ? `A higher-carb meal: about ${n.carbs} g carbs (glycemic load about ${n.gl}).`
-      : rating === "lower"
-        ? `A lighter-carb meal: about ${n.carbs} g carbs (glycemic load about ${n.gl}).`
-        : `A moderate meal: about ${n.carbs} g carbs (glycemic load about ${n.gl}).`;
+  const headline = t(`tips.head.${rating}` as MessageKey, { c: n.carbs, gl: n.gl });
 
   // What's good
-  if (has("dal")) good.push("Dal or legumes bring fibre and protein, which slow down how fast carbs are absorbed.");
-  if (has("veg")) good.push("There is a vegetable in this meal, which adds fibre.");
-  if (n.protein >= 15) good.push(`Good protein for one meal (about ${n.protein} g).`);
-  if (n.fibre >= 6) good.push(`Good fibre (about ${n.fibre} g).`);
-  if (lines.some((l) => l.food!.gi <= 40 && l.food!.carbs * l.count >= 5)) {
-    good.push("It includes a low glycemic index food, which tends to raise glucose more gently.");
-  }
-  if (rating === "lower") good.push("Carbs are comfortably within your per-meal goal.");
+  if (has("dal")) good.push(t("tips.good.dal"));
+  if (has("veg")) good.push(t("tips.good.veg"));
+  if (n.protein >= 15) good.push(t("tips.good.protein", { n: n.protein }));
+  if (n.fibre >= 6) good.push(t("tips.good.fibre", { n: n.fibre }));
+  if (lines.some((l) => l.food!.gi <= 40 && l.food!.carbs * l.count >= 5)) good.push(t("tips.good.lowgi"));
+  if (rating === "lower") good.push(t("tips.good.within"));
 
   // What could be better
   if (n.carbs > target) {
     const biggest = [...lines].sort((a, b) => carbOf(b) - carbOf(a))[0];
-    if (biggest) {
-      const half = Math.round(carbOf(biggest) / 2);
-      improve.push(
-        `About ${n.carbs} g carbs is above your ${target} g per-meal goal. A smaller portion of ${biggest.food!.name} (say half) would save about ${half} g.`,
-      );
-    }
+    if (biggest) improve.push(t("tips.imp.over", { c: n.carbs, t: target, dish: foodName(biggest.food!, lang), s: Math.round(carbOf(biggest) / 2) }));
   }
   const refined = lines.filter((l) => ["grain"].includes(l.food!.category) && l.food!.fibre / Math.max(l.food!.carbs, 1) < 0.1);
   const refinedCarbs = refined.reduce((a, l) => a + carbOf(l), 0);
-  if (n.carbs > 0 && refinedCarbs / n.carbs >= 0.6) {
-    improve.push("Most of the carbs here come from refined grains. Pairing them with dal, vegetables or curd can help balance the meal.");
-  }
-  if (!has("veg") && !has("dal") && has("grain")) improve.push("No vegetable or dal on the plate. Adding a sabzi, salad or dal adds fibre.");
-  if (n.protein < 10) improve.push(`Low in protein (about ${n.protein} g). Curd, paneer, egg or dal alongside can help.`);
-  else if (n.fibre < 4) improve.push(`Low in fibre (about ${n.fibre} g). Vegetables, salad or whole grains can add more.`);
-  if (has("sweet")) improve.push("Sweets are best kept as a small, occasional portion. Worth discussing with your educator.");
-  if (lines.some((l) => ["chai_sugar", "coffee_sugar", "cola", "fruit_juice_packaged", "sugarcane_juice", "lassi_sweet"].includes(l.food!.id))) improve.push("Sweet drinks add carbs quickly, with nothing to slow them down. Worth discussing how often with your educator.");
+  if (n.carbs > 0 && refinedCarbs / n.carbs >= 0.6) improve.push(t("tips.imp.refined"));
+  if (!has("veg") && !has("dal") && has("grain")) improve.push(t("tips.imp.noveg"));
+  if (n.protein < 10) improve.push(t("tips.imp.lowprotein", { n: n.protein }));
+  else if (n.fibre < 4) improve.push(t("tips.imp.lowfibre", { n: n.fibre }));
+  if (has("sweet")) improve.push(t("tips.imp.sweets"));
+  if (lines.some((l) => ["chai_sugar", "coffee_sugar", "cola", "fruit_juice_packaged", "sugarcane_juice", "lassi_sweet"].includes(l.food!.id))) improve.push(t("tips.imp.drinks"));
 
   // Swaps
   for (const l of lines) {
-    const s = SWAPS[l.food!.id];
-    const to = s && byId.get(s.to);
-    if (!s || !to || lines.some((x) => x.food!.id === to.id)) continue;
+    const sw = SWAPS[l.food!.id];
+    const to = sw && byId.get(sw.to);
+    if (!sw || !to || lines.some((x) => x.food!.id === to.id)) continue;
     const saves = Math.round(l.food!.carbs * l.count - to.carbs * l.count);
-    if (saves >= 3) swaps.push({ from: l.food!.name, to: to.name, saves, note: s.note });
+    if (saves >= 3) swaps.push({ from: foodName(l.food!, lang), to: foodName(to, lang), saves, note: t(sw.note) });
   }
   swaps.sort((a, b) => b.saves - a.saves);
 

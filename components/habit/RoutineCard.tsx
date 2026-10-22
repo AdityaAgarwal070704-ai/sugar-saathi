@@ -5,17 +5,19 @@ import { Card } from "@/components/ui/Card";
 import { dayKey } from "@/lib/day";
 import { store, useStore } from "@/lib/store";
 import { nowMs } from "@/lib/time";
+import { useT } from "@/lib/useT";
 
 export default function RoutineCard() {
   const { routine, ticks } = useStore();
+  const { t } = useT();
   const today = dayKey(new Date(nowMs()));
   const done = ticks[today] ?? [];
   if (routine.length === 0) {
     return (
       <Card tone="sand">
-        <h2 className="font-display text-xl font-semibold">Today&apos;s routine</h2>
-        <p className="mt-1 text-sm text-muted">Add small daily habits you want to keep, like a walk, water or a morning check.</p>
-        <Link href="/app/routine" className="mt-2 inline-block text-sm font-medium text-moss underline">Set up my routine</Link>
+        <h2 className="font-display text-xl font-semibold">{t("routine.title")}</h2>
+        <p className="mt-1 text-sm text-muted">{t("routine.emptyBody")}</p>
+        <Link href="/app/routine" className="mt-2 inline-block text-sm font-medium text-moss underline">{t("routine.setup")}</Link>
       </Card>
     );
   }
@@ -23,8 +25,8 @@ export default function RoutineCard() {
   return (
     <Card>
       <div className="flex items-baseline justify-between gap-3">
-        <h2 className="font-display text-xl font-semibold">Today&apos;s routine</h2>
-        <span className="tabular text-sm text-muted">{count} of {routine.length}</span>
+        <h2 className="font-display text-xl font-semibold">{t("routine.title")}</h2>
+        <span className="tabular text-sm text-muted">{t("routine.of", { a: count, b: routine.length })}</span>
       </div>
       <ul className="mt-3 space-y-2">
         {routine.map((r) => {
@@ -40,7 +42,7 @@ export default function RoutineCard() {
           );
         })}
       </ul>
-      <Link href="/app/routine" className="mt-3 inline-block text-sm font-medium text-moss underline">Edit routine and reminders</Link>
+      <Link href="/app/routine" className="mt-3 inline-block text-sm font-medium text-moss underline">{t("routine.edit")}</Link>
     </Card>
   );
 }

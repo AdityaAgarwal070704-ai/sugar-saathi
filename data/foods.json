@@ -4,6 +4,7 @@
   {
    "id": "roti",
    "name": "Roti / chapati / phulka",
+   "hi": "रोटी / चपाती / फुलका",
    "unit": "piece",
    "carbs": 15,
    "fibre": 2.0,
@@ -17,6 +18,7 @@
   {
    "id": "plain_paratha",
    "name": "Plain paratha",
+   "hi": "सादा पराठा",
    "unit": "piece",
    "carbs": 22,
    "fibre": 2.5,
@@ -30,6 +32,7 @@
   {
    "id": "aloo_paratha",
    "name": "Aloo paratha",
+   "hi": "आलू पराठा",
    "unit": "piece",
    "carbs": 32,
    "fibre": 3,
@@ -43,6 +46,7 @@
   {
    "id": "gobi_paratha",
    "name": "Gobi paratha",
+   "hi": "गोभी पराठा",
    "unit": "piece",
    "carbs": 28,
    "fibre": 3,
@@ -56,6 +60,7 @@
   {
    "id": "paneer_paratha",
    "name": "Paneer paratha",
+   "hi": "पनीर पराठा",
    "unit": "piece",
    "carbs": 30,
    "fibre": 2.5,
@@ -69,6 +74,7 @@
   {
    "id": "methi_paratha",
    "name": "Methi paratha",
+   "hi": "मेथी पराठा",
    "unit": "piece",
    "carbs": 22,
    "fibre": 3,
@@ -82,6 +88,7 @@
   {
    "id": "lachha_paratha",
    "name": "Lachha paratha",
+   "hi": "लच्छा पराठा",
    "unit": "piece",
    "carbs": 28,
    "fibre": 1.5,
@@ -97,6 +104,7 @@
   {
    "id": "thepla",
    "name": "Thepla",
+   "hi": "थेपला",
    "unit": "piece",
    "carbs": 14,
    "fibre": 2,
@@ -110,6 +118,7 @@
   {
    "id": "missi_roti",
    "name": "Missi roti (besan + atta)",
+   "hi": "मिस्सी रोटी",
    "unit": "piece",
    "carbs": 16,
    "fibre": 3,
@@ -123,6 +132,7 @@
   {
    "id": "bajra_roti",
    "name": "Bajra roti",
+   "hi": "बाजरे की रोटी",
    "unit": "piece",
    "carbs": 18,
    "fibre": 2.5,
@@ -136,6 +146,7 @@
   {
    "id": "jowar_roti",
    "name": "Jowar roti",
+   "hi": "ज्वार की रोटी",
    "unit": "piece",
    "carbs": 17,
    "fibre": 2.5,
@@ -149,6 +160,7 @@
   {
    "id": "ragi_roti",
    "name": "Ragi roti",
+   "hi": "रागी की रोटी",
    "unit": "piece",
    "carbs": 18,
    "fibre": 2.5,
@@ -162,6 +174,7 @@
   {
    "id": "makki_roti",
    "name": "Makki di roti",
+   "hi": "मक्के की रोटी",
    "unit": "piece",
    "carbs": 20,
    "fibre": 2.5,
@@ -175,6 +188,7 @@
   {
    "id": "tandoori_roti",
    "name": "Tandoori roti",
+   "hi": "तंदूरी रोटी",
    "unit": "piece",
    "carbs": 22,
    "fibre": 2.5,
@@ -190,6 +204,7 @@
   {
    "id": "rumali_roti",
    "name": "Rumali roti",
+   "hi": "रूमाली रोटी",
    "unit": "piece",
    "carbs": 15,
    "fibre": 1,
@@ -205,6 +220,7 @@
   {
    "id": "naan",
    "name": "Naan",
+   "hi": "नान",
    "unit": "piece",
    "carbs": 45,
    "fibre": 2,
@@ -220,6 +236,7 @@
   {
    "id": "kulcha",
    "name": "Kulcha",
+   "hi": "कुलचा",
    "unit": "piece",
    "carbs": 35,
    "fibre": 1.5,
@@ -235,6 +252,7 @@
   {
    "id": "puri",
    "name": "Puri",
+   "hi": "पूरी",
    "unit": "piece",
    "carbs": 12,
    "fibre": 1,
@@ -248,6 +266,7 @@
   {
    "id": "luchi",
    "name": "Luchi",
+   "hi": "लुची",
    "unit": "piece",
    "carbs": 12,
    "fibre": 0.5,
@@ -261,6 +280,7 @@
   {
    "id": "bhatura",
    "name": "Bhatura",
+   "hi": "भटूरा",
    "unit": "piece",
    "carbs": 35,
    "fibre": 2,
@@ -276,6 +296,7 @@
   {
    "id": "puran_poli",
    "name": "Puran poli",
+   "hi": "पूरन पोली",
    "unit": "piece",
    "carbs": 45,
    "fibre": 2.5,
@@ -291,6 +312,7 @@
   {
    "id": "plain_dosa",
    "name": "Plain dosa",
+   "hi": "सादा डोसा",
    "unit": "piece",
    "carbs": 25,
    "fibre": 1,
@@ -304,6 +326,7 @@
   {
    "id": "masala_dosa",
    "name": "Masala dosa",
+   "hi": "मसाला डोसा",
    "unit": "piece",
    "carbs": 42,
    "fibre": 3,
@@ -319,6 +342,7 @@
   {
    "id": "rava_dosa",
    "name": "Rava dosa",
+   "hi": "रवा डोसा",
    "unit": "piece",
    "carbs": 25,
    "fibre": 1,
@@ -334,6 +358,7 @@
   {
    "id": "pesarattu",
    "name": "Pesarattu (moong dosa)",
+   "hi": "पेसरट्टू (मूंग डोसा)",
    "unit": "piece",
    "carbs": 15,
    "fibre": 3,
@@ -347,6 +372,7 @@
   {
    "id": "adai",
    "name": "Adai (mixed dal dosa)",
+   "hi": "अडाई (मिक्स दाल डोसा)",
    "unit": "piece",
    "carbs": 18,
    "fibre": 3,
@@ -360,6 +386,7 @@
   {
    "id": "uttapam",
    "name": "Uttapam",
+   "hi": "उत्तपम",
    "unit": "piece",
    "carbs": 30,
    "fibre": 2,
@@ -373,6 +400,7 @@
   {
    "id": "idli",
    "name": "Idli",
+   "hi": "इडली",
    "unit": "piece",
    "carbs": 8,
    "fibre": 1,
@@ -386,6 +414,7 @@
   {
    "id": "rava_idli",
    "name": "Rava idli",
+   "hi": "रवा इडली",
    "unit": "piece",
    "carbs": 12,
    "fibre": 1,
@@ -399,6 +428,7 @@
   {
    "id": "appam",
    "name": "Appam",
+   "hi": "अप्पम",
    "unit": "piece",
    "carbs": 18,
    "fibre": 0.5,
@@ -412,6 +442,7 @@
   {
    "id": "idiyappam",
    "name": "Idiyappam (string hoppers)",
+   "hi": "इडियप्पम",
    "unit": "piece",
    "carbs": 12,
    "fibre": 0.5,
@@ -425,6 +456,7 @@
   {
    "id": "besan_chilla",
    "name": "Besan chilla",
+   "hi": "बेसन चीला",
    "unit": "piece",
    "carbs": 12,
    "fibre": 2,
@@ -438,6 +470,7 @@
   {
    "id": "moong_cheela",
    "name": "Moong dal cheela",
+   "hi": "मूंग दाल चीला",
    "unit": "piece",
    "carbs": 10,
    "fibre": 2,
@@ -451,6 +484,7 @@
   {
    "id": "bread_slice",
    "name": "Bread slice",
+   "hi": "ब्रेड स्लाइस",
    "unit": "piece",
    "carbs": 13,
    "fibre": 1,
@@ -464,6 +498,7 @@
   {
    "id": "pav",
    "name": "Pav",
+   "hi": "पाव",
    "unit": "piece",
    "carbs": 18,
    "fibre": 1,
@@ -477,6 +512,7 @@
   {
    "id": "white_rice",
    "name": "Steamed white rice",
+   "hi": "सादा चावल",
    "unit": "katori",
    "carbs": 40,
    "fibre": 0.5,
@@ -490,6 +526,7 @@
   {
    "id": "brown_rice",
    "name": "Brown rice",
+   "hi": "ब्राउन राइस",
    "unit": "katori",
    "carbs": 36,
    "fibre": 3,
@@ -503,6 +540,7 @@
   {
    "id": "jeera_rice",
    "name": "Jeera rice",
+   "hi": "जीरा राइस",
    "unit": "katori",
    "carbs": 42,
    "fibre": 1,
@@ -518,6 +556,7 @@
   {
    "id": "curd_rice",
    "name": "Curd rice",
+   "hi": "दही चावल",
    "unit": "katori",
    "carbs": 30,
    "fibre": 0.5,
@@ -531,6 +570,7 @@
   {
    "id": "lemon_rice",
    "name": "Lemon rice",
+   "hi": "नींबू चावल",
    "unit": "katori",
    "carbs": 40,
    "fibre": 1,
@@ -544,6 +584,7 @@
   {
    "id": "tamarind_rice",
    "name": "Tamarind rice (puliyogare)",
+   "hi": "इमली चावल (पुलियोगरे)",
    "unit": "katori",
    "carbs": 40,
    "fibre": 1,
@@ -557,6 +598,7 @@
   {
    "id": "tomato_rice",
    "name": "Tomato rice",
+   "hi": "टमाटर चावल",
    "unit": "katori",
    "carbs": 40,
    "fibre": 1.5,
@@ -570,6 +612,7 @@
   {
    "id": "pulao",
    "name": "Veg pulao",
+   "hi": "वेज पुलाव",
    "unit": "katori",
    "carbs": 38,
    "fibre": 3,
@@ -583,6 +626,7 @@
   {
    "id": "veg_biryani",
    "name": "Veg biryani",
+   "hi": "वेज बिरयानी",
    "unit": "katori",
    "carbs": 40,
    "fibre": 3,
@@ -598,6 +642,7 @@
   {
    "id": "chicken_biryani",
    "name": "Chicken biryani",
+   "hi": "चिकन बिरयानी",
    "unit": "katori",
    "carbs": 42,
    "fibre": 1.5,
@@ -614,6 +659,7 @@
   {
    "id": "egg_biryani",
    "name": "Egg biryani",
+   "hi": "अंडा बिरयानी",
    "unit": "katori",
    "carbs": 41,
    "fibre": 1.5,
@@ -630,6 +676,7 @@
   {
    "id": "mutton_biryani",
    "name": "Mutton biryani",
+   "hi": "मटन बिरयानी",
    "unit": "katori",
    "carbs": 42,
    "fibre": 1.5,
@@ -647,6 +694,7 @@
   {
    "id": "khichdi",
    "name": "Dal khichdi",
+   "hi": "दाल खिचड़ी",
    "unit": "katori",
    "carbs": 30,
    "fibre": 4,
@@ -660,6 +708,7 @@
   {
    "id": "millet_khichdi",
    "name": "Millet khichdi",
+   "hi": "मिलेट खिचड़ी",
    "unit": "katori",
    "carbs": 30,
    "fibre": 4,
@@ -673,6 +722,7 @@
   {
    "id": "bisi_bele_bath",
    "name": "Bisi bele bath",
+   "hi": "बिसी बेले बाथ",
    "unit": "katori",
    "carbs": 40,
    "fibre": 4,
@@ -686,6 +736,7 @@
   {
    "id": "pongal",
    "name": "Ven pongal",
+   "hi": "वेन पोंगल",
    "unit": "katori",
    "carbs": 35,
    "fibre": 2,
@@ -699,6 +750,7 @@
   {
    "id": "poha",
    "name": "Poha",
+   "hi": "पोहा",
    "unit": "katori",
    "carbs": 30,
    "fibre": 2,
@@ -712,6 +764,7 @@
   {
    "id": "upma",
    "name": "Upma",
+   "hi": "उपमा",
    "unit": "katori",
    "carbs": 30,
    "fibre": 2,
@@ -725,6 +778,7 @@
   {
    "id": "semiya_upma",
    "name": "Semiya (vermicelli) upma",
+   "hi": "सेवइयां उपमा",
    "unit": "katori",
    "carbs": 32,
    "fibre": 2,
@@ -738,6 +792,7 @@
   {
    "id": "daliya",
    "name": "Daliya (broken wheat) porridge",
+   "hi": "दलिया",
    "unit": "katori",
    "carbs": 30,
    "fibre": 4,
@@ -751,6 +806,7 @@
   {
    "id": "oats_porridge",
    "name": "Oats porridge (no sugar)",
+   "hi": "ओट्स दलिया (बिना चीनी)",
    "unit": "katori",
    "carbs": 20,
    "fibre": 3,
@@ -764,6 +820,7 @@
   {
    "id": "ragi_mudde",
    "name": "Ragi mudde (ball)",
+   "hi": "रागी मुद्दे",
    "unit": "ball",
    "carbs": 40,
    "fibre": 3,
@@ -777,6 +834,7 @@
   {
    "id": "sabudana_khichdi",
    "name": "Sabudana khichdi",
+   "hi": "साबूदाना खिचड़ी",
    "unit": "katori",
    "carbs": 40,
    "fibre": 2,
@@ -792,6 +850,7 @@
   {
    "id": "dal",
    "name": "Dal (plain toor / moong / masoor)",
+   "hi": "दाल (तुअर / मूंग / मसूर)",
    "unit": "katori",
    "carbs": 15,
    "fibre": 5,
@@ -805,6 +864,7 @@
   {
    "id": "dal_tadka",
    "name": "Dal tadka",
+   "hi": "दाल तड़का",
    "unit": "katori",
    "carbs": 15,
    "fibre": 5,
@@ -820,6 +880,7 @@
   {
    "id": "dal_makhani",
    "name": "Dal makhani",
+   "hi": "दाल मखनी",
    "unit": "katori",
    "carbs": 18,
    "fibre": 6,
@@ -835,6 +896,7 @@
   {
    "id": "moong_dal",
    "name": "Moong dal",
+   "hi": "मूंग दाल",
    "unit": "katori",
    "carbs": 14,
    "fibre": 4,
@@ -848,6 +910,7 @@
   {
    "id": "masoor_dal",
    "name": "Masoor dal",
+   "hi": "मसूर दाल",
    "unit": "katori",
    "carbs": 14,
    "fibre": 4,
@@ -861,6 +924,7 @@
   {
    "id": "chana_dal",
    "name": "Chana dal",
+   "hi": "चना दाल",
    "unit": "katori",
    "carbs": 18,
    "fibre": 6,
@@ -874,6 +938,7 @@
   {
    "id": "urad_dal",
    "name": "Urad dal",
+   "hi": "उड़द दाल",
    "unit": "katori",
    "carbs": 14,
    "fibre": 5,
@@ -887,6 +952,7 @@
   {
    "id": "dal_palak",
    "name": "Dal palak",
+   "hi": "दाल पालक",
    "unit": "katori",
    "carbs": 14,
    "fibre": 5,
@@ -900,6 +966,7 @@
   {
    "id": "rajma",
    "name": "Rajma curry",
+   "hi": "राजमा",
    "unit": "katori",
    "carbs": 22,
    "fibre": 8,
@@ -913,6 +980,7 @@
   {
    "id": "chole",
    "name": "Chole / chana masala",
+   "hi": "छोले / चना मसाला",
    "unit": "katori",
    "carbs": 25,
    "fibre": 9,
@@ -926,6 +994,7 @@
   {
    "id": "black_chana",
    "name": "Kala chana curry",
+   "hi": "काला चना",
    "unit": "katori",
    "carbs": 20,
    "fibre": 7,
@@ -939,6 +1008,7 @@
   {
    "id": "sambar",
    "name": "Sambar",
+   "hi": "सांभर",
    "unit": "katori",
    "carbs": 12,
    "fibre": 3,
@@ -952,6 +1022,7 @@
   {
    "id": "rasam",
    "name": "Rasam",
+   "hi": "रसम",
    "unit": "katori",
    "carbs": 5,
    "fibre": 0.8,
@@ -965,6 +1036,7 @@
   {
    "id": "kadhi",
    "name": "Kadhi",
+   "hi": "कढ़ी",
    "unit": "katori",
    "carbs": 10,
    "fibre": 1,
@@ -978,6 +1050,7 @@
   {
    "id": "sprouts_salad",
    "name": "Sprouts salad",
+   "hi": "अंकुरित अनाज का सलाद",
    "unit": "katori",
    "carbs": 12,
    "fibre": 5,
@@ -991,6 +1064,7 @@
   {
    "id": "boiled_chana",
    "name": "Boiled chana",
+   "hi": "उबला चना",
    "unit": "katori",
    "carbs": 22,
    "fibre": 6,
@@ -1004,6 +1078,7 @@
   {
    "id": "soya_chunks",
    "name": "Soya chunks curry",
+   "hi": "सोया चंक्स की सब्जी",
    "unit": "katori",
    "carbs": 8,
    "fibre": 5,
@@ -1017,6 +1092,7 @@
   {
    "id": "aloo_sabzi",
    "name": "Aloo sabzi",
+   "hi": "आलू की सब्जी",
    "unit": "katori",
    "carbs": 18,
    "fibre": 3,
@@ -1030,6 +1106,7 @@
   {
    "id": "jeera_aloo",
    "name": "Jeera aloo",
+   "hi": "जीरा आलू",
    "unit": "katori",
    "carbs": 20,
    "fibre": 2.5,
@@ -1043,6 +1120,7 @@
   {
    "id": "aloo_gobi",
    "name": "Aloo gobi",
+   "hi": "आलू गोभी",
    "unit": "katori",
    "carbs": 14,
    "fibre": 3,
@@ -1056,6 +1134,7 @@
   {
    "id": "aloo_matar",
    "name": "Aloo matar",
+   "hi": "आलू मटर",
    "unit": "katori",
    "carbs": 18,
    "fibre": 4,
@@ -1069,6 +1148,7 @@
   {
    "id": "bhindi_sabzi",
    "name": "Bhindi sabzi",
+   "hi": "भिंडी की सब्जी",
    "unit": "katori",
    "carbs": 8,
    "fibre": 3,
@@ -1082,6 +1162,7 @@
   {
    "id": "gobi_sabzi",
    "name": "Gobi sabzi",
+   "hi": "गोभी की सब्जी",
    "unit": "katori",
    "carbs": 8,
    "fibre": 3,
@@ -1095,6 +1176,7 @@
   {
    "id": "lauki_sabzi",
    "name": "Lauki sabzi",
+   "hi": "लौकी की सब्जी",
    "unit": "katori",
    "carbs": 6,
    "fibre": 2,
@@ -1108,6 +1190,7 @@
   {
    "id": "turai_sabzi",
    "name": "Turai / tori sabzi",
+   "hi": "तोरी की सब्जी",
    "unit": "katori",
    "carbs": 6,
    "fibre": 2,
@@ -1121,6 +1204,7 @@
   {
    "id": "karela_sabzi",
    "name": "Karela sabzi",
+   "hi": "करेले की सब्जी",
    "unit": "katori",
    "carbs": 7,
    "fibre": 3.5,
@@ -1134,6 +1218,7 @@
   {
    "id": "baingan_bharta",
    "name": "Baingan bharta",
+   "hi": "बैंगन का भरता",
    "unit": "katori",
    "carbs": 8,
    "fibre": 3,
@@ -1147,6 +1232,7 @@
   {
    "id": "mixed_veg",
    "name": "Mixed vegetable sabzi",
+   "hi": "मिक्स वेज सब्जी",
    "unit": "katori",
    "carbs": 10,
    "fibre": 4,
@@ -1160,6 +1246,7 @@
   {
    "id": "poriyal",
    "name": "Vegetable poriyal (dry stir-fry)",
+   "hi": "पोरियल (सूखी सब्जी)",
    "unit": "katori",
    "carbs": 8,
    "fibre": 3,
@@ -1173,6 +1260,7 @@
   {
    "id": "kootu",
    "name": "Kootu (veg + dal)",
+   "hi": "कूटू (सब्जी + दाल)",
    "unit": "katori",
    "carbs": 12,
    "fibre": 4,
@@ -1186,6 +1274,7 @@
   {
    "id": "avial",
    "name": "Avial",
+   "hi": "अविअल",
    "unit": "katori",
    "carbs": 12,
    "fibre": 3,
@@ -1199,6 +1288,7 @@
   {
    "id": "mushroom_masala",
    "name": "Mushroom masala",
+   "hi": "मशरूम मसाला",
    "unit": "katori",
    "carbs": 7,
    "fibre": 2,
@@ -1212,6 +1302,7 @@
   {
    "id": "lauki_kofta",
    "name": "Lauki kofta curry",
+   "hi": "लौकी कोफ्ता",
    "unit": "katori",
    "carbs": 12,
    "fibre": 2,
@@ -1225,6 +1316,7 @@
   {
    "id": "gatte_sabzi",
    "name": "Gatte ki sabzi",
+   "hi": "गट्टे की सब्जी",
    "unit": "katori",
    "carbs": 18,
    "fibre": 3,
@@ -1238,6 +1330,7 @@
   {
    "id": "undhiyu",
    "name": "Undhiyu",
+   "hi": "उंधियू",
    "unit": "katori",
    "carbs": 18,
    "fibre": 4,
@@ -1253,6 +1346,7 @@
   {
    "id": "sarson_saag",
    "name": "Sarson ka saag",
+   "hi": "सरसों का साग",
    "unit": "katori",
    "carbs": 8,
    "fibre": 4,
@@ -1266,6 +1360,7 @@
   {
    "id": "pav_bhaji",
    "name": "Pav bhaji (bhaji, 1 katori)",
+   "hi": "पाव भाजी (भाजी)",
    "unit": "katori",
    "carbs": 25,
    "fibre": 4,
@@ -1281,6 +1376,7 @@
   {
    "id": "boiled_potato",
    "name": "Boiled potato",
+   "hi": "उबला आलू",
    "unit": "piece",
    "carbs": 17,
    "fibre": 2,
@@ -1294,6 +1390,7 @@
   {
    "id": "boiled_sweet_potato",
    "name": "Boiled sweet potato",
+   "hi": "उबला शकरकंद",
    "unit": "piece",
    "carbs": 25,
    "fibre": 3.5,
@@ -1307,6 +1404,7 @@
   {
    "id": "corn_on_cob",
    "name": "Corn on the cob (bhutta)",
+   "hi": "भुट्टा",
    "unit": "piece",
    "carbs": 25,
    "fibre": 3,
@@ -1320,6 +1418,7 @@
   {
    "id": "salad",
    "name": "Salad (cucumber, tomato, onion)",
+   "hi": "सलाद (खीरा, टमाटर, प्याज़)",
    "unit": "katori",
    "carbs": 5,
    "fibre": 1.5,
@@ -1333,6 +1432,7 @@
   {
    "id": "cucumber",
    "name": "Cucumber",
+   "hi": "खीरा",
    "unit": "piece",
    "carbs": 3,
    "fibre": 0.5,
@@ -1346,6 +1446,7 @@
   {
    "id": "palak_paneer",
    "name": "Palak paneer",
+   "hi": "पालक पनीर",
    "unit": "katori",
    "carbs": 7,
    "fibre": 3,
@@ -1361,6 +1462,7 @@
   {
    "id": "paneer_butter_masala",
    "name": "Paneer butter masala",
+   "hi": "पनीर बटर मसाला",
    "unit": "katori",
    "carbs": 10,
    "fibre": 2,
@@ -1376,6 +1478,7 @@
   {
    "id": "matar_paneer",
    "name": "Matar paneer",
+   "hi": "मटर पनीर",
    "unit": "katori",
    "carbs": 10,
    "fibre": 3,
@@ -1391,6 +1494,7 @@
   {
    "id": "shahi_paneer",
    "name": "Shahi paneer",
+   "hi": "शाही पनीर",
    "unit": "katori",
    "carbs": 10,
    "fibre": 1.5,
@@ -1407,6 +1511,7 @@
   {
    "id": "kadai_paneer",
    "name": "Kadai paneer",
+   "hi": "कड़ाही पनीर",
    "unit": "katori",
    "carbs": 8,
    "fibre": 2,
@@ -1422,6 +1527,7 @@
   {
    "id": "paneer_bhurji",
    "name": "Paneer bhurji",
+   "hi": "पनीर भुर्जी",
    "unit": "katori",
    "carbs": 6,
    "fibre": 1,
@@ -1435,6 +1541,7 @@
   {
    "id": "paneer_tikka",
    "name": "Paneer tikka (4 pieces)",
+   "hi": "पनीर टिक्का (4 टुकड़े)",
    "unit": "serving",
    "carbs": 4,
    "fibre": 0.5,
@@ -1450,6 +1557,7 @@
   {
    "id": "paneer_cubes",
    "name": "Paneer (plain, 50 g)",
+   "hi": "पनीर (सादा, 50 ग्राम)",
    "unit": "serving",
    "carbs": 1,
    "fibre": 0,
@@ -1463,6 +1571,7 @@
   {
    "id": "tofu_bhurji",
    "name": "Tofu bhurji",
+   "hi": "टोफू भुर्जी",
    "unit": "katori",
    "carbs": 5,
    "fibre": 2,
@@ -1476,6 +1585,7 @@
   {
    "id": "egg",
    "name": "Boiled egg",
+   "hi": "उबला अंडा",
    "unit": "piece",
    "carbs": 1,
    "fibre": 0,
@@ -1491,6 +1601,7 @@
   {
    "id": "omelette",
    "name": "Omelette (2 egg)",
+   "hi": "ऑमलेट (2 अंडे)",
    "unit": "piece",
    "carbs": 2,
    "fibre": 0.2,
@@ -1506,6 +1617,7 @@
   {
    "id": "egg_bhurji",
    "name": "Egg bhurji",
+   "hi": "अंडा भुर्जी",
    "unit": "katori",
    "carbs": 3,
    "fibre": 0.5,
@@ -1521,6 +1633,7 @@
   {
    "id": "egg_curry",
    "name": "Egg curry (2 eggs)",
+   "hi": "अंडा करी (2 अंडे)",
    "unit": "katori",
    "carbs": 6,
    "fibre": 1.5,
@@ -1536,6 +1649,7 @@
   {
    "id": "chicken_curry",
    "name": "Chicken curry",
+   "hi": "चिकन करी",
    "unit": "katori",
    "carbs": 5,
    "fibre": 1,
@@ -1551,6 +1665,7 @@
   {
    "id": "butter_chicken",
    "name": "Butter chicken",
+   "hi": "बटर चिकन",
    "unit": "katori",
    "carbs": 10,
    "fibre": 1,
@@ -1567,6 +1682,7 @@
   {
    "id": "chicken_tikka",
    "name": "Chicken tikka (4 pieces)",
+   "hi": "चिकन टिक्का (4 टुकड़े)",
    "unit": "serving",
    "carbs": 3,
    "fibre": 0.5,
@@ -1583,6 +1699,7 @@
   {
    "id": "tandoori_chicken",
    "name": "Tandoori chicken (1 leg)",
+   "hi": "तंदूरी चिकन (1 लेग)",
    "unit": "piece",
    "carbs": 2,
    "fibre": 0,
@@ -1599,6 +1716,7 @@
   {
    "id": "mutton_curry",
    "name": "Mutton curry",
+   "hi": "मटन करी",
    "unit": "katori",
    "carbs": 5,
    "fibre": 1,
@@ -1615,6 +1733,7 @@
   {
    "id": "keema",
    "name": "Keema (mince) curry",
+   "hi": "कीमा करी",
    "unit": "katori",
    "carbs": 4,
    "fibre": 1,
@@ -1630,6 +1749,7 @@
   {
    "id": "fish_curry",
    "name": "Fish curry",
+   "hi": "फिश करी",
    "unit": "katori",
    "carbs": 4,
    "fibre": 1,
@@ -1645,6 +1765,7 @@
   {
    "id": "fish_fry",
    "name": "Fish fry (1 piece)",
+   "hi": "फिश फ्राई (1 टुकड़ा)",
    "unit": "piece",
    "carbs": 5,
    "fibre": 0.3,
@@ -1660,6 +1781,7 @@
   {
    "id": "prawn_curry",
    "name": "Prawn curry",
+   "hi": "झींगा करी",
    "unit": "katori",
    "carbs": 6,
    "fibre": 0.5,
@@ -1675,6 +1797,7 @@
   {
    "id": "curd",
    "name": "Curd / dahi",
+   "hi": "दही",
    "unit": "katori",
    "carbs": 6,
    "fibre": 0,
@@ -1688,6 +1811,7 @@
   {
    "id": "raita",
    "name": "Raita",
+   "hi": "रायता",
    "unit": "katori",
    "carbs": 7,
    "fibre": 0.5,
@@ -1701,6 +1825,7 @@
   {
    "id": "dahi_vada",
    "name": "Dahi vada",
+   "hi": "दही वड़ा",
    "unit": "piece",
    "carbs": 12,
    "fibre": 1,
@@ -1716,6 +1841,7 @@
   {
    "id": "samosa",
    "name": "Samosa",
+   "hi": "समोसा",
    "unit": "piece",
    "carbs": 24,
    "fibre": 2,
@@ -1729,6 +1855,7 @@
   {
    "id": "kachori",
    "name": "Kachori",
+   "hi": "कचौरी",
    "unit": "piece",
    "carbs": 25,
    "fibre": 2,
@@ -1742,6 +1869,7 @@
   {
    "id": "pakora",
    "name": "Pakora / bhajiya",
+   "hi": "पकौड़ा / भजिया",
    "unit": "piece",
    "carbs": 6,
    "fibre": 1,
@@ -1755,6 +1883,7 @@
   {
    "id": "vada_pav",
    "name": "Vada pav",
+   "hi": "वड़ा पाव",
    "unit": "piece",
    "carbs": 38,
    "fibre": 3,
@@ -1770,6 +1899,7 @@
   {
    "id": "medu_vada",
    "name": "Medu vada",
+   "hi": "मेदू वड़ा",
    "unit": "piece",
    "carbs": 10,
    "fibre": 1.5,
@@ -1783,6 +1913,7 @@
   {
    "id": "aloo_tikki",
    "name": "Aloo tikki",
+   "hi": "आलू टिक्की",
    "unit": "piece",
    "carbs": 20,
    "fibre": 2,
@@ -1798,6 +1929,7 @@
   {
    "id": "pani_puri",
    "name": "Pani puri (1 puri)",
+   "hi": "पानी पूरी (1 पूरी)",
    "unit": "piece",
    "carbs": 7,
    "fibre": 0.5,
@@ -1813,6 +1945,7 @@
   {
    "id": "bhel_puri",
    "name": "Bhel puri",
+   "hi": "भेल पूरी",
    "unit": "plate",
    "carbs": 40,
    "fibre": 3,
@@ -1828,6 +1961,7 @@
   {
    "id": "papdi_chaat",
    "name": "Papdi chaat",
+   "hi": "पापड़ी चाट",
    "unit": "plate",
    "carbs": 35,
    "fibre": 3,
@@ -1843,6 +1977,7 @@
   {
    "id": "dhokla",
    "name": "Dhokla",
+   "hi": "ढोकला",
    "unit": "piece",
    "carbs": 8,
    "fibre": 1,
@@ -1856,6 +1991,7 @@
   {
    "id": "khandvi",
    "name": "Khandvi",
+   "hi": "खांडवी",
    "unit": "piece",
    "carbs": 5,
    "fibre": 0.5,
@@ -1869,6 +2005,7 @@
   {
    "id": "sabudana_vada",
    "name": "Sabudana vada",
+   "hi": "साबूदाना वड़ा",
    "unit": "piece",
    "carbs": 20,
    "fibre": 1,
@@ -1884,6 +2021,7 @@
   {
    "id": "murukku",
    "name": "Murukku / chakli",
+   "hi": "मुरुक्कु / चकली",
    "unit": "piece",
    "carbs": 8,
    "fibre": 0.5,
@@ -1899,6 +2037,7 @@
   {
    "id": "namkeen",
    "name": "Namkeen mixture (small katori)",
+   "hi": "नमकीन मिक्सचर",
    "unit": "katori",
    "carbs": 15,
    "fibre": 1,
@@ -1912,6 +2051,7 @@
   {
    "id": "roasted_chana",
    "name": "Roasted chana (handful)",
+   "hi": "भुना चना",
    "unit": "handful",
    "carbs": 10,
    "fibre": 3,
@@ -1925,6 +2065,7 @@
   {
    "id": "makhana",
    "name": "Roasted makhana (katori)",
+   "hi": "भुना मखाना",
    "unit": "katori",
    "carbs": 12,
    "fibre": 2,
@@ -1940,6 +2081,7 @@
   {
    "id": "peanuts",
    "name": "Peanuts (handful)",
+   "hi": "मूंगफली",
    "unit": "handful",
    "carbs": 4,
    "fibre": 2.5,
@@ -1953,6 +2095,7 @@
   {
    "id": "almonds",
    "name": "Almonds (handful)",
+   "hi": "बादाम",
    "unit": "handful",
    "carbs": 3,
    "fibre": 3,
@@ -1966,6 +2109,7 @@
   {
    "id": "mixed_nuts",
    "name": "Mixed nuts (handful)",
+   "hi": "मिक्स मेवे",
    "unit": "handful",
    "carbs": 5,
    "fibre": 2,
@@ -1979,6 +2123,7 @@
   {
    "id": "popcorn",
    "name": "Popcorn (katori)",
+   "hi": "पॉपकॉर्न",
    "unit": "katori",
    "carbs": 12,
    "fibre": 2,
@@ -1992,6 +2137,7 @@
   {
    "id": "marie_biscuit",
    "name": "Marie biscuit",
+   "hi": "मैरी बिस्कुट",
    "unit": "piece",
    "carbs": 5.5,
    "fibre": 0.2,
@@ -2005,6 +2151,7 @@
   {
    "id": "digestive_biscuit",
    "name": "Digestive biscuit",
+   "hi": "डाइजेस्टिव बिस्कुट",
    "unit": "piece",
    "carbs": 11,
    "fibre": 0.5,
@@ -2018,6 +2165,7 @@
   {
    "id": "chips_packet",
    "name": "Potato chips (small packet)",
+   "hi": "आलू चिप्स (छोटा पैकेट)",
    "unit": "packet",
    "carbs": 15,
    "fibre": 1,
@@ -2031,6 +2179,7 @@
   {
    "id": "gulab_jamun",
    "name": "Gulab jamun",
+   "hi": "गुलाब जामुन",
    "unit": "piece",
    "carbs": 30,
    "fibre": 0.5,
@@ -2046,6 +2195,7 @@
   {
    "id": "jalebi",
    "name": "Jalebi",
+   "hi": "जलेबी",
    "unit": "piece",
    "carbs": 20,
    "fibre": 0,
@@ -2061,6 +2211,7 @@
   {
    "id": "rasgulla",
    "name": "Rasgulla",
+   "hi": "रसगुल्ला",
    "unit": "piece",
    "carbs": 25,
    "fibre": 0,
@@ -2076,6 +2227,7 @@
   {
    "id": "kheer",
    "name": "Kheer / payasam",
+   "hi": "खीर / पायसम",
    "unit": "katori",
    "carbs": 35,
    "fibre": 0.5,
@@ -2091,6 +2243,7 @@
   {
    "id": "suji_halwa",
    "name": "Suji halwa",
+   "hi": "सूजी का हलवा",
    "unit": "katori",
    "carbs": 40,
    "fibre": 1,
@@ -2107,6 +2260,7 @@
   {
    "id": "gajar_halwa",
    "name": "Gajar halwa",
+   "hi": "गाजर का हलवा",
    "unit": "katori",
    "carbs": 40,
    "fibre": 2,
@@ -2122,6 +2276,7 @@
   {
    "id": "besan_ladoo",
    "name": "Besan ladoo",
+   "hi": "बेसन के लड्डू",
    "unit": "piece",
    "carbs": 20,
    "fibre": 1,
@@ -2137,6 +2292,7 @@
   {
    "id": "motichoor_ladoo",
    "name": "Motichoor ladoo",
+   "hi": "मोतीचूर के लड्डू",
    "unit": "piece",
    "carbs": 22,
    "fibre": 0.5,
@@ -2152,6 +2308,7 @@
   {
    "id": "kaju_katli",
    "name": "Kaju katli",
+   "hi": "काजू कतली",
    "unit": "piece",
    "carbs": 8,
    "fibre": 0.5,
@@ -2167,6 +2324,7 @@
   {
    "id": "barfi",
    "name": "Milk barfi",
+   "hi": "दूध की बर्फी",
    "unit": "piece",
    "carbs": 18,
    "fibre": 0.3,
@@ -2182,6 +2340,7 @@
   {
    "id": "peda",
    "name": "Peda",
+   "hi": "पेड़ा",
    "unit": "piece",
    "carbs": 14,
    "fibre": 0,
@@ -2197,6 +2356,7 @@
   {
    "id": "sandesh",
    "name": "Sandesh",
+   "hi": "संदेश",
    "unit": "piece",
    "carbs": 12,
    "fibre": 0,
@@ -2212,6 +2372,7 @@
   {
    "id": "chikki",
    "name": "Chikki (peanut)",
+   "hi": "मूंगफली चिक्की",
    "unit": "piece",
    "carbs": 15,
    "fibre": 1,
@@ -2227,6 +2388,7 @@
   {
    "id": "ice_cream",
    "name": "Ice cream (1 scoop)",
+   "hi": "आइसक्रीम (1 स्कूप)",
    "unit": "scoop",
    "carbs": 14,
    "fibre": 0.5,
@@ -2240,6 +2402,7 @@
   {
    "id": "khajoor",
    "name": "Dates (1 piece)",
+   "hi": "खजूर (1 पीस)",
    "unit": "piece",
    "carbs": 6,
    "fibre": 0.7,
@@ -2255,6 +2418,7 @@
   {
    "id": "chai_sugar",
    "name": "Chai with sugar",
+   "hi": "चीनी वाली चाय",
    "unit": "cup",
    "carbs": 12,
    "fibre": 0,
@@ -2268,6 +2432,7 @@
   {
    "id": "chai_nosugar",
    "name": "Chai without sugar",
+   "hi": "बिना चीनी की चाय",
    "unit": "cup",
    "carbs": 5,
    "fibre": 0,
@@ -2281,6 +2446,7 @@
   {
    "id": "coffee_sugar",
    "name": "Coffee with milk and sugar",
+   "hi": "दूध-चीनी वाली कॉफी",
    "unit": "cup",
    "carbs": 12,
    "fibre": 0,
@@ -2294,6 +2460,7 @@
   {
    "id": "black_coffee",
    "name": "Black coffee (no sugar)",
+   "hi": "ब्लैक कॉफी (बिना चीनी)",
    "unit": "cup",
    "carbs": 0.5,
    "fibre": 0,
@@ -2307,6 +2474,7 @@
   {
    "id": "milk",
    "name": "Milk",
+   "hi": "दूध",
    "unit": "glass",
    "carbs": 10,
    "fibre": 0,
@@ -2320,6 +2488,7 @@
   {
    "id": "chaas",
    "name": "Chaas / buttermilk",
+   "hi": "छाछ",
    "unit": "glass",
    "carbs": 5,
    "fibre": 0,
@@ -2333,6 +2502,7 @@
   {
    "id": "lassi_sweet",
    "name": "Sweet lassi",
+   "hi": "मीठी लस्सी",
    "unit": "glass",
    "carbs": 35,
    "fibre": 0,
@@ -2348,6 +2518,7 @@
   {
    "id": "lassi_salted",
    "name": "Salted lassi",
+   "hi": "नमकीन लस्सी",
    "unit": "glass",
    "carbs": 8,
    "fibre": 0,
@@ -2361,6 +2532,7 @@
   {
    "id": "nimbu_pani_sugar",
    "name": "Nimbu pani with sugar",
+   "hi": "चीनी वाला नींबू पानी",
    "unit": "glass",
    "carbs": 18,
    "fibre": 0,
@@ -2374,6 +2546,7 @@
   {
    "id": "coconut_water",
    "name": "Coconut water",
+   "hi": "नारियल पानी",
    "unit": "glass",
    "carbs": 9,
    "fibre": 0,
@@ -2387,6 +2560,7 @@
   {
    "id": "sugarcane_juice",
    "name": "Sugarcane juice",
+   "hi": "गन्ने का रस",
    "unit": "glass",
    "carbs": 40,
    "fibre": 0,
@@ -2400,6 +2574,7 @@
   {
    "id": "cola",
    "name": "Cola / soft drink",
+   "hi": "कोल्ड ड्रिंक",
    "unit": "glass",
    "carbs": 26,
    "fibre": 0,
@@ -2413,6 +2588,7 @@
   {
    "id": "fruit_juice_packaged",
    "name": "Packaged fruit juice",
+   "hi": "पैकेट वाला फलों का जूस",
    "unit": "glass",
    "carbs": 24,
    "fibre": 0.3,
@@ -2426,6 +2602,7 @@
   {
    "id": "sattu_drink",
    "name": "Sattu drink",
+   "hi": "सत्तू शरबत",
    "unit": "glass",
    "carbs": 15,
    "fibre": 3,
@@ -2439,6 +2616,7 @@
   {
    "id": "badam_milk",
    "name": "Badam milk",
+   "hi": "बादाम दूध",
    "unit": "glass",
    "carbs": 20,
    "fibre": 1,
@@ -2452,6 +2630,7 @@
   {
    "id": "haldi_milk",
    "name": "Haldi doodh (turmeric milk)",
+   "hi": "हल्दी वाला दूध",
    "unit": "glass",
    "carbs": 11,
    "fibre": 0,
@@ -2465,6 +2644,7 @@
   {
    "id": "jaljeera",
    "name": "Jaljeera",
+   "hi": "जलजीरा",
    "unit": "glass",
    "carbs": 8,
    "fibre": 0.5,
@@ -2478,6 +2658,7 @@
   {
    "id": "thandai",
    "name": "Thandai",
+   "hi": "ठंडाई",
    "unit": "glass",
    "carbs": 30,
    "fibre": 1,
@@ -2493,6 +2674,7 @@
   {
    "id": "aam_panna",
    "name": "Aam panna",
+   "hi": "आम पन्ना",
    "unit": "glass",
    "carbs": 25,
    "fibre": 0.5,
@@ -2506,6 +2688,7 @@
   {
    "id": "banana",
    "name": "Banana",
+   "hi": "केला",
    "unit": "piece",
    "carbs": 23,
    "fibre": 2.6,
@@ -2519,6 +2702,7 @@
   {
    "id": "apple",
    "name": "Apple",
+   "hi": "सेब",
    "unit": "piece",
    "carbs": 20,
    "fibre": 2.4,
@@ -2532,6 +2716,7 @@
   {
    "id": "mango",
    "name": "Mango slices",
+   "hi": "आम (कटा हुआ)",
    "unit": "katori",
    "carbs": 25,
    "fibre": 2,
@@ -2545,6 +2730,7 @@
   {
    "id": "papaya",
    "name": "Papaya (katori)",
+   "hi": "पपीता",
    "unit": "katori",
    "carbs": 11,
    "fibre": 2,
@@ -2558,6 +2744,7 @@
   {
    "id": "guava",
    "name": "Guava",
+   "hi": "अमरूद",
    "unit": "piece",
    "carbs": 14,
    "fibre": 5,
@@ -2571,6 +2758,7 @@
   {
    "id": "orange",
    "name": "Orange / mosambi",
+   "hi": "संतरा / मौसमी",
    "unit": "piece",
    "carbs": 12,
    "fibre": 2.5,
@@ -2584,6 +2772,7 @@
   {
    "id": "pomegranate",
    "name": "Pomegranate (katori)",
+   "hi": "अनार",
    "unit": "katori",
    "carbs": 20,
    "fibre": 4,
@@ -2597,6 +2786,7 @@
   {
    "id": "grapes",
    "name": "Grapes (katori)",
+   "hi": "अंगूर",
    "unit": "katori",
    "carbs": 17,
    "fibre": 1,
@@ -2610,6 +2800,7 @@
   {
    "id": "watermelon",
    "name": "Watermelon (katori)",
+   "hi": "तरबूज",
    "unit": "katori",
    "carbs": 11,
    "fibre": 0.5,
@@ -2623,6 +2814,7 @@
   {
    "id": "pear",
    "name": "Pear",
+   "hi": "नाशपाती",
    "unit": "piece",
    "carbs": 21,
    "fibre": 5,
@@ -2636,6 +2828,7 @@
   {
    "id": "chikoo",
    "name": "Chikoo (sapota)",
+   "hi": "चीकू",
    "unit": "piece",
    "carbs": 20,
    "fibre": 5,
@@ -2649,6 +2842,7 @@
   {
    "id": "jamun",
    "name": "Jamun (katori)",
+   "hi": "जामुन",
    "unit": "katori",
    "carbs": 14,
    "fibre": 1.5,
@@ -2662,6 +2856,7 @@
   {
    "id": "muskmelon",
    "name": "Muskmelon (katori)",
+   "hi": "खरबूजा",
    "unit": "katori",
    "carbs": 8,
    "fibre": 0.8,
@@ -2675,6 +2870,7 @@
   {
    "id": "pineapple",
    "name": "Pineapple (katori)",
+   "hi": "अनानास",
    "unit": "katori",
    "carbs": 13,
    "fibre": 1.5,
@@ -2688,6 +2884,7 @@
   {
    "id": "fruit_chaat",
    "name": "Fruit chaat (katori)",
+   "hi": "फ्रूट चाट",
    "unit": "katori",
    "carbs": 20,
    "fibre": 3,
@@ -2703,6 +2900,7 @@
   {
    "id": "papad",
    "name": "Papad (roasted)",
+   "hi": "पापड़ (भुना)",
    "unit": "piece",
    "carbs": 5,
    "fibre": 1,
@@ -2716,6 +2914,7 @@
   {
    "id": "pickle",
    "name": "Pickle (1 tsp)",
+   "hi": "अचार (1 चम्मच)",
    "unit": "tsp",
    "carbs": 0.5,
    "fibre": 0.2,
@@ -2729,6 +2928,7 @@
   {
    "id": "ghee",
    "name": "Ghee (1 tsp)",
+   "hi": "घी (1 चम्मच)",
    "unit": "tsp",
    "carbs": 0,
    "fibre": 0,
@@ -2742,6 +2942,7 @@
   {
    "id": "butter",
    "name": "Butter (1 tsp)",
+   "hi": "मक्खन (1 चम्मच)",
    "unit": "tsp",
    "carbs": 0,
    "fibre": 0,
@@ -2755,6 +2956,7 @@
   {
    "id": "coconut_chutney",
    "name": "Coconut chutney (tbsp)",
+   "hi": "नारियल की चटनी",
    "unit": "tbsp",
    "carbs": 1,
    "fibre": 0.5,
@@ -2768,6 +2970,7 @@
   {
    "id": "kuttu_puri",
    "name": "Kuttu puri",
+   "hi": "कुट्टू की पूरी",
    "unit": "piece",
    "carbs": 14,
    "fibre": 1.5,
@@ -2783,6 +2986,7 @@
   {
    "id": "sama_rice",
    "name": "Sama (vrat) rice",
+   "hi": "समा के चावल (व्रत)",
    "unit": "katori",
    "carbs": 30,
    "fibre": 3,
@@ -2798,6 +3002,7 @@
   {
    "id": "aloo_vrat",
    "name": "Vrat aloo",
+   "hi": "व्रत के आलू",
    "unit": "katori",
    "carbs": 18,
    "fibre": 2.5,
@@ -2813,6 +3018,7 @@
   {
    "id": "rajgira_paratha",
    "name": "Rajgira paratha",
+   "hi": "राजगिरा पराठा",
    "unit": "piece",
    "carbs": 22,
    "fibre": 2.5,
@@ -2828,6 +3034,7 @@
   {
    "id": "makhana_kheer",
    "name": "Makhana kheer",
+   "hi": "मखाने की खीर",
    "unit": "katori",
    "carbs": 25,
    "fibre": 1,
@@ -2843,6 +3050,7 @@
   {
    "id": "veg_momos",
    "name": "Veg momos (1 piece)",
+   "hi": "वेज मोमोज़ (1 पीस)",
    "unit": "piece",
    "carbs": 6,
    "fibre": 0.5,
@@ -2858,6 +3066,7 @@
   {
    "id": "noodles",
    "name": "Hakka noodles",
+   "hi": "हक्का नूडल्स",
    "unit": "katori",
    "carbs": 38,
    "fibre": 2,
@@ -2873,6 +3082,7 @@
   {
    "id": "fried_rice",
    "name": "Veg fried rice",
+   "hi": "वेज फ्राइड राइस",
    "unit": "katori",
    "carbs": 40,
    "fibre": 2,
@@ -2888,6 +3098,7 @@
   {
    "id": "pizza_slice",
    "name": "Pizza slice",
+   "hi": "पिज़्ज़ा स्लाइस",
    "unit": "piece",
    "carbs": 30,
    "fibre": 2,
@@ -2903,6 +3114,7 @@
   {
    "id": "burger",
    "name": "Burger",
+   "hi": "बर्गर",
    "unit": "piece",
    "carbs": 40,
    "fibre": 3,
@@ -2918,6 +3130,7 @@
   {
    "id": "french_fries",
    "name": "French fries (katori)",
+   "hi": "फ्रेंच फ्राइज़",
    "unit": "katori",
    "carbs": 30,
    "fibre": 3,
@@ -2933,6 +3146,7 @@
   {
    "id": "sandwich_veg",
    "name": "Veg sandwich",
+   "hi": "वेज सैंडविच",
    "unit": "piece",
    "carbs": 30,
    "fibre": 3,
@@ -2948,6 +3162,7 @@
   {
    "id": "maggi",
    "name": "Maggi noodles (1 packet)",
+   "hi": "मैगी नूडल्स (1 पैकेट)",
    "unit": "packet",
    "carbs": 45,
    "fibre": 2,

@@ -13,7 +13,7 @@ import { Card } from "@/components/ui/Card";
 import { DayRing } from "@/components/ui/DayRing";
 import { GlucoseChart } from "@/components/ui/GlucoseChart";
 import { StreakChip } from "@/components/ui/StreakChip";
-import { MEAL_EMOJI, MEAL_LABEL, MEAL_TYPES } from "@/lib/meal";
+import { MEAL_EMOJI, MEAL_TYPES } from "@/lib/meal";
 import { weeklyCheckin } from "@/lib/checkin";
 import { dayKey } from "@/lib/day";
 import { weeklyObservations } from "@/lib/insights";
@@ -25,6 +25,7 @@ import { weekStats } from "@/lib/stats";
 import { streakOf } from "@/lib/streak";
 import { nowMs } from "@/lib/time";
 import { useRecent } from "@/lib/useRecent";
+import { useT } from "@/lib/useT";
 
 const localInput = (ms: number) => {
   const d = new Date(ms);
@@ -34,11 +35,12 @@ const localInput = (ms: number) => {
 
 export default function Today() {
   const { ready, meals, readings, paired, profile, walks, timer, checkinAt, wrapupDismissed, foods: FOODS } = useRecent(365);
-  if (!ready) return <p className="text-muted">Loading…</p>;
+  const { t, lang } = useT();
+  if (!ready) return <p className="text-muted">{t("common.loading")}</p>;
 
   const now = new Date(nowMs());
   const hour = now.getHours();
-  const greeting = hour < 12 ? "Good morning" : hour < 17 ? "Good afternoon" : "Good evening";
+  const greeting = hour < 12 ? t("today.morning") : hour < 17 ? t("today.afternoon") : t("today.evening");
   const startOfDay = new Date(now);
   startOfDay.setHours(0, 0, 0, 0);
 
@@ -55,7 +57,7 @@ export default function Today() {
 
   const todayReadings = readings.filter((r) => new Date(r.measured_at) >= startOfDay).sort((a, b) => a.measured_at.localeCompare(b.measured_at));
   const latest = readings[0]; // readings are newest first
-  const alert = latest && nowMs() - new Date(latest.measured_at).getTime() < 3 * 3600_000 ? rangeAlert(latest.value, profile) : null;
+  const alert = latest && nowMs() - new Date(latest.measured_at).getTime() < 3 * 3600_000 ? rangeAlert(latest.value, profile, t) : null;
 
   const due = todayMeals.filter((m) => {
     const age = nowMs() - new Date(m.eaten_at).getTime();
@@ -63,7 +65,7 @@ export default function Today() {
   });
 
   const dayOfYear = Math.floor((nowMs() - new Date(now.getFullYear(), 0, 0).getTime()) / 86400_000);
-  const says = saathiSays({ stats, todayMeals: todayMeals.length, profile, dayOfYear });
+  const says = saathiSays({ stats, todayMeals: todayMeals.length, profile, dayOfYear }, { t, lang });
   const hasAnything = meals.length > 0 || readings.length > 0;
 
   // Habit layer
@@ -77,17 +79,17 @@ export default function Today() {
   const daysSinceCheckin = checkinAt ? (nowMs() - new Date(checkinAt).getTime()) / 86400_000 : Infinity;
   const checkinDue = stats.meals >= 4 && daysSinceCheckin >= 7;
   const observations = weeklyObservations(stats, profile);
-  const checkin = weeklyCheckin(stats, profile);
+  const checkin = weeklyCheckin(stats, profile, { t, lang });
   const shareBody = reportText({ name: profile.display_name, stats, observations, profile, from: new Date(weekCut), to: now });
 
   const wrapDue = hour >= 19 && todayMeals.length > 0 && wrapupDismissed !== todayKey;
-  const wrap = wrapDue ? dayWrapUp(todayMeals, FOODS, profile, todayReadings) : null;
+  const wrap = wrapDue ? dayWrapUp(todayMeals, FOODS, profile, todayReadings, { t, lang }) : null;
 
   return (
     <>
       <header className="rise-in flex flex-wrap items-end justify-between gap-3">
         <div>
-          <p className="text-sm text-muted">{now.toLocaleDateString("en-IN", { weekday: "long", day: "numeric", month: "long" })}</p>
+          <p className="text-sm text-muted">{now.toLocaleDateString(lang === "hi" ? "hi-IN" : "en-IN", { weekday: "long", day: "numeric", month: "long" })}</p>
           <h1 className="font-display text-3xl font-semibold sm:text-4xl">{greeting}{profile.display_name ? `, ${profile.display_name}` : ""}</h1>
         </div>
         <StreakChip streak={streak} />
@@ -102,51 +104,51 @@ export default function Today() {
 
       {!hasAnything && (
         <Card tone="moss" className="rise-in">
-          <h2 className="font-display text-2xl font-semibold">Welcome to Sugar Saathi</h2>
+          <h2 className="font-display text-2xl font-semibold">{t("today.welcomeTitle")}</h2>
           <ol className="mt-3 space-y-2 text-white/90">
-            <li>1. Log what you eat. Say it, type it or snap a photo.</li>
-            <li>2. See carbs, protein, fibre, fat and how it may affect your sugar.</li>
-            <li>3. Add a reading before and 2 hours after, and the app learns what meals do to you.</li>
+            <li>{t("today.welcome1")}</li>
+            <li>{t("today.welcome2")}</li>
+            <li>{t("today.welcome3")}</li>
           </ol>
-          <ButtonLink href="/app/log" variant="saffron" size="lg" className="mt-4">Log your first meal</ButtonLink>
-          <p className="mt-3 text-xs text-white/70">Everything stays in this browser on this device. Use Me to back it up.</p>
+          <ButtonLink href="/app/log" variant="saffron" size="lg" className="mt-4">{t("today.logFirst")}</ButtonLink>
+          <p className="mt-3 text-xs text-white/70">{t("today.privacy")}</p>
         </Card>
       )}
 
       <div className="grid gap-5 md:grid-cols-[1.1fr_1fr]">
         <Card className="rise-in">
-          <h2 className="font-display text-xl font-semibold">Today</h2>
+          <h2 className="font-display text-xl font-semibold">{t("today.title")}</h2>
           <div className="mt-3 flex items-center gap-5">
             <DayRing value={carbsToday} max={budget} caption="carbs today" />
             <div className="space-y-1.5 text-sm">
-              <p className="text-lg font-semibold">{left >= 0 ? `${left} g left` : `${-left} g over`}</p>
-              <p className="text-muted">Daily budget is 3 × your {profile.meal_carb_target} g meal goal.</p>
-              <p className="tabular">Protein <strong>{sum("protein")} g</strong></p>
-              <p className="tabular">Fibre <strong>{sum("fibre")} g</strong></p>
-              <p className="tabular">Fat <strong>{sum("fat")} g</strong> · <strong>{Math.round(sum("kcal"))}</strong> kcal</p>
+              <p className="text-lg font-semibold">{left >= 0 ? t("today.left", { n: left }) : t("today.over", { n: -left })}</p>
+              <p className="text-muted">{t("today.budget", { n: profile.meal_carb_target })}</p>
+              <p className="tabular">{t("macro.protein")} <strong>{sum("protein")} g</strong></p>
+              <p className="tabular">{t("macro.fibre")} <strong>{sum("fibre")} g</strong></p>
+              <p className="tabular">{t("macro.fat")} <strong>{sum("fat")} g</strong> · <strong>{Math.round(sum("kcal"))}</strong> {t("macro.kcal")}</p>
             </div>
           </div>
         </Card>
 
         <Card tone="sand" className="rise-in">
-          <h2 className="font-display text-xl font-semibold">Saathi says</h2>
+          <h2 className="font-display text-xl font-semibold">{t("today.saathi")}</h2>
           <p className="mt-2 text-lg leading-snug">{says}</p>
           <div className="mt-4 flex items-end justify-between gap-3">
             <WeekDots logged={loggedDays} now={now} />
-            <p className="text-xs text-muted">{streak.loggedLast7} of 7 days logged</p>
+            <p className="text-xs text-muted">{t("today.daysLogged", { n: streak.loggedLast7 })}</p>
           </div>
         </Card>
       </div>
 
       {due.length > 0 && (
         <section className="space-y-3">
-          <h2 className="font-display text-xl font-semibold">Time for a 2-hour check</h2>
+          <h2 className="font-display text-xl font-semibold">{t("today.checkTitle")}</h2>
           {due.map((m) => (
             <Card key={m.id} tone="saffron">
               <p className="font-medium">{m.text}</p>
-              <p className="text-sm text-muted">Eaten at {new Date(m.eaten_at).toLocaleTimeString("en-IN", { hour: "numeric", minute: "2-digit" })}. What is your sugar now? Around 2 hours after eating is best; anything from 1.5 to 3 hours is counted.</p>
+              <p className="text-sm text-muted">{t("today.checkBody", { time: new Date(m.eaten_at).toLocaleTimeString(lang === "hi" ? "hi-IN" : "en-IN", { hour: "numeric", minute: "2-digit" }) })}</p>
               <div className="mt-2">
-                <GlucoseQuickAdd compact defaultTime={localInput(nowMs())} label="Save 2-hour reading" />
+                <GlucoseQuickAdd compact defaultTime={localInput(nowMs())} label={t("today.save2h")} />
               </div>
             </Card>
           ))}
@@ -159,19 +161,19 @@ export default function Today() {
       {wrap && <WrapUpCard wrap={wrap} day={todayKey} />}
 
       <section className="space-y-3">
-        <h2 className="font-display text-xl font-semibold">Your meals today</h2>
+        <h2 className="font-display text-xl font-semibold">{t("today.mealsToday")}</h2>
         <div className="grid gap-3 md:grid-cols-2">
-          {MEAL_TYPES.map((t) => {
-            const logged = todayMeals.filter((m) => m.meal_type === t);
+          {MEAL_TYPES.map((slot) => {
+            const logged = todayMeals.filter((m) => m.meal_type === slot);
             return (
-              <div key={t} className="space-y-2">
+              <div key={slot} className="space-y-2">
                 {logged.map((m) => <MealCard key={m.id} meal={m} foods={FOODS} />)}
                 {logged.length === 0 && (
-                  <Link href={`/app/log?slot=${t}`} className="flex min-h-20 items-center gap-3 rounded-3xl border border-dashed border-line bg-paper/60 px-4 py-3 text-muted hover:bg-sand">
-                    <span className="text-2xl" aria-hidden="true">{MEAL_EMOJI[t]}</span>
+                  <Link href={`/app/log?slot=${slot}`} className="flex min-h-20 items-center gap-3 rounded-3xl border border-dashed border-line bg-paper/60 px-4 py-3 text-muted hover:bg-sand">
+                    <span className="text-2xl" aria-hidden="true">{MEAL_EMOJI[slot]}</span>
                     <span>
-                      <span className="block font-medium text-ink">{MEAL_LABEL[t]}</span>
-                      <span className="block text-sm">Not logged yet. Tap to add.</span>
+                      <span className="block font-medium text-ink">{t(`slot.${slot}` as const)}</span>
+                      <span className="block text-sm">{t("today.notLogged")}</span>
                     </span>
                   </Link>
                 )}
@@ -186,13 +188,13 @@ export default function Today() {
       {todayReadings.length > 0 && (
         <Card>
           <div className="flex items-center justify-between">
-            <h2 className="font-display text-xl font-semibold">Sugar today</h2>
-            <Link href="/app/glucose" className="text-sm font-medium text-moss underline">Add or import readings</Link>
+            <h2 className="font-display text-xl font-semibold">{t("today.sugarToday")}</h2>
+            <Link href="/app/glucose" className="text-sm font-medium text-moss underline">{t("today.addImport")}</Link>
           </div>
           <div className="mt-2">
             <GlucoseChart
               points={todayReadings.slice(-60).map((r) => ({ t: new Date(r.measured_at).getTime(), v: r.value }))}
-              markers={todayMeals.map((m) => ({ t: new Date(m.eaten_at).getTime(), label: MEAL_LABEL[m.meal_type] }))}
+              markers={todayMeals.map((m) => ({ t: new Date(m.eaten_at).getTime(), label: t(`slot.${m.meal_type}` as const) }))}
               low={profile.glucose_low}
               high={profile.glucose_high}
               ariaLabel="Today's glucose readings with meals marked"
@@ -203,8 +205,8 @@ export default function Today() {
 
       {hasAnything && todayReadings.length === 0 && (
         <Card tone="sand">
-          <h2 className="font-display text-lg font-semibold">Add a reading</h2>
-          <p className="mb-2 text-sm text-muted">Readings let the app show what each meal does to you.</p>
+          <h2 className="font-display text-lg font-semibold">{t("today.addReading")}</h2>
+          <p className="mb-2 text-sm text-muted">{t("today.addReadingBody")}</p>
           <GlucoseQuickAdd />
         </Card>
       )}

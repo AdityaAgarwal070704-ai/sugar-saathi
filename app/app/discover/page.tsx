@@ -7,13 +7,14 @@ const LIVE = [
   { href: "/app/planner", icon: "🍽️", title: "Day meal planner", body: "A full day of Indian meals that fits your carb goal and diet, with every number worked out from the food table." },
   { href: "/app/eating-out", icon: "🍛", title: "Eating out", body: "Restaurant and delivery dishes compared, with simple swaps and a side-by-side dish comparison." },
   { href: "/app/occasions", icon: "🪔", title: "Fasting and festivals", body: "Vrat, Ramzan and festival ideas, and a sweet budget that shows how many pieces fit." },
+  { href: "/app/learn", icon: "📚", title: "Learn", body: "Short, practical lessons in English and Hindi: the balanced thali, roti or rice, reading labels, festivals, and what to ask your educator." },
   { href: "/app/report", icon: "📄", title: "Educator report", body: "A clean one-page summary of your week to print, save or share before your appointment." },
   { href: "/app/glucose", icon: "🩸", title: "Glucose readings", body: "Add readings or import a CSV from your meter or CGM app, and see them beside your meals." },
 ];
 
 const SOON = [
-  { icon: "📚", title: "Learn", body: "Short, practical lessons for everyday Indian life with diabetes." },
-  { icon: "🌐", title: "More languages", body: "Hindi and other Indian languages across the whole app." },
+  { icon: "🌐", title: "More of the app in Hindi", body: "Hindi already covers the daily screens. Progress, Discover tools and reports are next, then other Indian languages." },
+  { icon: "☁️", title: "Sync across devices", body: "Optional accounts so your data follows you from phone to phone." },
 ];
 
 export default function Discover() {

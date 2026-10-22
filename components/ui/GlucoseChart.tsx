@@ -27,15 +27,15 @@ export function GlucoseChart({ points, low, high, markers = [], ariaLabel = "Glu
       <rect x={PAD.l} y={y(high)} width={W - PAD.l - PAD.r} height={Math.max(0, y(low) - y(high))} fill="#e3efe7" />
       <text x={PAD.l - 6} y={y(high) + 4} textAnchor="end" style={{ font: "10px var(--font-dm-sans)", fill: "#5b6b61" }}>{high}</text>
       <text x={PAD.l - 6} y={y(low) + 4} textAnchor="end" style={{ font: "10px var(--font-dm-sans)", fill: "#5b6b61" }}>{low}</text>
-      {markers.map((m) => (
-        <g key={m.t + m.label}>
+      {markers.map((m, i) => (
+        <g key={`${m.t}-${m.label}-${i}`}>
           <line x1={x(m.t)} x2={x(m.t)} y1={PAD.t} y2={H - PAD.b} stroke="#e9a23b" strokeWidth="2" strokeDasharray="4 3" />
           <text x={x(m.t) + 4} y={PAD.t + 8} style={{ font: "600 10px var(--font-dm-sans)", fill: "#7a4f08" }}>{m.label}</text>
         </g>
       ))}
       {sorted.length > 1 && <path d={path} fill="none" stroke="#1b4d3e" strokeWidth="2.5" strokeLinejoin="round" strokeLinecap="round" />}
-      {sorted.map((p) => (
-        <g key={p.t}>
+      {sorted.map((p, i) => (
+        <g key={`${p.t}-${p.v}-${i}`}>
           <circle cx={x(p.t)} cy={y(p.v)} r="4.5" fill="#1b4d3e" stroke="#fffdf9" strokeWidth="2" />
           <text x={x(p.t)} y={y(p.v) - 9} textAnchor="middle" style={{ font: "600 10px var(--font-dm-sans)", fill: "#1f2a24" }}>{p.v}</text>
         </g>

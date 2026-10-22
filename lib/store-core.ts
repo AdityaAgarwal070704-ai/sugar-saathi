@@ -25,7 +25,7 @@ export const DEFAULT_ROUTINE: RoutineItem[] = [
 ];
 export const DEFAULT_EXTRAS: Extras = { routine: DEFAULT_ROUTINE, ticks: {}, walks: [], timer: null, reminders: DEFAULT_REMINDERS, checkinAt: null, wrapupDismissed: null, customFoods: [], recipes: [] };
 
-export const DEFAULT_PROFILE: Profile = { display_name: null, meal_carb_target: 60, glucose_low: 70, glucose_high: 180, diet: "veg" };
+export const DEFAULT_PROFILE: Profile = { display_name: null, meal_carb_target: 60, glucose_low: 70, glucose_high: 180, diet: "veg", language: "en" };
 export const EMPTY_STATE: State = { meals: [], readings: [], profile: DEFAULT_PROFILE, ...DEFAULT_EXTRAS };
 
 // Readings are stored compactly as [epoch ms, mg/dL, source] so a year of CGM data fits in browser storage.
@@ -75,6 +75,7 @@ function validProfile(p: unknown): Profile {
     glucose_low: low,
     glucose_high: high > low ? high : DEFAULT_PROFILE.glucose_high,
     diet: x.diet === "nonveg" || x.diet === "egg" ? x.diet : "veg",
+    language: x.language === "hi" ? "hi" : "en",
   };
 }
 

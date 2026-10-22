@@ -16,8 +16,8 @@
   --color-saffron-ink: #7a4f08;
   --color-terracotta: #b84a32;
   --color-terracotta-soft: #f8ddd5;
-  --font-sans: var(--font-dm-sans), system-ui, sans-serif;
-  --font-display: var(--font-fraunces), Georgia, serif;
+  --font-sans: var(--font-dm-sans), var(--font-deva-sans), system-ui, sans-serif;
+  --font-display: var(--font-fraunces), var(--font-deva-serif), Georgia, serif;
   --shadow-soft: 0 1px 2px rgba(31, 42, 36, 0.04), 0 8px 24px rgba(31, 42, 36, 0.06);
   --shadow-lift: 0 2px 4px rgba(31, 42, 36, 0.06), 0 14px 32px rgba(31, 42, 36, 0.1);
 }
@@ -47,6 +47,10 @@ h1, h2, h3 {
 .tabular {
   font-variant-numeric: tabular-nums;
 }
+
+/* Devanagari has tall marks above and below the line, so it needs more line height. */
+html[lang="hi"] .font-display { line-height: 1.4; }
+html[lang="hi"] body { line-height: 1.6; }
 
 @keyframes rise-in {
   from { opacity: 0; transform: translateY(10px); }

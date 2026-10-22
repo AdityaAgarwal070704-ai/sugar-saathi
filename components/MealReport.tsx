@@ -11,6 +11,7 @@ import { plateGroups } from "@/lib/impact";
 import { mealTips } from "@/lib/insights";
 import type { PairedMeal } from "@/lib/pairing";
 import { expectedRise } from "@/lib/response";
+import { useT } from "@/lib/useT";
 import type { Food, MealRow, MealType, Profile, SavedItem } from "@/lib/types";
 
 type Props = {
@@ -24,15 +25,16 @@ type Props = {
 
 // The full report for one meal: macros, glycemic impact, plate balance, expected change in the user's sugar, tips.
 export default function MealReport({ items, mealType, foods, profile, history, mealId }: Props) {
+  const { t, lang } = useT();
   const n = nutritionOf(items, foods);
-  const tips = mealTips(items, foods, profile);
+  const tips = mealTips(items, foods, profile, { t, lang });
   const groups = plateGroups(items, foods);
   const expected = expectedRise({ carbs: n.carbs, meal_type: mealType, id: mealId }, history);
 
   return (
     <div className="space-y-4">
       <Card>
-        <h2 className="font-display text-xl font-semibold">Nutrition</h2>
+        <h2 className="font-display text-xl font-semibold">{t("report.nutrition")}</h2>
         <p className="mt-1 text-sm text-muted">{tips.headline}</p>
         <div className="mt-4 grid items-center gap-5 sm:grid-cols-[auto_1fr]">
           <div className="flex justify-center"><MacroRing carbs={n.carbs} protein={n.protein} fat={n.fat} kcal={n.kcal} /></div>
@@ -43,29 +45,27 @@ export default function MealReport({ items, mealType, foods, profile, history, m
       <Card>
         <GlycemicGauge gl={n.gl} />
         <div className="mt-5">
-          <h3 className="mb-2 font-display text-lg font-semibold">Plate balance</h3>
+          <h3 className="mb-2 font-display text-lg font-semibold">{t("report.plate")}</h3>
           <PlateBalance groups={groups} />
         </div>
       </Card>
 
       <Card tone="saffron">
-        <h2 className="font-display text-xl font-semibold">Expected change in your sugar</h2>
+        <h2 className="font-display text-xl font-semibold">{t("report.expected")}</h2>
         {expected.status === "ok" ? (
           <>
             <p className="tabular mt-2 text-3xl font-bold">
               {expected.low >= 0 ? "+" : ""}{expected.low} to {expected.high >= 0 ? "+" : ""}{expected.high} <span className="text-lg font-medium">mg/dL</span>
             </p>
             <p className="mt-1 text-sm">
-              Meals like this have raised your sugar by about this much (typically {expected.median >= 0 ? "+" : ""}{expected.median}). Based on {expected.n} of your own similar {expected.sameMealType ? `${mealType} meals` : "meals"} with before and 2-hour readings.
+              {t("report.okBody", { median: `${expected.median >= 0 ? "+" : ""}${expected.median}`, n: expected.n, kind: expected.sameMealType ? t("report.kindType", { type: t(`slot.${mealType}` as const).toLowerCase() }) : t("report.kindMeals") })}
             </p>
-            <p className="mt-2 text-xs text-muted">This comes from your own history, not a prediction. Activity, sleep, stress and illness all change the result.</p>
+            <p className="mt-2 text-xs text-muted">{t("report.okNote")}</p>
           </>
         ) : (
           <>
-            <p className="mt-2 text-sm">
-              Not enough of your own readings yet to say how a meal like this affects you ({expected.found} of {expected.needed} similar meals with a 2-hour reading).
-            </p>
-            <p className="mt-2 text-sm text-muted">Add a reading before eating and another 2 hours later. After a few meals this card shows a personal range, learned only from your data.</p>
+            <p className="mt-2 text-sm">{t("report.insufficient", { found: expected.found, needed: expected.needed })}</p>
+            <p className="mt-2 text-sm text-muted">{t("report.insufficientHow")}</p>
           </>
         )}
       </Card>

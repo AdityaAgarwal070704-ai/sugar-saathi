@@ -1,9 +1,12 @@
 import type { Metadata, Viewport } from "next";
-import { DM_Sans, Fraunces } from "next/font/google";
+import { DM_Sans, Fraunces, Noto_Sans_Devanagari, Noto_Serif_Devanagari } from "next/font/google";
 import "./globals.css";
 
 const dmSans = DM_Sans({ variable: "--font-dm-sans", subsets: ["latin"] });
 const fraunces = Fraunces({ variable: "--font-fraunces", subsets: ["latin"] });
+// Hindi (Devanagari) text uses these; the Latin fonts above do not contain those letters.
+const devaSans = Noto_Sans_Devanagari({ variable: "--font-deva-sans", subsets: ["devanagari"], display: "swap" });
+const devaSerif = Noto_Serif_Devanagari({ variable: "--font-deva-serif", subsets: ["devanagari"], display: "swap" });
 
 export const metadata: Metadata = {
   title: {
@@ -24,7 +27,7 @@ export const viewport: Viewport = {
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
-    <html lang="en" className={`${dmSans.variable} ${fraunces.variable} h-full antialiased`}>
+    <html lang="en" className={`${dmSans.variable} ${fraunces.variable} ${devaSans.variable} ${devaSerif.variable} h-full antialiased`}>
       <body className="flex min-h-full flex-col">{children}</body>
     </html>
   );

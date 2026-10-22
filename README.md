@@ -19,6 +19,8 @@ Live app: https://sugar-saathi.vercel.app. No sign-up. Your data stays in your o
 - **Calm safety cards:** a reading outside your own range shows a gentle note to follow your doctor's plan, never treatment instructions.
 - **Recipe builder for home-cooked dishes:** list your raw ingredients (or just describe them in your own words), say how many it serves, and get nutrition for one serving. Save it as "my dish" and log it in one tap or by name.
 - **Eating out, fasting and festivals:** restaurant dishes compared, a side-by-side dish comparison, vrat, Ramzan and festival ideas, and a sweet budget that shows how many pieces fit.
+- **Hindi and English:** switch language in one tap. Hindi covers the daily screens (Today, Log, meal reports and tips, settings, Learn) and all 215 dish names. Voice logging understands Hindi, and typing in Hindi, English or Hinglish works. The Hindi translation is a first version and should be reviewed by a native speaker.
+- **Learn:** eleven short lessons in English and Hindi (the balanced thali, roti or rice, fibre and protein, glycemic index and load, labels, why two readings, sweet drinks, eating out, festivals and fasting, sleep and stress, your appointment). Numbers inside them come from the food table.
 - **Dashboard, history and weekly insights:** rule-based observations, plus an AI summary of possible links to discuss with your educator.
 - **Educator report:** a one-page weekly summary to print or save as PDF.
 - **Meal planner:** an AI-proposed day of Indian meals within your carb goal and diet, with every number calculated from the table.
@@ -49,6 +51,7 @@ Key files:
 - `app/app/` has the screens
 - `app/api/` has five routes: `parse-meal`, `parse-photo`, `parse-recipe`, `insights` and `plan`
 - `data/foods.json` is the food table and `data/ingredients.json` the raw-ingredient table for the recipe builder
+- `lib/i18n/` holds the English and Hindi messages (generated from `tools/i18n_table.py` so both always have the same keys); `lib/learn.ts` holds the lessons
 - `tests/logic.test.ts` has the unit tests
 
 ## Run it locally

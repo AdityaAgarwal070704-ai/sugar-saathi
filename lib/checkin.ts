@@ -1,21 +1,23 @@
+import { EN, type Loc } from "./insights";
 import type { WeekStats } from "./stats";
 import type { Profile } from "./types";
 
 export type Checkin = { highlights: string[]; tryThis: string };
 
 // The weekly check-in: a calm look back and one small thing to try. No scores, no shaming.
-export function weeklyCheckin(stats: WeekStats, profile: Pick<Profile, "meal_carb_target">): Checkin {
+export function weeklyCheckin(stats: WeekStats, profile: Pick<Profile, "meal_carb_target">, loc: Loc = EN): Checkin {
+  const { t } = loc;
   const highlights: string[] = [];
-  highlights.push(`You logged ${stats.meals} meal${stats.meals === 1 ? "" : "s"} on ${stats.days} day${stats.days === 1 ? "" : "s"}.`);
-  highlights.push(`Average carbs per meal: ${stats.avgMealCarbs} g (your goal is ${profile.meal_carb_target} g).`);
-  if (stats.inRangePct !== null) highlights.push(`${stats.inRangePct}% of your readings were in range.`);
-  if (stats.avgRise !== null) highlights.push(`Your average rise after meals was ${stats.avgRise > 0 ? "+" : ""}${stats.avgRise} mg/dL across ${stats.pairedMeals} paired meals.`);
+  highlights.push(t("ci.logged", { m: stats.meals, d: stats.days, n: stats.meals === 1 && stats.days === 1 ? 1 : 2 }));
+  highlights.push(t("ci.avg", { a: stats.avgMealCarbs, g: profile.meal_carb_target }));
+  if (stats.inRangePct !== null) highlights.push(t("ci.range", { n: stats.inRangePct }));
+  if (stats.avgRise !== null) highlights.push(t("ci.rise", { r: `${stats.avgRise > 0 ? "+" : ""}${stats.avgRise}`, p: stats.pairedMeals }));
 
-  let tryThis = "Pick one meal this week and add a short walk after it. Notice how you feel and what your readings show.";
+  let tryThis = t("ci.try.walk");
   if (stats.meals >= 4) {
-    if (stats.avgFibre < 5) tryThis = "Add a salad or an extra sabzi to your lunch and dinner this week. Fibre is the easiest thing to raise.";
-    else if (stats.avgProtein < 12) tryThis = "Add a protein to one meal a day this week: curd, paneer, an egg, dal or sprouts.";
-    else if (stats.mealsOverTarget / stats.meals >= 0.4) tryThis = "Try a slightly smaller portion of rice or roti at your biggest meal this week.";
+    if (stats.avgFibre < 5) tryThis = t("ci.try.fibre");
+    else if (stats.avgProtein < 12) tryThis = t("ci.try.protein");
+    else if (stats.mealsOverTarget / stats.meals >= 0.4) tryThis = t("ci.try.portion");
   }
   return { highlights, tryThis };
 }

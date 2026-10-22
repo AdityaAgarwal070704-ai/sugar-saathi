@@ -515,3 +515,65 @@ test("store: custom dishes and recipes round trip; foreign ids and bad numbers a
   assert.equal(bad.customFoods[0].name, "Fine");
   assert.deepEqual(bad.recipes.map((r) => r.id), ["r-3"]);
 });
+
+import { en } from "../lib/i18n/en";
+import { hi } from "../lib/i18n/hi";
+import { translate, unitLabel, foodName, tFor } from "../lib/i18n";
+import { mealTips as mealTipsLoc } from "../lib/insights";
+
+test("i18n: Hindi has every key, placeholders match, nothing is empty", () => {
+  const enKeys = Object.keys(en).sort();
+  assert.deepEqual(Object.keys(hi).sort(), enKeys);
+  for (const k of enKeys) {
+    const e = (en as Record<string, string>)[k];
+    const h = (hi as Record<string, string>)[k];
+    assert.ok(e.trim() !== "" && h.trim() !== "", `${k} is empty`);
+    const ph = (s: string) => (s.match(/\{\w+\}/g) ?? []).sort().join(",");
+    assert.equal(ph(h), ph(e), `${k}: placeholders differ between English and Hindi`);
+    assert.ok(/[ऀ-ॿ]/.test(h) || /^[\d\W\w]{0,4}$/.test(h) || k.startsWith("unit.tsp") || k === "gluLow", `${k} does not look translated: ${h}`);
+  }
+});
+
+test("i18n: placeholders, singular forms and units", () => {
+  assert.equal(translate("en", "today.left", { n: 12 }), "12 g left");
+  assert.equal(translate("hi", "today.left", { n: 12 }), "12 ग्राम बाकी");
+  assert.equal(translate("en", "streak.days", { n: 1 }), "1 day in a row");
+  assert.equal(translate("en", "streak.days", { n: 3 }), "3 days in a row");
+  assert.equal(translate("en", "log.notCounted", { n: 1 }), "1 dish not counted yet. Pick a dish for it below.");
+  assert.equal(unitLabel(tFor("en"), "katori", 1), "katori");
+  assert.equal(unitLabel(tFor("en"), "katori", 2), "katoris");
+  assert.equal(unitLabel(tFor("hi"), "katori", 2), "कटोरी");
+  assert.equal(unitLabel(tFor("en"), "mystery", 2), "mystery");
+});
+
+test("i18n: every dish has a Hindi name and the tips speak Hindi without losing numbers", () => {
+  for (const f of foods) assert.ok(f.hi && /[ऀ-ॿ]/.test(f.hi), `${f.id} has no Hindi name`);
+  assert.equal(foodName(foods.find((f) => f.id === "dal")!, "hi"), "दाल (तुअर / मूंग / मसूर)");
+  assert.equal(foodName(foods.find((f) => f.id === "dal")!, "en"), "Dal (plain toor / moong / masoor)");
+  const t = mealTipsLoc([{ foodId: "white_rice", count: 2.5 }], foods, profile, { t: tFor("hi"), lang: "hi" });
+  assert.match(t.headline, /[ऀ-ॿ]/);
+  assert.match(t.headline, /100/); // 2.5 katori of rice = 100 g carbs
+  assert.ok(t.improve.some((x) => x.includes("60")));
+  assert.ok(t.swaps.some((s) => /ब्राउन राइस/.test(s.to)));
+  assert.ok(t.swaps[0].note.length > 5);
+});
+
+import { LESSONS, fill } from "../lib/learn";
+
+test("learn: both languages complete, table numbers fill in, links point to real pages", () => {
+  assert.ok(LESSONS.length >= 10);
+  const ids = new Set(LESSONS.map((l) => l.id));
+  assert.equal(ids.size, LESSONS.length);
+  for (const l of LESSONS) {
+    assert.equal(l.points.en.length, l.points.hi.length, `${l.id}: point counts differ`);
+    assert.ok(l.title.en && l.title.hi && l.intro.en && l.intro.hi && l.tryToday.en && l.tryToday.hi);
+    assert.ok(/[\u0900-\u097F]/.test(l.title.hi) && l.points.hi.every((p) => /[\u0900-\u097F]/.test(p)), `${l.id} Hindi looks untranslated`);
+    for (const text of [...l.points.en, ...l.points.hi]) {
+      const filled = fill(text, foods);
+      assert.ok(!/\{c:/.test(filled), `${l.id}: unknown dish in a number placeholder: ${text}`);
+      assert.ok(!hasDosingAdvice(filled), `${l.id}: lesson sounds like dosing advice`);
+    }
+    if (l.link) assert.ok(/^\/app\/[a-z-]+$/.test(l.link.href));
+  }
+  assert.equal(fill("A roti has {c:roti} g.", foods), "A roti has 15 g.");
+});
