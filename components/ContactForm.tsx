@@ -8,6 +8,7 @@ const field = "mt-1 w-full rounded-2xl border border-line bg-paper px-4 py-3 tex
 export default function ContactForm() {
   const [state, setState] = useState<"idle" | "sending" | "done">("idle");
   const [error, setError] = useState("");
+  const [emailed, setEmailed] = useState(false);
 
   async function submit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -20,8 +21,9 @@ export default function ContactForm() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ name: f.get("name"), email: f.get("email"), message: f.get("message"), website: f.get("website") }),
       });
-      const data = (await res.json().catch(() => ({}))) as { error?: string };
+      const data = (await res.json().catch(() => ({}))) as { error?: string; emailed?: boolean };
       if (!res.ok) throw new Error(data.error || "Something went wrong. Please try again.");
+      setEmailed(Boolean(data.emailed));
       setState("done");
     } catch (err) {
       setError(err instanceof Error ? err.message : "Something went wrong. Please try again.");
@@ -33,7 +35,7 @@ export default function ContactForm() {
     return (
       <div role="status" className="mt-6 rounded-3xl bg-moss-soft p-6">
         <p className="font-display text-xl font-semibold text-leaf">Thank you, your message is in.</p>
-        <p className="mt-1 text-muted">We&apos;ve sent a confirmation to your email. Check spam if you don&apos;t see it.</p>
+        <p className="mt-1 text-muted">{emailed ? "We've sent a confirmation to your email. Check spam if you don't see it." : "We'll get back to you soon."}</p>
       </div>
     );
   }

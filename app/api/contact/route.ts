@@ -39,5 +39,5 @@ export async function POST(request: Request) {
     });
   }
   await markContact(id, { notified, replied });
-  return Response.json({ ok: true });
+  return Response.json({ ok: true, emailed: replied });
 }
