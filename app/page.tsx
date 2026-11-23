@@ -151,7 +151,7 @@ export default function Landing() {
       </section>
 
       <footer className="mx-auto max-w-3xl space-y-3 px-5 pb-12">
-        <p className="text-sm"><Link href="/privacy" className="text-moss underline">Privacy</Link> · <Link href="/terms" className="text-moss underline">Terms</Link> · <Link href="/login" className="text-moss underline">Sign in</Link></p>
+        <p className="text-sm"><Link href="/privacy" className="text-moss underline">Privacy</Link> · <Link href="/terms" className="text-moss underline">Terms</Link> · <Link href="/contact" className="text-moss underline">Contact</Link> · <Link href="/login" className="text-moss underline">Sign in</Link></p>
         <Disclaimer />
       </footer>
     </div>

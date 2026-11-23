@@ -93,3 +93,25 @@ export async function deleteUserData(userId: string): Promise<boolean> {
     return false;
   }
 }
+
+export type ContactInput = { name: string; email: string; message: string };
+
+// Saves a contact message and returns its id (null if the database isn't set up or the save failed).
+export async function saveContact(c: ContactInput): Promise<string | null> {
+  try {
+    const res = await rest("contact_messages", { method: "POST", body: c, prefer: "return=representation" });
+    if (!res.ok) return null;
+    const rows = (await res.json()) as { id: string }[];
+    return rows[0]?.id ?? null;
+  } catch {
+    return null;
+  }
+}
+
+export async function markContact(id: string, patch: { notified?: boolean; replied?: boolean }): Promise<void> {
+  try {
+    await rest(`contact_messages?id=eq.${q(id)}`, { method: "PATCH", body: patch, prefer: "return=minimal" });
+  } catch {
+    // best effort
+  }
+}
