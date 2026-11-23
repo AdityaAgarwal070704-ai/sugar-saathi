@@ -1,5 +1,8 @@
-// Best-effort daily caps per signed-in user for AI requests. With no database, counts live in server memory, so they are
-// per server instance and reset on restarts: good for stopping runaway use, not an exact meter.
+import { bumpUsage, dbEnabled, usageToday } from "./db";
+
+// Daily caps per signed-in user for AI requests. With the database configured the counts live there (exact, shared by all
+// server instances). Without it, or if it can't be reached, they live in server memory: per instance and reset on restarts,
+// good for stopping runaway use, not an exact meter.
 // Pro-only AI routes are enforced exactly by plan (see lib/auth/server.ts), not by these counters.
 const WINDOW = 24 * 3600_000;
 const hits = new Map<string, number[]>();
@@ -18,4 +21,17 @@ export function recordUse(userId: string, kind: string, now = Date.now()): void 
 
 export function resetQuotaForTests() {
   hits.clear();
+}
+
+export async function usedTodayAsync(userId: string, kind: string): Promise<number> {
+  if (dbEnabled()) {
+    const n = await usageToday(userId, kind);
+    if (n !== null) return n;
+  }
+  return usedToday(userId, kind);
+}
+
+export async function recordUseAsync(userId: string, kind: string): Promise<void> {
+  if (dbEnabled() && (await bumpUsage(userId, kind))) return;
+  recordUse(userId, kind);
 }

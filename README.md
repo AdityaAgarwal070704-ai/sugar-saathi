@@ -2,14 +2,14 @@
 
 A web app for Indian adults managing type 2 diabetes. Free plan forever, plus a 7-day Pro trial for every new account. Describe a meal in everyday words, get an honest carb estimate and practical feedback, and see every meal beside your glucose.
 
-Live app: https://sugar-saathi.vercel.app. Sign in with Google. Your meals and readings stay on your own device.
+Live app: https://sugar-saathi.vercel.app. Sign in with Google. Your meals and readings stay on your own device; trial and Pro users also get a cloud copy that keeps their phones in step.
 
 - Original MVP scope: [MVP_SCOPE.md](MVP_SCOPE.md)
 - Current product scope and decisions: [PRODUCT.md](PRODUCT.md)
 
 ## Free, trial and Pro
 
-Sign-in is with Google. There is no database: the app remembers you with signed cookies, and your health data stays in your browser.
+Sign-in is with Google. The app remembers you with signed cookies. Health data lives in your browser, and, with Supabase configured, trial and Pro users also get a cloud copy (see Cloud sync below). With no Supabase variables set, there is no database at all and everything works as before.
 
 | | Free (forever) | Pro (7-day trial now, paid later) |
 |---|---|---|
@@ -23,15 +23,26 @@ Sign-in is with Google. There is no database: the app remembers you with signed 
 | Recipe builder | Manual | Plus "describe it" AI fill |
 | AI weekly summary, day meal planner | No | Yes |
 | Educator report, WhatsApp share, CSV import | No | Yes |
-| Backup, restore, delete my data | Yes | Yes |
+| Cloud sync across your devices | No (on this device only) | Yes |
+| Backup, restore, delete my data (including the cloud copy) | Yes | Yes |
 
-Safety is never locked. Pro is **not on sale yet**: after the trial everyone is on Free and the upgrade screen says "coming soon". Cloud sync across devices is planned, not built.
+Safety is never locked. Pro is **not on sale yet**: after the trial everyone is on Free and the upgrade screen says "coming soon". Cloud sync is built (below); payments are not.
 
 How it works, and its honest limits:
-- **The trial is best-effort.** With no database there is nowhere to record who has used a trial. The start date is kept in a signed cookie that survives sign-outs, so clearing browser data (or using another browser) can restart it.
+- **The trial.** With Supabase configured, the database records the date you first signed in and cannot be restarted by clearing cookies. Without Supabase it is best-effort: the start date is kept in a signed cookie, so clearing browser data (or using another browser) can restart it.
 - **Pro-only AI features are enforced on the server** (photo, recipe AI, weekly summary, planner), by the signed login cookie. The free daily cap on AI-read meals is counted in server memory, so it is a good guard, not an exact meter. Pro features that run on your device (the report, 30-day charts and so on) are locked in the interface; a determined person could get around that with browser tools.
 - **Grant Pro** to testers by adding their email to `PRO_EMAILS` in Vercel.
 - If the Google keys are not set, the app stays open to everyone with every feature, exactly as before accounts existed.
+
+## Cloud sync (Supabase)
+
+Optional, and only for trial and Pro users. The browser never talks to the database: only the server does, with a secret key, after it has checked the signed Google login. The three tables have row level security on and no policies, so the public key can read nothing.
+
+- **What is stored:** `profiles` (Google id, email, trial start, a future `pro_until`), `user_data` (one JSON copy of the user's data plus a revision number) and `ai_usage` (daily AI request counts, which make the free and trial caps exact).
+- **How two devices agree:** each device merges the cloud copy with its own data (meals, readings, walks and recipes are combined by id; deleted meals and recipes are remembered so a delete reaches the other phone; settings come from whichever device changed last) and saves with the revision it read. If another device saved first, it reads, merges and retries. Nothing is lost silently.
+- **Off switch:** leave `SUPABASE_URL` and `SUPABASE_SECRET_KEY` unset and none of this runs.
+- **Setup:** create a project at supabase.com, run `supabase/schema.sql` in the SQL editor, then put the project URL and secret key in `.env.local` and in Vercel (see `.env.example`). The secret key is server-only.
+- **Limits:** the newer of two edits to the same meal wins (by each device's clock); un-ticking a routine item on one device can be undone by the other when both change the same day; restoring a backup replaces meals and recipes but not readings already in the cloud; a copy larger than about 4 MB is not synced.
 
 ## What it does
 
@@ -130,9 +141,9 @@ Import the repo in Vercel (or run `npx vercel deploy --prod`), add `OPENROUTER_A
 
 ## Known limits
 
-- **Data lives in one browser on one device per account.** Clearing browser data or switching device loses it, so use Settings → Export backup. There is no sync.
+- **Without sync, data lives in one browser on one device per account.** Free users, and anyone without Supabase configured, lose it if browser data is cleared, so use Me → Export backup.
 - The food table is a **starter set of 215 dishes with approximate values, not verified by a dietitian**. It must be reviewed before real use, and the app says so on screen.
 - Glycemic-load ratings and per-meal thresholds are simple starter rules, not clinically validated.
 - The abuse limit on the AI routes is best-effort (per server instance), not a hard guarantee.
 - This is not a medical device. It gives food guidance, not medical advice.
-- Not built: accounts and cross-device sync, payments, direct CGM or meter sync, photo and voice input, regional languages, medication tracking, an educator-side dashboard.
+- Not built: payments, direct CGM or meter sync, photo and voice input, regional languages, medication tracking, an educator-side dashboard.

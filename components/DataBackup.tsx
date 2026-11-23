@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/Button";
 import { store } from "@/lib/store";
+import { deleteCloudCopy } from "@/lib/sync";
 import { useT } from "@/lib/useT";
 
 export default function DataBackup() {
@@ -31,10 +32,12 @@ export default function DataBackup() {
     setMsg(result.saved ? { ok: true, text: `Restored ${result.meals} meals and ${result.readings} readings.` } : { ok: false, text: "Your browser couldn't save that much data." });
   };
 
-  const clear = () => {
-    if (window.confirm("Delete ALL meals, readings and settings from this browser? This can't be undone. Export a backup first if unsure.")) {
+  const clear = async () => {
+    if (window.confirm("Delete ALL meals, readings and settings from this browser and from your cloud copy, if you have one? This can't be undone. Export a backup first if unsure.")) {
+      // The cloud copy goes first: if it stayed, it would simply sync back onto this device.
+      if (!(await deleteCloudCopy())) return setMsg({ ok: false, text: "Couldn't delete your cloud copy, so nothing was deleted. Check your connection and try again." });
       store.clearAll();
-      setMsg({ ok: true, text: "All data deleted from this browser." });
+      setMsg({ ok: true, text: "All data deleted from this browser and from the cloud." });
     }
   };
 

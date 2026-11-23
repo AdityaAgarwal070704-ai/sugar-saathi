@@ -1,6 +1,6 @@
 # Sugar Saathi
 
-[MVP_SCOPE.md](MVP_SCOPE.md) is the original MVP scope. On 2026-10-22 the user expanded it to a full platform (see [PRODUCT.md](PRODUCT.md)); it is now Google-sign-in with a Free plan and a 7-day Pro trial (no database; data in the browser; payments not built). Supabase and Stripe were tried and removed. Follow PRODUCT.md for what to build.
+[MVP_SCOPE.md](MVP_SCOPE.md) is the original MVP scope. On 2026-10-22 the user expanded it to a full platform (see [PRODUCT.md](PRODUCT.md)); it is now Google-sign-in with a Free plan and a 7-day Pro trial (data in the browser; payments not built). Stripe and Supabase Auth were removed. On 2026-11-23 Supabase came back as a server-only Postgres for cloud sync of trial/Pro users, the trial date and AI quotas (`lib/db.ts`, `supabase/schema.sql`); it is optional, and the browser never talks to it. Follow PRODUCT.md for what to build.
 
 Hard rules that still apply everywhere (UI text, prompts, code):
 - Carbs, fibre, protein and glycemic load come only from `data/foods.json`, never from the AI.

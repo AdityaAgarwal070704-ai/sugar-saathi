@@ -4,7 +4,7 @@ Decided with the user on 2026-10-22. This expands [MVP_SCOPE.md](MVP_SCOPE.md) i
 
 ## Decisions
 - **Glucose data:** real readings only, from quick manual entry or CSV import (LibreView-style exports). The app never invents readings. Every meal also gets a glycemic-load estimate from the food table, labelled as an estimate.
-- **Accounts:** Google sign-in only, required once configured, with no database (signed cookies). Health data stays in the browser, one slot per account. No cloud sync yet.
+- **Accounts:** Google sign-in only, required once configured (signed cookies). Health data stays in the browser, one slot per account. Supabase (Postgres, server-side only) was re-added on 2026-11-23 for cloud sync of trial and Pro users, the trial date and exact AI quotas; with no Supabase variables the app runs with no database.
 - **Plans:** Free forever + a 7-day Pro trial for every new account. Pro is not on sale; the upgrade screen says "coming soon". Pro access can be granted through the `PRO_EMAILS` list. See README.md for the Free vs Pro table and limits.
 - **Advice rules:** food guidance only, worded as suggestions to discuss with an educator or doctor. No medication or dose advice.
 

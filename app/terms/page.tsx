@@ -33,7 +33,7 @@ export default function Terms() {
         <h2>Using the service</h2>
         <ul>
           <li>You are 18 or over, and you are responsible for the information you enter and for keeping your device secure.</li>
-          <li>Your data lives on your device. If you clear your browser data or lose the device, it is gone unless you exported a backup.</li>
+          <li>Your data lives on your device. If you clear your browser data or lose the device, it is gone unless you exported a backup or had a cloud copy through the trial or Pro.</li>
           <li>Please do not misuse the service, try to break it, overload it or use it to harm others.</li>
         </ul>
       </section>

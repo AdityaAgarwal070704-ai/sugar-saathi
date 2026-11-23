@@ -49,7 +49,6 @@ export default function Upgrade() {
           <ul className="mt-2 list-disc space-y-1.5 pl-5 text-sm">
             <li>Up to {DAILY_LIMITS.pro.parse} AI-read meals a day</li>
             {PRO_FEATURES.map((f) => <li key={f}>{FEATURE_LABEL[f]}</li>)}
-            <li className="text-muted">Cloud sync across your phones (planned)</li>
           </ul>
           <p className="mt-3 text-sm">Planned price: about ₹149 a month or ₹999 a year. Not final, and nothing is charged today.</p>
           {WAITLIST ? (

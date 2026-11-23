@@ -18,13 +18,13 @@ const FEATURES = [
   ["📈", "What meals do to you", "Add readings and Sugar Saathi learns your own pattern, then shows a range like +45 to +80 mg/dL for meals like this one."],
   ["🔄", "Swaps that save real carbs", "Brown rice for white, roti for naan, nimbu pani for cola, each with the grams saved."],
   ["🍽️", "A day meal planner", "Ideas for a full day of Indian meals within your carb goal, vegetarian or not."],
-  ["🔒", "Private by design", "Your meals and readings are stored only on your own device, with backup and restore. We keep no health database."],
+  ["🔒", "Private by design", "Your meals and readings live on your own device, with backup and restore. Trial and Pro users can also keep an optional cloud copy, and delete it any time."],
 ];
 
 const FAQ = [
   ["Is Sugar Saathi free?", "Yes. There is a free plan forever. Every new account also gets all Pro features free for 7 days, with no card. Pro isn't on sale yet, and nothing is charged today."],
   ["What is in Free and what is in Pro?", "Free covers the daily essentials: logging, nutrition and tips, your routine, glucose entry and safety cards, Learn and more. Pro adds photo logging, your personal expected sugar change, 30-day progress, the AI weekly summary, the day planner, the educator report, sharing and CSV import."],
-  ["Where is my data stored?", "Your meals, readings and goals are stored only in your own browser on your own device. We keep just your Google name and email in a sign-in cookie. Use the backup in Me to move your data or keep it safe."],
+  ["Where is my data stored?", "Your meals, readings and goals are stored in your own browser on your own device. On the 7-day trial and on Pro, a copy is also kept in our database so your phones stay in step, and you can delete it any time in Me. Use the backup in Me to move your data or keep it safe."],
   ["Does the AI calculate my carbs?", "No. The AI only works out which dishes you ate. Every number comes from the food table and is calculated by code, so it can't invent nutrition."],
   ["Will it tell me how much insulin or medicine to take?", "Never. Sugar Saathi gives food guidance only. Questions about medicines or doses are for your doctor or diabetes educator."],
   ["How accurate are the numbers?", "They are estimates from a starter table that has not been checked by a dietitian yet, and portions are your own judgement. Treat them as a helpful guide, not lab results."],

@@ -13,6 +13,8 @@ export type Extras = {
   wrapupDismissed: string | null; // "YYYY-MM-DD" of the day whose wrap-up was dismissed
   customFoods: Food[]; // dishes the user made with the recipe builder ("my dishes")
   recipes: Recipe[];
+  tombstones: Record<string, string>; // id of a deleted meal or recipe -> when, so a delete also reaches the cloud copy
+  savedAt: string | null; // when this device last changed anything, used to pick the newer settings when merging
 };
 
 export type State = { meals: MealRow[]; readings: ReadingRow[]; profile: Profile } & Extras;
@@ -23,7 +25,7 @@ export const DEFAULT_ROUTINE: RoutineItem[] = [
   { id: "water", label: "Drink enough water", icon: "💧" },
   { id: "fasting", label: "Check fasting sugar", icon: "🩸" },
 ];
-export const DEFAULT_EXTRAS: Extras = { routine: DEFAULT_ROUTINE, ticks: {}, walks: [], timer: null, reminders: DEFAULT_REMINDERS, checkinAt: null, wrapupDismissed: null, customFoods: [], recipes: [] };
+export const DEFAULT_EXTRAS: Extras = { routine: DEFAULT_ROUTINE, ticks: {}, walks: [], timer: null, reminders: DEFAULT_REMINDERS, checkinAt: null, wrapupDismissed: null, customFoods: [], recipes: [], tombstones: {}, savedAt: null };
 
 export const DEFAULT_PROFILE: Profile = { display_name: null, meal_carb_target: 60, glucose_low: 70, glucose_high: 180, diet: "veg", language: "en" };
 export const EMPTY_STATE: State = { meals: [], readings: [], profile: DEFAULT_PROFILE, ...DEFAULT_EXTRAS };
@@ -57,6 +59,8 @@ export function toPersisted(state: State): Persisted {
     wrapupDismissed: state.wrapupDismissed,
     customFoods: state.customFoods,
     recipes: state.recipes,
+    tombstones: state.tombstones,
+    savedAt: state.savedAt,
   };
 }
 
@@ -84,6 +88,7 @@ const isDay = (v: unknown): v is string => typeof v === "string" && /^\d{4}-\d{2
 const isTime = (v: unknown): v is string => typeof v === "string" && /^([01]\d|2[0-3]):[0-5]\d$/.test(v);
 
 const CATEGORIES: Category[] = ["grain", "dal", "veg", "protein", "dairy", "fruit", "sweet", "snack", "drink", "nuts", "extra"];
+const MAX_TOMBSTONES = 500;
 const MY_ID = /^my_[a-z0-9]{4,24}$/;
 const inRange = (n: unknown, hi: number): n is number => typeof n === "number" && Number.isFinite(n) && n >= 0 && n <= hi;
 
@@ -136,7 +141,12 @@ function validExtras(d: Partial<Extras>): Extras {
     ? { breakfast: r.breakfast, lunch: r.lunch, dinner: r.dinner, snack: isTime(r.snack) ? r.snack : null, checks: r.checks !== false, walks: r.walks !== false }
     : DEFAULT_REMINDERS;
   const { customFoods, recipes } = validRecipes(d);
-  return { routine, ticks, walks, timer, reminders, checkinAt: isIso(d.checkinAt) ? d.checkinAt : null, wrapupDismissed: isDay(d.wrapupDismissed) ? d.wrapupDismissed : null, customFoods, recipes };
+  const tombstones: Record<string, string> = {};
+  if (d.tombstones && typeof d.tombstones === "object") {
+    const entries = Object.entries(d.tombstones).filter(([id, at]) => id.length > 0 && id.length <= 60 && isIso(at));
+    for (const [id, at] of entries.sort((x, y) => y[1].localeCompare(x[1])).slice(0, MAX_TOMBSTONES)) tombstones[id] = at;
+  }
+  return { routine, ticks, walks, timer, reminders, checkinAt: isIso(d.checkinAt) ? d.checkinAt : null, wrapupDismissed: isDay(d.wrapupDismissed) ? d.wrapupDismissed : null, customFoods, recipes, tombstones, savedAt: isIso(d.savedAt) ? d.savedAt : null };
 }
 
 // Reads stored or backed-up data defensively: anything malformed is dropped, never trusted.
@@ -180,4 +190,58 @@ export function mergeReadings(existing: ReadingRow[], incoming: { measured_at: s
   }
   next.sort((a, b) => b.measured_at.localeCompare(a.measured_at));
   return { readings: next, added };
+}
+
+// Marks a meal or recipe as deleted (kept for a while so the delete reaches other devices).
+export function withTombstone(tombstones: Record<string, string>, id: string, at: string): Record<string, string> {
+  const next = { ...tombstones, [id]: at };
+  const entries = Object.entries(next);
+  if (entries.length <= MAX_TOMBSTONES) return next;
+  return Object.fromEntries(entries.sort((x, y) => y[1].localeCompare(x[1])).slice(0, MAX_TOMBSTONES));
+}
+
+const later = (a: string | null, b: string | null) => ((a ?? "") >= (b ?? "") ? a : b);
+
+// Combines this device's data with the cloud copy (or another device's). Nothing is lost:
+//  - meals, readings, walks, recipes are unioned by id, except those deleted on either side (tombstones);
+//  - settings, routine, reminders and the like come from whichever side was changed more recently;
+//  - a meal or recipe edited on both sides keeps the more recent side's version.
+export function mergeStates(local: State, remote: State): State {
+  const newer = (local.savedAt ?? "") >= (remote.savedAt ?? "") ? local : remote;
+  const older = newer === local ? remote : local;
+
+  let tombstones: Record<string, string> = {};
+  for (const src of [older.tombstones, newer.tombstones]) for (const [id, at] of Object.entries(src)) tombstones = withTombstone(tombstones, id, tombstones[id] && tombstones[id] > at ? tombstones[id] : at);
+
+  const unionById = <T extends { id: string }>(a: T[], b: T[]): T[] => {
+    const m = new Map<string, T>();
+    for (const x of a) m.set(x.id, x); // older first, so the newer side wins on the same id
+    for (const x of b) m.set(x.id, x);
+    return [...m.values()].filter((x) => !(x.id in tombstones));
+  };
+
+  const meals = unionById(older.meals, newer.meals).sort((x, y) => y.eaten_at.localeCompare(x.eaten_at));
+  const readings = unionById(older.readings, newer.readings).sort((x, y) => y.measured_at.localeCompare(x.measured_at));
+  const walks = unionById(older.walks, newer.walks).sort((x, y) => x.started_at.localeCompare(y.started_at)).slice(-1000);
+  const recipes = unionById(older.recipes, newer.recipes);
+  const wanted = new Set(recipes.map((r) => r.foodId));
+  const customFoods = unionById(older.customFoods, newer.customFoods).filter((f) => wanted.has(f.id));
+  const ticks: Record<string, string[]> = { ...older.ticks, ...newer.ticks };
+
+  return {
+    meals,
+    readings,
+    walks,
+    recipes,
+    customFoods,
+    ticks,
+    tombstones,
+    profile: newer.profile,
+    routine: newer.routine,
+    timer: newer.timer,
+    reminders: newer.reminders,
+    checkinAt: later(local.checkinAt, remote.checkinAt),
+    wrapupDismissed: later(local.wrapupDismissed, remote.wrapupDismissed),
+    savedAt: later(local.savedAt, remote.savedAt),
+  };
 }

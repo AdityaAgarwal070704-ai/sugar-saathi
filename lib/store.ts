@@ -2,11 +2,11 @@
 
 import { useSyncExternalStore } from "react";
 import { dayKey } from "./day";
-import { EMPTY_STATE, fromPersisted, mergeReadings, toPersisted, type State } from "./store-core";
+import { EMPTY_STATE, fromPersisted, mergeReadings, toPersisted, withTombstone, type State } from "./store-core";
 import type { Recipe } from "./recipe";
 import type { Food, MealRow, Profile, Reminders, RoutineItem } from "./types";
 
-// All user data lives in this browser (localStorage). No accounts, no server database.
+// All user data lives in this browser (localStorage). Signed-in Pro and trial users also get a cloud copy (see lib/sync.ts).
 const LEGACY_KEY = "sugar-saathi:v1";
 // With login, each account gets its own storage slot, so two people on one phone never see each other's data.
 let activeKey = LEGACY_KEY;
@@ -14,6 +14,7 @@ const handledKey = (userId: string) => `sugar-saathi:legacy-handled:${userId}`;
 
 let cache: State | null = null;
 const listeners = new Set<() => void>();
+const localListeners = new Set<() => void>(); // told only about changes the user made here, not about merges from the cloud
 
 function load(): State {
   try {
@@ -33,7 +34,8 @@ function emit() {
 }
 
 // Returns false if the browser refused to save (storage full or blocked).
-function commit(next: State): boolean {
+function commit(next: State, touch = true): boolean {
+  if (touch) next = { ...next, savedAt: new Date().toISOString() };
   cache = next;
   let ok = true;
   try {
@@ -42,6 +44,7 @@ function commit(next: State): boolean {
     ok = false;
   }
   emit();
+  if (touch) localListeners.forEach((l) => l());
   return ok;
 }
 
@@ -85,6 +88,17 @@ function legacyHasData(): boolean {
 }
 
 export const store = {
+  getState(): State {
+    return getSnapshot();
+  },
+  // Saves the result of merging with the cloud copy without counting it as a change made on this device.
+  applySynced(next: State): boolean {
+    return commit(next, false);
+  },
+  onLocalChange(cb: () => void): () => void {
+    localListeners.add(cb);
+    return () => localListeners.delete(cb);
+  },
   // Switches to a signed-in user's own data (or back to the shared slot when signed out / no login).
   setUser(userId: string | null): void {
     const next = userId ? `${LEGACY_KEY}:${userId}` : LEGACY_KEY;
@@ -137,7 +151,7 @@ export const store = {
   },
   deleteMeal(id: string): boolean {
     const s = getSnapshot();
-    return commit({ ...s, meals: s.meals.filter((m) => m.id !== id) });
+    return commit({ ...s, meals: s.meals.filter((m) => m.id !== id), tombstones: withTombstone(s.tombstones, id, new Date().toISOString()) });
   },
   addReadings(incoming: { measured_at: string; value: number; source: "manual" | "csv" }[]): { added: number; saved: boolean } {
     const s = getSnapshot();
@@ -187,7 +201,7 @@ export const store = {
     const s = getSnapshot();
     const r = s.recipes.find((x) => x.id === id);
     if (!r) return true;
-    return commit({ ...s, recipes: s.recipes.filter((x) => x.id !== id), customFoods: s.customFoods.filter((f) => f.id !== r.foodId) });
+    return commit({ ...s, recipes: s.recipes.filter((x) => x.id !== id), customFoods: s.customFoods.filter((f) => f.id !== r.foodId), tombstones: withTombstone(s.tombstones, id, new Date().toISOString()) });
   },
   markCheckin(): boolean {
     return commit({ ...getSnapshot(), checkinAt: new Date().toISOString() });
@@ -203,14 +217,20 @@ export const store = {
     try {
       const next = fromPersisted(JSON.parse(text));
       if (!next) return null;
-      const saved = commit(next);
+      // A restore replaces everything, so whatever the backup doesn't have counts as deleted (and stays deleted in the cloud).
+      const cur = getSnapshot();
+      const at = new Date().toISOString();
+      let tombstones = next.tombstones;
+      const keep = new Set([...next.meals.map((m) => m.id), ...next.recipes.map((r) => r.id)]);
+      for (const id of [...cur.meals.map((m) => m.id), ...cur.recipes.map((r) => r.id)]) if (!keep.has(id)) tombstones = withTombstone(tombstones, id, at);
+      const saved = commit({ ...next, tombstones });
       return { meals: next.meals.length, readings: next.readings.length, saved };
     } catch {
       return null;
     }
   },
   clearAll(): void {
-    commit(EMPTY_STATE);
+    commit(EMPTY_STATE, false);
     try {
       window.localStorage.removeItem(activeKey);
     } catch {

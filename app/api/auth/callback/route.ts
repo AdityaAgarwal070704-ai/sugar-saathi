@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { authMode } from "@/lib/auth/config";
+import { dbEnabled, ensureProfile } from "@/lib/db";
 import { completeSignIn, redirectUri } from "@/lib/auth/google";
 import { COOKIES, cookieOptions, parseCookies, readAttempt, readTrial, sessionMaxAge, signSession, signTrial, trialMaxAge } from "@/lib/auth/session";
 
@@ -29,12 +30,14 @@ export async function GET(request: Request) {
   }
 
   // The trial starts the first time this browser signs in with this Google account, and is remembered across sign-outs.
+  // With the database configured, the database holds the trial start (the exact date, on any browser). Without it, the signed cookie does.
   const known = await readTrial(cookies[COOKIES.trial], profile.sub);
-  const trialStart = known ?? Date.now();
+  const stored = dbEnabled() ? await ensureProfile(profile.sub, profile.email) : null;
+  const trialStart = stored?.trialStartMs ?? known ?? Date.now();
 
   const res = NextResponse.redirect(new URL(attempt.next, url));
   res.cookies.set(COOKIES.session, await signSession({ ...profile, trialStart }), cookieOptions(sessionMaxAge));
-  if (known === null) res.cookies.set(COOKIES.trial, await signTrial(profile.sub, trialStart), cookieOptions(trialMaxAge));
+  if (known === null && !stored) res.cookies.set(COOKIES.trial, await signTrial(profile.sub, trialStart), cookieOptions(trialMaxAge));
   res.cookies.delete(COOKIES.oauth);
   return res;
 }

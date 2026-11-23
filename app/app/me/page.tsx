@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useAuth } from "@/components/auth/AuthProvider";
+import SyncStatus from "@/components/auth/SyncStatus";
 import DataBackup from "@/components/DataBackup";
 import LanguageToggle from "@/components/LanguageToggle";
 import SettingsForm from "@/components/SettingsForm";
@@ -41,7 +42,8 @@ export default function MePage() {
             <Button size="sm" variant="outline" onClick={() => signOut(false)}>Sign out</Button>
             <Button size="sm" variant="danger" onClick={() => { if (window.confirm("Sign out and delete this account's meals, readings and settings from THIS device? Export a backup first if you want to keep them.")) signOut(true); }}>Sign out and clear this device</Button>
           </div>
-          <p className="mt-3 text-xs text-muted">Your meals and readings are stored on this device. Only your Google name and email are kept in your sign-in cookie. See the <Link href="/privacy" className="underline">Privacy Policy</Link>.</p>
+          <SyncStatus />
+          <p className="mt-3 text-xs text-muted">Your meals and readings are stored on this device, plus a cloud copy if you are on the trial or Pro. See the <Link href="/privacy" className="underline">Privacy Policy</Link>.</p>
         </Card>
       )}
       <Card>

@@ -1,5 +1,5 @@
 import { DAILY_LIMITS, parseEmailList, planStatus, ROUTE_FEATURE, can, type PlanStatus, type Tier, type UsageKind } from "../plan";
-import { recordUse, usedToday } from "../quota";
+import { recordUseAsync, usedTodayAsync } from "../quota";
 import { tooMany } from "../ratelimit";
 import { authMode } from "./config";
 import { COOKIES, parseCookies, readSession, type SessionClaims } from "./session";
@@ -37,8 +37,8 @@ export async function authorize(request: Request, kind: UsageKind): Promise<Auth
     return deny("pro_required", plan.trialExpired ? "Your free trial has ended. This is a Pro feature, and Pro is coming soon." : "This is a Pro feature. Pro is coming soon.", 403);
   }
   const limit = DAILY_LIMITS[plan.tier][kind];
-  if (usedToday(claims.sub, kind) >= limit) {
+  if ((await usedTodayAsync(claims.sub, kind)) >= limit) {
     return deny("limit", plan.tier === "free" ? `You've used your ${limit} free AI-read meals for today. Typing a meal and picking dishes by hand still works, and Pro (coming soon) raises the limit.` : "You've reached today's limit for this feature. Please try again tomorrow.", 429);
   }
-  return { ok: true, tier: plan.tier, userId: claims.sub, commit: () => recordUse(claims.sub, kind) };
+  return { ok: true, tier: plan.tier, userId: claims.sub, commit: () => void recordUseAsync(claims.sub, kind) };
 }

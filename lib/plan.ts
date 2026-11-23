@@ -17,9 +17,10 @@ export type Feature =
   | "planner" // AI day meal planner
   | "report" // educator report
   | "share" // WhatsApp share
-  | "csvImport"; // CSV glucose import
+  | "csvImport" // CSV glucose import
+  | "sync"; // cloud copy across devices
 
-export const PRO_FEATURES: Feature[] = ["photo", "aiRecipe", "personalResponse", "progress30", "dishRanking", "walkEffect", "gmi", "aiSummary", "planner", "report", "share", "csvImport"];
+export const PRO_FEATURES: Feature[] = ["photo", "aiRecipe", "personalResponse", "progress30", "dishRanking", "walkEffect", "gmi", "aiSummary", "planner", "report", "share", "csvImport", "sync"];
 
 export const FEATURE_LABEL: Record<Feature, string> = {
   photo: "Photo logging",
@@ -34,6 +35,7 @@ export const FEATURE_LABEL: Record<Feature, string> = {
   report: "Educator report",
   share: "WhatsApp sharing",
   csvImport: "CSV glucose import",
+  sync: "Cloud sync across devices",
 };
 
 export function can(tier: Tier, feature: Feature): boolean {
